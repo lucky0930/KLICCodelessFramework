@@ -1,0 +1,451 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ValueMomentum</groupId>
+	<artifactId>VM_Framework_Base</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>VM_Automation_Framework</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<jdk.version>1.7</jdk.version>
+		<jsonpath.version>0.5.5</jsonpath.version>
+		<encoding>UTF-8</encoding>
+		<maven-compiler.version>3.1</maven-compiler.version>
+		<maven-surefire.version>2.18.1</maven-surefire.version>
+		<maven-failsafe.version>2.17</maven-failsafe.version>
+		<maven-resources.version>2.6</maven-resources.version>
+		<maven.surefire.junitmode>true</maven.surefire.junitmode>
+		<test.include>**/*.java</test.include>
+		<test.exclude></test.exclude>
+		<testng.memory.opts>-Xmx1g</testng.memory.opts>
+		<sehelper.seleniumGrid></sehelper.seleniumGrid>
+		<jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+		<test.retryCount>2</test.retryCount>
+		<testng.listeners.retry>2</testng.listeners.retry>
+		<testng.listeners.default>org.uncommons.reportng.EmailableReporter,org.testng.reporters.XMLReporter,org.testng.reporters.FailedReporter</testng.listeners.default>
+		<testng.listeners>${testng.listeners.default}${testng.listeners.retry}</testng.listeners>
+		<testng.suitexmlfile>testng.xml</testng.suitexmlfile>
+		<testng.reportng.title>HTML Report</testng.reportng.title>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>codelds</id>
+			<name>Code IDs</name>
+			<url>https://code.lds.org/nexus/content/groups/main-repo </url>
+		</repository>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+
+
+		<!-- <dependency> <groupId>com.microsoft.sqlserver</groupId> <artifactId>sqljdbc4</artifactId> 
+			<version>4.0.2206.100</version> </dependency> -->
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.lightbody.bmp</groupId>
+			<artifactId>browsermob-proxy</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.uncommons</groupId>
+			<artifactId>reportng</artifactId>
+			<version>1.1.2</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.testng</groupId>
+					<artifactId>testng</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.relevantcodes</groupId>
+			<artifactId>extentreports</artifactId>
+			<version>2.40.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.5</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<artifactId>commons-logging</artifactId>
+			<groupId>commons-logging</groupId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.4</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.6.4</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.8-beta4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.13.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-api</artifactId>
+			<version>3.13.0</version>
+		</dependency>
+ <!--
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>3.13.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>3.13.0</version>
+		</dependency>
+ -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.btmatthews.selenium.junit4</groupId>
+			<artifactId>selenium-junit4-runner</artifactId>
+			<version>1.0.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson-mapper-asl.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${jsonpath.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path-assert</artifactId>
+			<version>${jsonpath.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>1.0.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.lightcouch</groupId>
+			<artifactId>lightcouch</artifactId>
+			<version>0.1.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>1.0.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+	</dependencies>
+
+
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+
+		<pluginManagement>
+			<plugins>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources.version}</version>
+					<configuration>
+						<nonFilteredFileExtensions>
+						</nonFilteredFileExtensions>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>test-jar</id>
+							<phase>package</phase>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler.version}</version>
+					<configuration>
+						<source>${jdk.version}</source>
+						<target>${jdk.version}</target>
+						<encoding>${encoding}</encoding>
+						<showWarnings>false</showWarnings>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire.version}</version>
+					<configuration>
+						<properties>
+							<property>
+								<name>usedefaultlisteners</name>
+								<value>false</value>
+							</property>
+							<property>
+								<name>listener</name>
+								<value>org.uncommons.reportng.HTMLReporter,
+									org.uncommons.reportng.JUnitXMLReporter</value>
+							</property>
+						</properties>
+						<reportsDirectory>${project.basedir}/target/</reportsDirectory>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>br.com.ingenieux</groupId>
+					<artifactId>beanstalk-maven-plugin</artifactId>
+					<inherited>true</inherited>
+					<version>0.2.8</version>
+					<configuration>
+						<applicationName>selenium</applicationName>
+						<cnamePrefix>selenium</cnamePrefix>
+						<useStagingDirectory>true</useStagingDirectory>
+					</configuration>
+				</plugin>
+
+
+
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>Smoke</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven-surefire.version}</version>
+						<configuration>
+							<argLine>${testng.memory.opts}</argLine>
+							<includes>
+								<include>${test.include}</include>
+							</includes>
+							<excludes>
+								<exclude>${test.exclude}</exclude>
+							</excludes>
+							<suiteXmlFiles>
+								<suiteXmlFile>${project.basedir}/TestExecution/VM_Test.xml</suiteXmlFile>
+							</suiteXmlFiles>
+							<systemPropertyVariables>
+								<org.uncommons.reportng.escape-output>false</org.uncommons.reportng.escape-output>
+								<org.uncommons.reportng.frames>false</org.uncommons.reportng.frames>
+								<org.uncommons.reportng.title>AP</org.uncommons.reportng.title>
+								<webdriver.chrome.driver>tools/chromedriver</webdriver.chrome.driver>
+								<base.url></base.url>
+								<http.credentials>true</http.credentials>
+								<enable.proxy>false</enable.proxy>
+								<test.retryCount>${test.retryCount}</test.retryCount>
+							</systemPropertyVariables>
+							<workingDirectory>${project.build.testOutputDirectory}/</workingDirectory>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-report-plugin</artifactId>
+						<version>${maven-surefire.version}</version>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>report-only</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${surefire.reports.dir}</outputDirectory>
+							<outputName>AP Smoke Test Report</outputName>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+
+		<profile>
+			<id>Autoamtion_Test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven-surefire.version}</version>
+						<configuration>
+							<argLine>${testng.memory.opts}</argLine>
+							<includes>
+								<include>${test.include}</include>
+							</includes>
+							<excludes>
+								<exclude>${test.exclude}</exclude>
+							</excludes>
+							<suiteXmlFiles>
+								<suiteXmlFile>${project.basedir}/TestExecution/VM_Test.xml</suiteXmlFile>
+							</suiteXmlFiles>
+							<systemPropertyVariables>
+								<org.uncommons.reportng.escape-output>false</org.uncommons.reportng.escape-output>
+								<org.uncommons.reportng.frames>false</org.uncommons.reportng.frames>
+								<org.uncommons.reportng.title>AP</org.uncommons.reportng.title>
+								<webdriver.chrome.driver>tools/chromedriver</webdriver.chrome.driver>
+								<base.url></base.url>
+								<http.credentials>true</http.credentials>
+								<enable.proxy>false</enable.proxy>
+								<test.retryCount>${test.retryCount}</test.retryCount>
+							</systemPropertyVariables>
+							<workingDirectory>${project.build.testOutputDirectory}/</workingDirectory>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-report-plugin</artifactId>
+						<version>${maven-surefire.version}</version>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>report-only</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${surefire.reports.dir}</outputDirectory>
+							<outputName>VM Sample test report</outputName>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+	</profiles>
+</project>

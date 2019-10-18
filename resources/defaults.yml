@@ -1,0 +1,22 @@
+
+browser:
+  version:
+    chromeN: 27    
+    firefoxN: 21   
+    ieN: 8    
+couchDb:
+  url: 192.168.2.102:5984
+sehelper:
+  seleniumGrid: http://172.18.118.245:4444/wd/hub
+  browserProxy: 172.18.216.129:28540
+  chromeExtension:
+  firefoxExtension:
+test:
+  retryCount: 2
+sauce:
+  record:
+    video: false
+    screenshots: false
+
+## mvn test -DargLine="-Dtest.retryCount=3"
+

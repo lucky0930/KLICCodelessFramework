@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"
+          xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+   <servers>
+      <server>
+         <id>all-repos</id>
+         <username>maven</username>
+         <password>ludist</password>
+       </server>
+       <server>
+         <id>central</id>
+         <username>maven</username>
+         <password>ludist</password>
+       </server>
+       <server>
+         <id>snapshots</id>
+         <username>maven</username>
+         <password>ludist</password>
+       </server>
+   </servers>
+
+   <mirrors>
+      <mirror>
+         <mirrorOf>*</mirrorOf>
+         <name>all-repos</name>
+      <url>http://repo.com:8081/artifactory/all-repos/</url>
+         <id>all-repos</id>
+      </mirror>
+   </mirrors>
+
+   <profiles>
+      <profile>
+         <id>artifactory</id>
+         <repositories>
+         
+         <repository>
+        	<id>java-net</id>
+        	<url>http://download.java.net/maven/2</url>
+    	</repository>
+         
+            <repository>
+               <snapshots>
+                  <enabled>false</enabled>
+               </snapshots>
+               <id>central</id>
+               <name>all-repos</name>
+          <url>http://repo.com:8081/artifactory/all-repos/</url>
+            </repository>
+            <repository>
+               <snapshots>
+                  <enabled>true</enabled>
+              <updatePolicy>interval:60</updatePolicy>
+               </snapshots>
+               <id>snapshots</id>
+               <name>all-repos</name>
+          <url>http://repo.com:8081/artifactory/all-repos/</url>
+            </repository>
+         </repositories>
+         <pluginRepositories>
+            <pluginRepository>
+               <snapshots>
+                  <enabled>false</enabled>
+               </snapshots>
+               <id>central</id>
+               <name>all-repos</name>
+          <url>http://repo.com:8081/artifactory/all-repos/</url>
+            </pluginRepository>
+            <pluginRepository>
+               <snapshots>
+                  <enabled>true</enabled>
+                  <updatePolicy>always</updatePolicy>
+               </snapshots>
+               <id>snapshots</id>
+               <name>all-repos</name>
+          <url>http://repo.com:8081/artifactory/all-repos/</url>
+            </pluginRepository>
+         </pluginRepositories>
+
+         <!-- sonar setup -->
+         <properties>
+            <sonar.jdbc.url>jdbc:mysql://nke-lnx-b2c-p001:3307/sonar?useUnicode=true&amp;characterEncoding=utf8</sonar.jdbc.url>
+            <sonar.jdbc.driver>com.mysql.jdbc.Driver</sonar.jdbc.driver>
+            <sonar.jdbc.username>sonar</sonar.jdbc.username>
+            <sonar.jdbc.password>sonar</sonar.jdbc.password>
+            <sonar.host.url>http://nke-lnx-b2c-p001:9000</sonar.host.url>
+         </properties>
+
+      </profile>
+   </profiles>
+
+   <activeProfiles>
+      <activeProfile>artifactory</activeProfile>
+   </activeProfiles>
+</settings>

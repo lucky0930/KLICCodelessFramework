@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>HTTP Archive Viewer 2.0.15</title>
+</head>
+<body class="harBody">
+    <div id="content" version="2.0.15"></div>
+    <!--[if IE]><script type="text/javascript" src="scripts/excanvas/excanvas.js"></script><![endif]-->
+    <script src="scripts/jquery.js"></script>
+    <script data-main="scripts/harViewer" src="scripts/require.js"></script>
+    <link rel="stylesheet" href="css/harViewer.css" type="text/css"/>
+    <script>
+    $("#content").bind("onViewerPreInit", function(event) {
+        // Get application object
+        var viewer = event.target.repObject;
+
+    	// Remove unnecessary tabs
+        viewer.removeTab("Home");
+        viewer.removeTab("DOM");
+        viewer.removeTab("About");
+        viewer.removeTab("Schema");
+
+        // Hide the tab bar
+        viewer.showTabBar(false);
+        
+        // Make sure stats is visible
+        // to the user by default
+        var preview = viewer.getTab("Preview");
+        preview.showStats(true);
+        preview.showTimeline(false);
+
+        // Show the selected har file
+        viewer.loadHar('%harfile%');
+    });
+    </script>
+</body>
+</html>
