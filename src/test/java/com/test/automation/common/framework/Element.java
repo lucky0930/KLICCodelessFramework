@@ -222,7 +222,23 @@ public class Element {
 			return null;
 		}
 	}
-	
+
+	public static WebElement getElement(WebDriver driver, By locator) {
+		try {
+			return driver.findElement(locator);
+		} catch (NoSuchElementException e) {
+			String errorName = "NoSuchElementException Exception in getElement:";
+			// se.log().logSeStep(errorName + e.getMessage());
+			// se.log().logTcError(errorName, se.browser().takeScreenShot());
+			return null;
+		} catch (Exception e) {
+			String errorName = "Un-handled Exception in getElement:";
+			// se.log().logSeStep(errorName + e.getMessage());
+			// se.log().logTcError(errorName, se.browser().takeScreenShot());
+			return null;
+		}
+	}
+
 	/**
 	 * Finds and returns a list of matching elements
 	 *
@@ -239,28 +255,30 @@ public class Element {
 			return new ArrayList<WebElement>();
 		}
 	}
-	
-	public boolean enterTextNoTAB(WebElement element, String testdata) {        
-        //se.log().logSeStep("Enter Text '" + testdata + "' in Element: " + element.toString());        
-        if (element != null) {
-            try {
-            	element.clear();
-                element.sendKeys(testdata);
-                return true;
-            } catch (InvalidElementStateException e) {
-                //se.log().logSeStep("Could not enter text in " + element.toString() + ", element not visible or not enabled");
-                //se.verify().reportError("Could not enter text, element not visible or not enabled");
-                return false;
-            } catch (Exception e) {
-                //se.log().logSeStep("Could not enter text in " + element.toString());
-                //se.verify().reportError("Could not enter text");
-                return false;
-            }
-        } else
-            return false;
+
+	public boolean enterTextNoTAB(WebElement element, String testdata) {
+		// se.log().logSeStep("Enter Text '" + testdata + "' in Element: " +
+		// element.toString());
+		if (element != null) {
+			try {
+				element.clear();
+				element.sendKeys(testdata);
+				return true;
+			} catch (InvalidElementStateException e) {
+				// se.log().logSeStep("Could not enter text in " + element.toString() + ",
+				// element not visible or not enabled");
+				// se.verify().reportError("Could not enter text, element not visible or not
+				// enabled");
+				return false;
+			} catch (Exception e) {
+				// se.log().logSeStep("Could not enter text in " + element.toString());
+				// se.verify().reportError("Could not enter text");
+				return false;
+			}
+		} else
+			return false;
 	}
 
-	
 	public boolean enterText(WebElement element, String testdata) {
 		// se.log().logSeStep("Enter Text '" + testdata + "' in Element: " +
 		// element.toString());
@@ -275,16 +293,14 @@ public class Element {
 					enterTAB(element);
 				} else {
 					element.clear();
-					/*se.util().sleep(1000);
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}*/
+					/*
+					 * se.util().sleep(1000); try { Thread.sleep(500); } catch (InterruptedException
+					 * e) { e.printStackTrace(); }
+					 */
 					element.sendKeys(testdata);
 					enterTAB(element);
 				}
-				
+
 				return true;
 			} catch (InvalidElementStateException e) {
 				// se.log().logSeStep("Could not enter text in " +
@@ -302,7 +318,7 @@ public class Element {
 			return false;
 
 	}
-	
+
 	public boolean enterTextWithDelay(WebElement element, String testdata) {
 		// se.log().logSeStep("Enter Text '" + testdata + "' in Element: " +
 		// element.toString());
@@ -326,7 +342,7 @@ public class Element {
 					element.sendKeys(testdata);
 					enterTAB(element);
 				}
-				
+
 				return true;
 			} catch (InvalidElementStateException e) {
 				// se.log().logSeStep("Could not enter text in " +
@@ -344,37 +360,39 @@ public class Element {
 			return false;
 
 	}
-	
-	public boolean EnterText(WebElement element, String testdata) {        
-        //se.log().logSeStep("Enter Text '" + testdata + "' in Element: " + element.toString());        
-        if (element != null) {
-            try {
-            	if(testdata.equals("NA")){
-            		testdata = "";
-            	}
-            	element.clear();
-                element.sendKeys(testdata);
-                return true;
-            } catch (InvalidElementStateException e) {
-                //se.log().logSeStep("Could not enter text in " + element.toString() + ", element not visible or not enabled");
-                //se.verify().reportError("Could not enter text, element not visible or not enabled");
-                return false;
-            } catch (Exception e) {
-                //se.log().logSeStep("Could not enter text in " + element.toString());
-                //se.verify().reportError("Could not enter text");
-                return false;
-            }
-        } else
-            return false;
 
-    }
+	public boolean EnterText(WebElement element, String testdata) {
+		// se.log().logSeStep("Enter Text '" + testdata + "' in Element: " +
+		// element.toString());
+		if (element != null) {
+			try {
+				if (testdata.equals("NA")) {
+					testdata = "";
+				}
+				element.clear();
+				element.sendKeys(testdata);
+				return true;
+			} catch (InvalidElementStateException e) {
+				// se.log().logSeStep("Could not enter text in " + element.toString() + ",
+				// element not visible or not enabled");
+				// se.verify().reportError("Could not enter text, element not visible or not
+				// enabled");
+				return false;
+			} catch (Exception e) {
+				// se.log().logSeStep("Could not enter text in " + element.toString());
+				// se.verify().reportError("Could not enter text");
+				return false;
+			}
+		} else
+			return false;
 
+	}
 
 	public void enter_textRich(final WebElement element, String testdata) {
-		
-		if(testdata.equals("NA")){
-    		testdata = "";
-    	}
+
+		if (testdata.equals("NA")) {
+			testdata = "";
+		}
 
 		WebDriverWait wait = new WebDriverWait(se.driver(), 30);
 		wait.until(new ExpectedCondition<Boolean>() {
@@ -406,7 +424,7 @@ public class Element {
 
 	public void checkvalue(WebElement element, String testdata) {
 		try {
-			if(testdata.equals("NA")){
+			if (testdata.equals("NA")) {
 				testdata = "N/A";
 			}
 			if (element.isDisplayed() && !testdata.equals("N/A")) {
@@ -497,7 +515,7 @@ public class Element {
 			return text;
 
 	}
-	
+
 	public String getSelectedDDValue(final By locator) {
 		WebElement element;
 		String text = "";
@@ -545,83 +563,76 @@ public class Element {
 	}
 
 	/**
-	 * @throws IOException 
-	 * Selects an item from a drop down
+	 * @throws IOException Selects an item from a drop down
 	 *
-	 * @param locator
-	 * @param selection
-	 * @return
-	 * @throws  
+	 * @param locator @param selection @return @throws
 	 */
 	public boolean selectElement(final By locator, String selection) throws IOException {
 		// se.log().logSeStep("Select " + selection + " In Element: "
 		// + locator.toString());
 		boolean flag = true;
-		try{
+		try {
 			String browserName = ((RemoteWebDriver) se.driver()).getCapabilities().getBrowserName();
 			WebElement element = searchForElement(locator);
-			if(selection.equals("N/A") || selection.equals("NA")){
+			if (selection.equals("N/A") || selection.equals("NA")) {
 				selection = "";
-			} else{
-			
-			if (element != null) {
-				Select select = new Select(element);
-				try {
-					select.deselectAll();
-	
-				} catch (Exception e) {
-					// ignore
+			} else {
+
+				if (element != null) {
+					Select select = new Select(element);
+					try {
+						select.deselectAll();
+
+					} catch (Exception e) {
+						// ignore
+					}
+					select.selectByVisibleText(selection);
+					flag = true;
+				} else {
+					flag = false;
 				}
-				select.selectByVisibleText(selection);
-				flag = true;
-			} else{
-				flag = false;
 			}
-			}
-		}catch (Exception e) {
-			se.verify().verifyEqualsNoScreenshot("Issue with dropdown for"+locator+" ---", true, false);
+		} catch (Exception e) {
+			se.verify().verifyEqualsNoScreenshot("Issue with dropdown for" + locator + " ---", true, false);
 		}
-		return flag;	
+		return flag;
 	}
-	
+
 	public boolean selectElementByIndex(final By locator, int selection) throws IOException {
 		// se.log().logSeStep("Select " + selection + " In Element: "
 		// + locator.toString());
 		boolean flag = true;
-		try{
+		try {
 			String browserName = ((RemoteWebDriver) se.driver()).getCapabilities().getBrowserName();
-			/*if(selection.equals("N/A") || selection.equals("NA")){
-				selection = "";
-			}*/
+			/*
+			 * if(selection.equals("N/A") || selection.equals("NA")){ selection = ""; }
+			 */
 			WebElement element = searchForElement(locator);
 			if (element != null) {
 				Select select = new Select(element);
 				try {
 					select.deselectAll();
-	
+
 				} catch (Exception e) {
 					// ignore
 				}
 				select.selectByIndex(selection);
 				flag = true;
-			} else{
+			} else {
 				flag = false;
 			}
-		}catch (Exception e) {
-			se.verify().verifyEqualsNoScreenshot("Issue with dropdown for"+locator+" ---", true, false);
+		} catch (Exception e) {
+			se.verify().verifyEqualsNoScreenshot("Issue with dropdown for" + locator + " ---", true, false);
 		}
-		return flag;	
+		return flag;
 	}
-	
-		
-	
-	
+
 	public void selectRadioByValue(final By locator, String value) {
-		
+
 		String browserName = ((RemoteWebDriver) se.driver()).getCapabilities().getBrowserName();
-		
+
 		String valueChangeCase = value.toUpperCase();
-		
+
 		List<WebElement> radios = se.driver().findElements(locator);
 		for (int i = 0; i < radios.size(); i++) {
 			String radiovalue = radios.get(i).getAttribute("value");
@@ -732,12 +743,12 @@ public class Element {
 		}
 
 	}
-	
+
 	public void selectvalueByElement(final WebElement select, String selection) {
 
 		try {
 
-			//WebElement select = se.driver().findElement(locator);
+			// WebElement select = se.driver().findElement(locator);
 			List<WebElement> options = select.findElements(By.tagName("option"));
 
 			for (WebElement option : options) {
@@ -810,7 +821,7 @@ public class Element {
 
 	public void selectradiovalue(String value) {
 
-		se.log().logTestStep("Select value as " +value);
+		se.log().logTestStep("Select value as " + value);
 		try {
 			List<WebElement> radios = se.driver().findElements(By.cssSelector(".radio"));
 			for (int i = 0; i < radios.size(); i++) {
@@ -829,11 +840,11 @@ public class Element {
 		}
 
 	}
-	
-	public void selectradiovalue(final By locator,String value) {
+
+	public void selectradiovalue(final By locator, String value) {
 
 		String browserName = ((RemoteWebDriver) se.driver()).getCapabilities().getBrowserName();
-		
+
 		List<WebElement> radios = se.driver().findElements(locator);
 		for (int i = 0; i < radios.size(); i++) {
 			String radiovalue = radios.get(i).getAttribute("value");
@@ -845,15 +856,15 @@ public class Element {
 		}
 
 	}
-	
+
 	public void selectradiovalueYN(final By locator, String value) {
 
-		if(value.equals("Yes")){
+		if (value.equals("Yes")) {
 			value = "1";
-		} else{
+		} else {
 			value = "0";
 		}
-		
+
 		String browserName = ((RemoteWebDriver) se.driver()).getCapabilities().getBrowserName();
 		try {
 			List<WebElement> radios = se.driver().findElements(locator);
@@ -864,15 +875,15 @@ public class Element {
 					break;
 				}
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-	
+
 	public void selectradiovalueUW(final By locator, String value) {
-		
+
 		String valueUppercase = value.toUpperCase();
 
 		String browserName = ((RemoteWebDriver) se.driver()).getCapabilities().getBrowserName();
@@ -885,12 +896,11 @@ public class Element {
 					break;
 				}
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 
 	public void clickElement(WebElement Element) {
 		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
@@ -901,44 +911,48 @@ public class Element {
 		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
 		executor.executeScript("arguments[0].click();", Element);
 	}
-	
-	public void enterTextJSPhone(WebElement Element,String dataValue) {
+
+	public void enterTextJSPhone(WebElement Element, String dataValue) {
 		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('AgencyPhone').value = '"+dataValue+"';");
-	}
-	
-	public void enterTextJSEffDate(WebElement Element,String dataValue) {	
-		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('EffectiveDate').value = '"+dataValue+"';");	
-	}
-	public void enterTextPriorLossJSEffDate(WebElement Element,String dataValue) {	
-		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('WorkCompLineBusiness_WorkCompLossOrPriorPolicy_EffectiveDt').value = '"+dataValue+"';");	
-	}
-	public void enterTextJSExpDate(WebElement Element,String dataValue) {	
-		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('ExpirationDate').value = '"+dataValue+"';");	
-	}
-	
-	public void enterTextJSZip(WebElement Element,String dataValue) {
-		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('ApplicantMailingZip_US').value = '"+dataValue+"';");
-		Element.sendKeys(Keys.TAB);
-	}
-	
-	public void enterTextJSDOBStarted(WebElement Element,String dataValue) {
-		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('DateBusinessStart').value = '"+dataValue+"';");
-	}
-	
-	public void enterTextJSTaxIDFEIN(WebElement Element,String dataValue) {
-		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('TaxIdFEIN').value = '"+dataValue+"';");
+		executor.executeScript("document.getElementById('AgencyPhone').value = '" + dataValue + "';");
 	}
 
-	public void enterTextJSTaxIDSSN(WebElement Element,String dataValue) {
+	public void enterTextJSEffDate(WebElement Element, String dataValue) {
 		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-		executor.executeScript("document.getElementById('TaxIdSSN').value = '"+dataValue+"';");
+		executor.executeScript("document.getElementById('EffectiveDate').value = '" + dataValue + "';");
+	}
+
+	public void enterTextPriorLossJSEffDate(WebElement Element, String dataValue) {
+		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+		executor.executeScript(
+				"document.getElementById('WorkCompLineBusiness_WorkCompLossOrPriorPolicy_EffectiveDt').value = '"
+						+ dataValue + "';");
+	}
+
+	public void enterTextJSExpDate(WebElement Element, String dataValue) {
+		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+		executor.executeScript("document.getElementById('ExpirationDate').value = '" + dataValue + "';");
+	}
+
+	public void enterTextJSZip(WebElement Element, String dataValue) {
+		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+		executor.executeScript("document.getElementById('ApplicantMailingZip_US').value = '" + dataValue + "';");
+		Element.sendKeys(Keys.TAB);
+	}
+
+	public void enterTextJSDOBStarted(WebElement Element, String dataValue) {
+		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+		executor.executeScript("document.getElementById('DateBusinessStart').value = '" + dataValue + "';");
+	}
+
+	public void enterTextJSTaxIDFEIN(WebElement Element, String dataValue) {
+		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+		executor.executeScript("document.getElementById('TaxIdFEIN').value = '" + dataValue + "';");
+	}
+
+	public void enterTextJSTaxIDSSN(WebElement Element, String dataValue) {
+		JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+		executor.executeScript("document.getElementById('TaxIdSSN').value = '" + dataValue + "';");
 	}
 
 	public boolean Click(WebElement Element) {
@@ -954,7 +968,7 @@ public class Element {
 			}
 		} else
 			se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
-			return false;
+		return false;
 	}
 
 	public void doubleClick(WebElement Element) {
@@ -1068,7 +1082,7 @@ public class Element {
 			return false;
 		}
 	}
-	
+
 	public boolean switchToFrameByXpath(WebElement Element) {
 		if (inFrame)
 			returnToDefaultContent();

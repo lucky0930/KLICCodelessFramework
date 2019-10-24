@@ -12,6 +12,7 @@
 		<groups>
 			<run>
 				<include name="VMTest" />
+				<include name="test" />
 				
 			</run>
 		</groups>		

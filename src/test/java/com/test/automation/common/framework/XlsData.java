@@ -314,6 +314,7 @@ public class XlsData extends Page {
 		XSSFCell cell = null;
 		List<Map<String, String>> table = new ArrayList<Map<String, String>>();
 		HashMap<String, String> rowMap = null;
+		
 		List<String> firstRow = new ArrayList<String>();
 
 		int i = 0;
