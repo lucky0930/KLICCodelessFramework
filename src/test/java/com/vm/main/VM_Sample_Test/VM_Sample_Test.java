@@ -50,25 +50,7 @@ public class VM_Sample_Test extends BaseTest {
 		extent = new ExtentReports(homepath + "\\Automation_Report\\" + "Run_" + Util.getCurrentDate() + "_"
 				+ Util.getCurrentTime() + "\\ReportSummary.html");
 
-		// testUtil.ExecuteTest("101");
 	}
-
-//	@Parameters({ "suite-param", "test-three-param" })
-//	@BeforeMethod
-//	protected void before(String Chrome, String )
-//	{
-////		Test test = method.getAnnotation(Test.class);
-//		Browsers myBrowser = (Browsers) params[0];		
-//		SeHelper se = ((SeHelper) params[1]);
-////		//getMethod(method);
-////		se.log().trace("Test Method: " + method.getName());
-//		//se.log().trace("Description: " + test.description());
-//		se.log().trace("Browser: " + myBrowser.toString());		
-//		se.util().sleep(1000);
-//		se.startSession(myBrowser);
-//		se.util().sleep(1000);
-//		se.element().setTimeOut(30);
-//	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void beforeMethod(Method method, Object[] params) {
@@ -85,6 +67,7 @@ public class VM_Sample_Test extends BaseTest {
 	public void VM_Test_One(Browsers myBrowser, SeHelper se, Map<String, Object> params) {
 		testUtil.ExecuteTest("101", se);
 	}
+
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result, Object[] params) {

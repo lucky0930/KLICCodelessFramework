@@ -15,7 +15,7 @@ public class LogInPage extends Page {
 	public static WebElement UserName(SeHelper se) {
 
 		return se.element().getElement(username);
-	}	
+	}
 
 	public static By next = By.xpath("//*[@id='UserName']//following::button");
 
@@ -23,14 +23,14 @@ public class LogInPage extends Page {
 		se.element().waitForElement(next);
 		return se.element().getElement(next);
 	}
-	
+
 	public static By password = By.xpath("//*[@id='Password']");
 
 	public static WebElement Password(SeHelper se) {
 		se.element().waitForElement(password);
 		return se.element().getElement(password);
 	}
-	
+
 	public static By login = By.xpath("//*[@id='Password']//following::button");
 
 	public static WebElement LogIn(SeHelper se) {
