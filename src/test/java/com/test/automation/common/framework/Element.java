@@ -222,6 +222,23 @@ public class Element {
 			return null;
 		}
 	}
+	
+	public WebElement getElement(final By locator, boolean wait) {
+		try {
+			se.element().waitForElement(locator);
+			return se.driver().findElement(locator);
+		} catch (NoSuchElementException e) {
+			String errorName = "NoSuchElementException Exception in getElement:";
+			se.log().logSeStep(errorName + e.getMessage());
+			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			return null;
+		} catch (Exception e) {
+			String errorName = "Un-handled Exception in getElement:";
+			se.log().logSeStep(errorName + e.getMessage());
+			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			return null;
+		}
+	}
 
 	public static WebElement getElement(WebDriver driver, By locator) {
 		try {

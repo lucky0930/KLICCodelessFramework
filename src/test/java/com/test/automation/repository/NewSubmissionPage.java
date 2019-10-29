@@ -12,7 +12,7 @@ public class NewSubmissionPage extends Page {
 
 	public static WebElement CustomerAccountName(SeHelper se) {
 
-		return se.element().getElement(customerAccountName);
+		return se.element().getElement(customerAccountName, true);
 	}
 
 	public static By zipcode = By.xpath("//input[@id='location']");
