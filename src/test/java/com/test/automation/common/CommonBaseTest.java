@@ -36,7 +36,7 @@ public class CommonBaseTest {
 	public static String myMethod = null;
 	public static String[] myMethods = new String[50];
 	public static int myMethodCount=0;
-	
+	private SeHelper se;
 	private Log logger = LogFactory.getLog(CommonBaseTest.class);
 	
 	public String getMethod(Method method) {
@@ -59,31 +59,40 @@ public class CommonBaseTest {
 		//return env[2];
 		return Strurl;
 	}
+	public SeHelper getSe() {
+		
+		return this.se;
+	}
+	public void setSe(SeHelper se) {
+		this.se = se;
+	}
 	
 	
 	@BeforeMethod(alwaysRun = true)
 	protected void beforeMethod(Method method, Object[] params) {
 		Test test = method.getAnnotation(Test.class);
-		Browsers myBrowser = (Browsers) params[0];		
-		SeHelper se = ((SeHelper) params[1]);
-		//getMethod(method);
+		//Browsers myBrowser = (Browsers) params[0];		
+		//SeHelper se = ((SeHelper) params[1]);
+		Browsers myBrowser = se.currentBrowser();
+		getMethod(method);
 		se.log().trace("Test Method: " + method.getName());
 		se.log().trace("Description: " + test.description());
 		se.log().trace("Browser: " + myBrowser.toString());		
 		se.util().sleep(1000);
-		se.startSession(myBrowser);
-		se.util().sleep(1000);
+		//se.startSession(myBrowser);
+		//se.util().sleep(1000);
 		se.element().setTimeOut(30);
+		
 	}
 	
 	@AfterMethod(alwaysRun = true)
 	protected void afterMethod(Method method,  ITestResult result, Object[] params) {
-		SeHelper se = ((SeHelper) params[1]);
+		//SeHelper se = ((SeHelper) params[1]);
 		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
 		
-		params[params.length-1]="";
+		//params[params.length-1]="";
 		se.log().printLogBuilder();
-		//se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
+		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
 		se.browser().quit();
 	}
 	
@@ -180,24 +189,24 @@ public class CommonBaseTest {
 	 * @return Object[][]
 	 */
 	@SuppressWarnings("unchecked")
-	@DataProvider(name = "browserXlsByCol", parallel = true)
-	public Object[][] XLSDataProviderByCol(Method method) {
+	//@DataProvider(name = "browserXlsByCol", parallel = true)
+	//public Object[][] XLSDataProviderByCol(Method method) {
 		//Array of browsers to parameterize test with
-		Object[][] browsersParameters = Data.createDataProviderFromDelimitedString(SystemPropertyUtil.getBrowsers(), ",");
+	//	Object[][] browsersParameters = Data.createDataProviderFromDelimitedString(SystemPropertyUtil.getBrowsers(), ",");
 		//List of parameters to weave in with browsers
-		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
-		//get annotation from test method
-		TestDataXLS testData = method.getAnnotation(TestDataXLS.class);
+		//List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		///get annotation from test method
+	//	TestDataXLS testData = method.getAnnotation(TestDataXLS.class);
 		
 		//check for annotation for filename
-		if(testData == null ||  testData.fileName() == null || testData.fileName().length() == 0)
-		{
-			throw new SkipException(method.getName() + " : TEST REQUIRES DATA FILE TO BE DEFINED");
-		}
+	//	if(testData == null ||  testData.fileName() == null || testData.fileName().length() == 0)
+	//	{
+	//		throw new SkipException(method.getName() + " : TEST REQUIRES DATA FILE TO BE DEFINED");
+	//	}
 		
 		//sFileName = testData.fileName();
 		
-		
+	/*	
 		
 		Object testObject = getXLSTestDataByCol(testData.fileName(), testData.sheetVersion(), testData.sheetName()).get("test");
 		
@@ -241,7 +250,7 @@ public class CommonBaseTest {
 		return returnData;
 	}
 	
-	
+	*/
 	/**
 	 * Description: getXLSTestData to get the parsed excel data to place it in map
 	 * @param filename
