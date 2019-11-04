@@ -43,7 +43,7 @@ public class TestUtil {
 
 	static XlsData objXlsData = new XlsData();
 
-	static String TESTDATA_SHEET_PATH = "C:\\Users\\VMQApractice\\Desktop\\VAMQAPractice\\VM_Framework_Base\\VM_Framework_Base\\resources\\test_data\\VM_TestData_Sample1.xlsx";
+	static String TESTDATA_SHEET_PATH = "C:\\Users\\Evan.Verbus\\git\\VMSF\\VMSeleniumFramework\\resources\\test_data\\VM_TestData_Sample1.xlsx";
 
 	ExcelReader excelReader = new ExcelReader();
 	List<String> sheetCollection = excelReader.sheetCollection;
@@ -71,6 +71,12 @@ public class TestUtil {
 
 	public void ExecuteTest(String TestCaseNumber, SeHelper se) {
 		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
 				TESTDATA_SHEET_PATH);
 		// sheetCollection = excelReader.GetSheetCollection();

@@ -38,7 +38,8 @@ public class VM_Sample_Test extends BaseTest {
 	ExtentReports extent;
 	ExtentTest test;
 	TestUtil testUtil = new TestUtil();
-
+	
+	
 //	@Test
 //	public void AddVehicle_101() {
 //		testUtil.ExecuteTest("101");
@@ -54,6 +55,8 @@ public class VM_Sample_Test extends BaseTest {
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void beforeMethod(Method method, Object[] params) {
+		setSe(new SeHelper());
+		getSe().startSession(Browsers.Chrome);
 		super.beforeMethod(method, params);
 		test = extent.startTest((this.getClass().getSimpleName() + " :: " + method.getName()), method.getName());
 		test.assignAuthor("VAM QA");
@@ -61,11 +64,11 @@ public class VM_Sample_Test extends BaseTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", dataProvider = "browserXlsByCol", groups = { "VMTest",
+	@Test(description = "VM Automation Framework", groups = { "VMTest",
 			"QA" }, timeOut = 500000000)
-	@TestDataXLS(fileName = "\\resources\\test_data\\VM_TestData_Sample.xlsx", sheetVersion = "new", sheetName = "ACME_Data_Sample1")
-	public void VM_Test_One(Browsers myBrowser, SeHelper se, Map<String, Object> params) {
-		testUtil.ExecuteTest("101", se);
+	//@TestDataXLS(fileName = "\\resources\\test_data\\VM_TestData_Sample.xlsx", sheetVersion = "new", sheetName = "ACME_Data_Sample1")
+	public void VM_Test_One() {
+		testUtil.ExecuteTest("101", getSe());
 	}
 
 
