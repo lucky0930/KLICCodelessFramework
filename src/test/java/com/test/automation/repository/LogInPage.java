@@ -14,7 +14,7 @@ public class LogInPage extends Page {
 
 	public static WebElement UserName(SeHelper se) {
 
-		return se.element().getElement(username);
+		return se.element().getElement(username, true);
 	}
 
 	public static By next = By.xpath("//*[@id='UserName']//following::button");
