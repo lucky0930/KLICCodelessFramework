@@ -14,4 +14,10 @@ public class IndexPage extends Page {
 		return se.element().getElement(newSubmission);
 	}
 
+	public static By ServicePolicy = By.xpath("//a[@ng-click=\"CustomerAndPolicySearch()\"]");
+
+	public static WebElement ServicePolicy(SeHelper se) {
+		se.element().waitForElement(ServicePolicy);
+		return se.element().getElement(ServicePolicy);
+	}
 }
