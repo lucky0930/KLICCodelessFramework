@@ -95,6 +95,6 @@ public class PageProcess {
 		default:
 			System.out.println("No Tag value is identified!");
 		}
-		
+
 	}
 }

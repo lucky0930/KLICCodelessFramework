@@ -1,7 +1,9 @@
 package com.test.automation.common.Utils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
@@ -47,10 +49,22 @@ public class TestUtil {
 		}
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
 				SystemPropertyUtil.getTestDataSheetPath());
+
+		List<String> sheetCollection1 = new ArrayList<String>();
+
+		tableData.entrySet().forEach(entry -> {
+			String sheetName = entry.getKey();
+			if (sheetName.contains("$")) {
+				String abc[] = sheetName.split(Pattern.quote("$"));
+				
+				sheetName = sheetName.split(Pattern.quote("$"))[0];
+			}
+			sheetCollection1.add(sheetName);
+		});
 		// sheetCollection = excelReader.GetSheetCollection();
 		for (int i = 0; i < tableData.size(); i++) {
-			String sheetName = sheetCollection.get(i);
-			LinkedHashMap<String, String> actualData = tableData.get(sheetCollection.get(i));
+			String sheetName = sheetCollection1.get(i);
+			LinkedHashMap<String, String> actualData = tableData.get(sheetName);
 
 			actualData.entrySet().forEach(entry -> {
 				System.out.println(entry.getKey() + " => " + entry.getValue());

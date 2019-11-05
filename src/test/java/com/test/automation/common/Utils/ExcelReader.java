@@ -20,6 +20,7 @@ public class ExcelReader {
 	private static org.apache.poi.ss.usermodel.Workbook workbook;
 	LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 	protected List<String> sheetCollection = new ArrayList<String>();
+	int indexflow;
 
 	protected LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(String testCaseNumber,
 			String TESTDATA_SHEET_PATH) {
@@ -29,6 +30,7 @@ public class ExcelReader {
 		int numberOfSheets = workbook.getNumberOfSheets();
 
 		for (int i = 0; i < numberOfSheets; i++) {
+			indexflow = 0;
 			Sheet sheet = workbook.getSheetAt(i);
 			String sheeTname = sheet.getSheetName();
 
@@ -36,16 +38,18 @@ public class ExcelReader {
 				String TCNumber = CheckNumeric(sheet.getRow(row).getCell(0));
 				String flow = CheckNumeric(sheet.getRow(row).getCell(1));
 
-				if (TCNumber != null)
-				{
+				if (TCNumber != null) {
 					if (TCNumber.equals(testCaseNumber)) {
 
 						GetTestData(sheet, row);
 
 						sheetCollection.add(sheeTname);
+						indexflow++;
 					}
+					
 				}
 			}
+			
 		}
 
 		return SortByFlow(tableData);
@@ -92,6 +96,9 @@ public class ExcelReader {
 			LinkedHashMap<String, String> data2) {
 		LinkedHashMap<String, LinkedHashMap<String, String>> myData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		if (!tableData.containsValue(data2)) {
+			if (indexflow > 0) {
+				sheetName = sheetName + "$" + indexflow;
+			}
 			tableData.put(sheetName, data2);
 		}
 
