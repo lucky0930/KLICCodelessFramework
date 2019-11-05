@@ -1,9 +1,9 @@
 package com.vm.main.VM_Sample_Test;
 
-import com.secura.ap.pages.BillingPage;
-import com.secura.ap.pages.CustomerPage;
-import com.secura.ap.pages.HomePage;
-import com.secura.ap.pages.VendorPage;
+//import com.secura.ap.pages.BillingPage;
+//import com.secura.ap.pages.CustomerPage;
+//import com.secura.ap.pages.HomePage;
+//import com.secura.ap.pages.VendorPage;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
@@ -23,9 +23,9 @@ import org.testng.annotations.Test;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
-import com.secura.ap.pages.LoginPage;
-import com.secura.ap.pages.StartupPage;
-import com.secura.ap.pages.SubmissionPage;
+//import com.secura.ap.pages.LoginPage;
+//import com.secura.ap.pages.StartupPage;
+//import com.secura.ap.pages.SubmissionPage;
 import com.test.automation.common.BaseTest;
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.Utils.TestPageFactory;
@@ -38,8 +38,7 @@ public class VM_Sample_Test extends BaseTest {
 	ExtentReports extent;
 	ExtentTest test;
 	TestUtil testUtil = new TestUtil();
-	
-	
+
 //	@Test
 //	public void AddVehicle_101() {
 //		testUtil.ExecuteTest("101");
@@ -55,14 +54,12 @@ public class VM_Sample_Test extends BaseTest {
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void beforeMethod(Method method, Object[] params) {
-		setSe(new SeHelper());
-		getSe().startSession(Browsers.Chrome);
 		super.beforeMethod(method, params);
 		test = extent.startTest((this.getClass().getSimpleName() + " :: " + method.getName()), method.getName());
 		test.assignAuthor("VAM QA");
 		test.assignCategory(method.getName());
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", groups = { 
 			"QA" }, timeOut = 500000000)
@@ -76,7 +73,6 @@ public class VM_Sample_Test extends BaseTest {
 	public void VM_Test_Two() {
 		testUtil.ExecuteTest("101", getSe());
 	}
-
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result, Object[] params) {

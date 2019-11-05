@@ -9,9 +9,9 @@ import com.test.automation.common.SeHelper;
 public class IndexPage extends Page {
 	public static By newSubmission = By.xpath("//*[@ng-click='navigateToMultiQuote()']");
 
-	public static WebElement NewSubmission(SeHelper se) {
-		se.element().waitForElement(newSubmission);
-		return se.element().getElement(newSubmission);
+	public static WebElement NewSubmission(SeHelper se) throws Exception {
+		Thread.sleep(10000);
+		return se.element().getElement(newSubmission,true);
 	}
 
 }
