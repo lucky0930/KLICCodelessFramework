@@ -63,9 +63,15 @@ public class VM_Sample_Test extends BaseTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", groups = { "VMTest", "QA" }, timeOut = 500000000)
+	@Test(description = "VM Automation Framework", groups = {  "QA" }, timeOut = 500000000)
 	public void VM_Test_One() {
 		testUtil.ExecuteTest("101", getSe());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test(description = "VM Automation Framework", groups = { "VMTest" }, timeOut = 500000000)
+	public void VM_Test_Two() {
+		testUtil.ExecuteTest("102", getSe());
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
