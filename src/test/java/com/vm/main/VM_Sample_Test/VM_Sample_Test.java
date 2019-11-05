@@ -60,23 +60,13 @@ public class VM_Sample_Test extends BaseTest {
 		test.assignCategory(method.getName());
 	}
 	
-	//@SuppressWarnings("unchecked")
-	//@Test(description = "VM Automation Framework", dataProvider = "browserXlsByCol", groups = {
-	//		"QA" }, timeOut = 500000000)
-	//@TestDataXLS(fileName = "\\resources\\test_data\\VM_TestData_Sample.xlsx", sheetVersion = "new", sheetName = "ACME_Data_Sample1")
-	//public void VM_Test_One(Browsers myBrowser, SeHelper se, Map<String, Object> params) {
-		//testUtil.ExecuteTest("101", se);
-	//}
-
 	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", dataProvider = "browserXlsByCol", groups = { "VMTest"}, timeOut = 500000000)
-	@TestDataXLS(fileName = "\\resources\\test_data\\VM_TestData_Sample.xlsx", sheetVersion = "new", sheetName = "ACME_Data_Sample1")
-	public void VM_Test_Three(Browsers myBrowser, SeHelper se, Map<String, Object> params) {
-		testUtil.ExecuteTest("103", se);
+	@Test(description = "VM Automation Framework", groups = { "VMTest",
+			"QA" }, timeOut = 500000000)
+	//@TestDataXLS(fileName = "\\resources\\test_data\\VM_TestData_Sample.xlsx", sheetVersion = "new", sheetName = "ACME_Data_Sample1")
+	public void VM_Test_One() {
+		testUtil.ExecuteTest("101", getSe());
 	}
-	
-	
-
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result, Object[] params) {
