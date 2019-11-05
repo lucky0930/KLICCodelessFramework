@@ -22,8 +22,8 @@
 		<classes>
 			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test" />
 			<methods>
-				<include name="VM_Test_Two" />
-				<exclude name="VM_Test_One" />
+				<exclude name="VM_Test_Two" />
+				<include name="VM_Test_One" />
 			</methods>
 		</classes>
 	</test>
