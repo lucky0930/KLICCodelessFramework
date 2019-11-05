@@ -70,14 +70,9 @@ public class PageProcess {
 
 		switch (element.getTagName()) {
 		case "input":
-			if (value.equalsIgnoreCase("Click")) {
-				element.click();
-				break;
-			} else {
-				element.clear();
-				element.sendKeys(value);
-				break;
-			}
+			element.clear();
+			element.sendKeys(value);
+			break;
 
 		case "button":
 			element.click();
@@ -87,9 +82,6 @@ public class PageProcess {
 			dropDownValue.selectByValue(value);
 			break;
 		case "a":
-			element.click();
-			break;
-		case "label":
 			element.click();
 			break;
 		default:
