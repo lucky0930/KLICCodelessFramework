@@ -70,9 +70,14 @@ public class PageProcess {
 
 		switch (element.getTagName()) {
 		case "input":
-			element.clear();
-			element.sendKeys(value);
-			break;
+			if (value.equalsIgnoreCase("Click")) {
+				element.click();
+				break;
+			} else {
+				element.clear();
+				element.sendKeys(value);
+				break;
+			}
 
 		case "button":
 			element.click();
@@ -84,8 +89,12 @@ public class PageProcess {
 		case "a":
 			element.click();
 			break;
+		case "label":
+			element.click();
+			break;
 		default:
 			System.out.println("No Tag value is identified!");
 		}
+		
 	}
 }

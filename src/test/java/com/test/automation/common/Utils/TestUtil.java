@@ -58,7 +58,8 @@ public class TestUtil {
 				if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
 
 				} else {
-					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue());
+					if (entry.getValue() != null)
+						PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue());
 					// FillElement(element, entry.getValue());
 				}
 			});
