@@ -64,10 +64,16 @@ public class VM_Sample_Test extends BaseTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", groups = { "VMTest",
+	@Test(description = "VM Automation Framework", groups = { 
 			"QA" }, timeOut = 500000000)
-	//@TestDataXLS(fileName = "\\resources\\test_data\\VM_TestData_Sample.xlsx", sheetVersion = "new", sheetName = "ACME_Data_Sample1")
 	public void VM_Test_One() {
+		testUtil.ExecuteTest("101", getSe());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test(description = "VM Automation Framework", groups = { "VMTest"
+			 }, timeOut = 500000000)
+	public void VM_Test_Two() {
 		testUtil.ExecuteTest("101", getSe());
 	}
 
