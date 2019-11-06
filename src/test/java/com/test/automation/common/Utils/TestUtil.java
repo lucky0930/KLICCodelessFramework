@@ -51,33 +51,35 @@ public class TestUtil {
 				SystemPropertyUtil.getTestDataSheetPath());
 
 		List<String> sheetCollection1 = new ArrayList<String>();
+		List<String> actualSheetCollection = new ArrayList<String>();
 
 		tableData.entrySet().forEach(entry -> {
 			String sheetName = entry.getKey();
+
+			actualSheetCollection.add(entry.getKey());
 			if (sheetName.contains("$")) {
-				String abc[] = sheetName.split(Pattern.quote("$"));
-				
 				sheetName = sheetName.split(Pattern.quote("$"))[0];
 			}
 			sheetCollection1.add(sheetName);
 		});
-		// sheetCollection = excelReader.GetSheetCollection();
+
 		for (int i = 0; i < tableData.size(); i++) {
-			String sheetName = sheetCollection1.get(i);
-			LinkedHashMap<String, String> actualData = tableData.get(sheetName);
-
-			actualData.entrySet().forEach(entry -> {
-				System.out.println(entry.getKey() + " => " + entry.getValue());
-
-				if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
-
-				} else {
-					if (entry.getValue() != null)
-						PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue());
-					// FillElement(element, entry.getValue());
-				}
-			});
+			LinkedHashMap<String, String> actualData = tableData.get(actualSheetCollection.get(i));
+			ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
 		}
 	}
 
+	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData) {
+
+		actualData.entrySet().forEach(entry -> {
+			System.out.println(entry.getKey() + " => " + entry.getValue());
+
+			if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
+
+			} else {
+				if (entry.getValue() != null)
+					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue());
+			}
+		});
+	}
 }
