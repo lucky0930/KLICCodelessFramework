@@ -15,12 +15,13 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.Augmenter;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
+//import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -34,7 +35,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -48,9 +51,9 @@ import com.test.automation.common.framework.OSTools;
 
 @SuppressWarnings("unused")
 public class Log {
-	private static final Logger logger = LoggerFactory.getLogger(Log.class);
+	private static final Logger logger = LogManager.getLogger(Log.class.getName());
 	private SeHelper se;
-	private boolean logToCouchDB = true;
+	private boolean logToCouchDB = false;
 	private StringBuilder logBuilder = new StringBuilder();
 	private JSONObject tcSteps = new JSONObject();
 	private int tcStepsCount = 1;
@@ -616,6 +619,16 @@ public class Log {
 	public void debug(String logString) {
 		logger.debug(logString);
 		logBuilder.append(logString).append("\n");
+	}
+	
+	public void error(String logString, Exception e) {
+		logger.error(logString, e);
+		logBuilder.append(logString).append("\n");
+	}
+	
+	public void testSeperator() {
+		logger.trace("----------------------- END OF TEST -----------------------");
+		logBuilder.append("----------------------- END OF TEST -----------------------").append("\n");
 	}
 
 	public void screenshot(String scresnshotName, String screenshotHref, VERDICT verdict) {

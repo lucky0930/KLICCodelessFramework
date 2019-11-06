@@ -41,7 +41,7 @@ public class CommonBaseTest {
 	
 	public String getMethod(Method method) {
 		SeHelper se = new SeHelper();
-		se.util().sleep(15000);
+		//se.util().sleep(15000);
 		String sMethod = method.getName();
 		myMethodCount++;
 		myMethods[myMethodCount] = sMethod;
@@ -92,6 +92,7 @@ public class CommonBaseTest {
 		
 		//params[params.length-1]="";
 		se.log().printLogBuilder();
+		se.log().testSeperator();
 		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
 		se.browser().quit();
 	}
