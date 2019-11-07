@@ -169,4 +169,10 @@ public class NewSubmissionPage extends Page {
 		se.element().waitForElement(SelectAndProceed);
 		return se.element().getElement(SelectAndProceed, true);
 	}
+	public static By SelectAndProceed1 = By.xpath("//button[@class=\"btn btn-success pull-right\"]");
+
+	public static WebElement SelectAndProceed1(SeHelper se) {
+		se.element().waitForElement(SelectAndProceed1);
+		return se.element().getElement(SelectAndProceed1, true);
+	}
 }
