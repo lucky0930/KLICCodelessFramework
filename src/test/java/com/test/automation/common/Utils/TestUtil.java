@@ -41,12 +41,7 @@ public class TestUtil {
 
 	public void ExecuteTest(String TestCaseNumber, SeHelper se) {
 		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
 				SystemPropertyUtil.getTestDataSheetPath());
 

@@ -5,6 +5,7 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -99,6 +100,46 @@ public class Element {
 	 * @param timeOutInSeconds
 	 * @return
 	 */
+	
+	public boolean waitForElementIsClickable(final By locator) {
+		
+		try {
+			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
+					.elementToBeClickable(locator));
+			return true;
+			
+		}catch (TimeoutException e) {
+			se.log().logSeStep("Timed out waiting for element " + locator.toString());
+			se.verify().reportError("Timed Out Waiting For Element");
+			return false;
+		} catch (Exception e) {
+			String errorName = "Un-handled Exception in waitForElement: ";
+			se.log().logSeStep(errorName + e + ": " + e.getMessage());
+			return false;
+		}
+		
+	}
+	
+	
+	public boolean waitForElementIs(WebElement element) {
+		
+		try {
+			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
+				.invisibilityOf(element));
+			return true;
+			
+		}catch (TimeoutException e) {
+			se.log().logSeStep("Timed out waiting for element " + element.toString());
+			se.verify().reportError("Timed Out Waiting For Element");
+			return false;
+		} catch (Exception e) {
+			String errorName = "Un-handled Exception in waitForElement: ";
+			se.log().logSeStep(errorName + e + ": " + e.getMessage());
+			return false;
+		}
+		
+	}
+
 	public boolean waitForElement(final By locator, int timeOutInSeconds) {
 		try {
 			new WebDriverWait(se.driver(), timeOutInSeconds).ignoring(RuntimeException.class)
@@ -184,7 +225,7 @@ public class Element {
 	public boolean exists(final By locator) {
 		// se.log().logSeStep("Checking if Element exists: " +
 		// locator.toString());
-		se.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		//se.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 		try {
 			se.driver().findElement(locator);
 			return true;
