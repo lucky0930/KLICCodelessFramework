@@ -20,4 +20,11 @@ public class IndexPage extends Page {
 		se.element().waitForElement(ServicePolicy);
 		return se.element().getElement(ServicePolicy);
 	}
+
+	public static By VerifyUser = By.xpath("//*[@class='user hidden-xs']/span");
+
+	public static WebElement VerifyUser(SeHelper se) {
+		se.element().waitForElement(VerifyUser);
+		return se.element().getElement(VerifyUser);
+	}
 }
