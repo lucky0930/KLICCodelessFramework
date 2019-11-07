@@ -36,6 +36,7 @@ public class PageProcess {
 
 			try {
 				se.log().logSeStep("Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
+				se.reporter().reportStep("Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
 				callMethod.setAccessible(true);
@@ -48,22 +49,28 @@ public class PageProcess {
 				}
 			} catch (NoSuchMethodException e) {
 				se.log().error("NoSuchMethodException encountered when attempting to get element: " + key + " on " + sheetName, e);
+				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
 				e.printStackTrace();
 			} catch (SecurityException e) {
 				se.log().error("SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
+				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
 				e.printStackTrace();
 			}
 		} catch (InstantiationException e) {
 			se.log().error("InstantiationException encountered when new instance of page: " + sheetName + " attempted to be created.", e);
+			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			se.log().error("IllegalAccessException encountered when new instance of page: " + sheetName + " attempted to be created.", e);
+			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			se.log().error("IllegalArgumentException encountered when new instance of page: " + sheetName + " attempted to be created.", e);
+			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			se.log().error("InvocationTargetException encountered when new instance of page: " + sheetName + " attempted to be created.", e);
+			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.getCause().printStackTrace();
 			e.printStackTrace();
 		}
@@ -92,9 +99,11 @@ public class PageProcess {
 				dropDownValue.selectByValue(value);
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value + "\" in element \"" + key + "\" \n", e);
+				se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value + "\" in element \"" + key + "\"");
 				e.printStackTrace();
 			} catch (Exception e) {
 				se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \"" + key + "\" \n", e);
+				se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value + "\" in element \"" + key + "\"");
 				e.printStackTrace();
 			}
 			break;

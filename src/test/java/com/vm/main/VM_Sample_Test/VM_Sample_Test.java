@@ -32,11 +32,11 @@ import com.test.automation.common.Utils.TestPageFactory;
 import com.test.automation.common.Utils.TestUtil;
 import com.test.automation.common.framework.Util;
 import com.test.automation.common.framework.Browser.Browsers;
+import com.test.automation.common.framework.ExtentReporter;
 
 public class VM_Sample_Test extends BaseTest {
 
-	ExtentReports extent;
-	ExtentTest test;
+	private ExtentReporter reporter;
 	TestUtil testUtil = new TestUtil();
 
 //	@Test
@@ -46,20 +46,18 @@ public class VM_Sample_Test extends BaseTest {
 
 	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
-		String homepath = new File(".").getCanonicalPath();
-		extent = new ExtentReports(homepath + "\\Automation_Report\\" + "Run_" + Util.getCurrentDate() + "_"
-				+ Util.getCurrentTime() + "\\ReportSummary.html");
-
+		reporter = new ExtentReporter();
 	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void beforeMethod(Method method, Object[] params) {
-		setSe(new SeHelper());
+		SeHelper se = new SeHelper();
+		se.setReporter(reporter);
+		setSe(se);
 		getSe().startSession(Browsers.Chrome);
 		super.beforeMethod(method, params);
-		test = extent.startTest((this.getClass().getSimpleName() + " :: " + method.getName()), method.getName());
-		test.assignAuthor("VAM QA");
-		test.assignCategory(method.getName());
+		reporter.startTest(this.getClass().getSimpleName(), method.getName());
+		reporter.reportStep("Testing report method.");
 	}
 
 //	@SuppressWarnings("unchecked")
@@ -83,13 +81,12 @@ public class VM_Sample_Test extends BaseTest {
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result, Object[] params) {
 		super.afterMethod(method, result, params);
-		extent.endTest(test);
+		reporter.endTest();
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void afterSuite() throws IOException {
-		extent.flush();
-		extent.close();
+		reporter.closeExtent();
 	}
 
 //	@SuppressWarnings("unchecked")

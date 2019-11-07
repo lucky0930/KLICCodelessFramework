@@ -8,6 +8,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.*;
+
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
 import com.test.automation.common.framework.*;
 import com.test.automation.common.framework.Browser.Browsers;
 
@@ -32,6 +35,8 @@ public class SeHelper {
 
 	public static int seMethodCount = 0;
 	private Browser.Browsers currentBrowser;
+	
+	private ExtentReporter reporter;
 
 	// Sauce Labs
 	private final String USERNAME = "saignapika";
@@ -413,5 +418,12 @@ public class SeHelper {
 		else
 			return "none";
 	}
-
+	
+	public void setReporter(ExtentReporter e) {
+		this.reporter = e;
+	}
+	
+	public ExtentReporter reporter() {
+		return reporter;
+	}
 }
