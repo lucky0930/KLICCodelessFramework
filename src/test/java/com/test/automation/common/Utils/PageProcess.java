@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.framework.Assertions;
+import com.test.automation.common.framework.CustomHandler;
 
 public class PageProcess {
 
@@ -88,6 +89,10 @@ public class PageProcess {
 		if (value.contains(">")) {
 			argValue = value;
 			value = value.substring(value.indexOf('>') + 1);
+		}
+		if(value.contains("()"))
+		{
+			value = new CustomHandler().handle(value); 
 		}
 
 		switch (element.getTagName()) {
