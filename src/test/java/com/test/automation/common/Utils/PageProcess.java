@@ -93,7 +93,7 @@ public class PageProcess {
 			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
 			e.getCause().printStackTrace();
 			e.printStackTrace();
-		}
+		} 
 		return element;
 	}
 
@@ -113,7 +113,8 @@ public class PageProcess {
 		switch (element.getTagName()) {
 		case "input":
 			if (value.equalsIgnoreCase("Click")) {
-				element.click();
+				se.element().Click(element);
+				//element.click();
 				break;
 			} else {
 				element.clear();
@@ -122,7 +123,8 @@ public class PageProcess {
 			}
 
 		case "button":
-			element.click();
+			se.element().Click(element);
+			//element.click();
 			break;
 		case "select":
 			try {
@@ -143,10 +145,12 @@ public class PageProcess {
 			}
 			break;
 		case "a":
-			element.click();
+			se.element().Click(element);
+			//element.click();
 			break;
 		case "label":
-			element.click();
+			se.element().Click(element);
+			//element.click();
 			break;
 		default:
 			ActionBasedOnValue(se, element, value);
@@ -159,7 +163,8 @@ public class PageProcess {
 
 	private static void ActionBasedOnValue(SeHelper se,WebElement element, String value) {
 		if (value.contains("Click")) {
-			element.click();
+			se.element().Click(element);
+			//element.click();
 		} else {
 			se.log().debug("No tag and value is identified!");
 		}

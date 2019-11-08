@@ -40,8 +40,7 @@ public class CommonBaseTest {
 	private Log logger = LogFactory.getLog(CommonBaseTest.class);
 	
 	public String getMethod(Method method) {
-		SeHelper se = new SeHelper();
-		//se.util().sleep(15000);
+
 		String sMethod = method.getName();
 		myMethodCount++;
 		myMethods[myMethodCount] = sMethod;
@@ -59,7 +58,7 @@ public class CommonBaseTest {
 		//return env[2];
 		return Strurl;
 	}
-	public SeHelper getSe() {
+	public SeHelper se() {
 		
 		return this.se;
 	}
@@ -79,9 +78,7 @@ public class CommonBaseTest {
 		se.log().trace("Description: " + test.description());
 		se.log().trace("Browser: " + myBrowser.toString());		
 		se.util().sleep(1000);
-		//se.startSession(myBrowser);
-		//se.util().sleep(1000);
-		se.element().setTimeOut(30);
+
 		
 	}
 	

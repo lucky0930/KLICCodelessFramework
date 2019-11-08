@@ -1,5 +1,7 @@
 package com.test.automation.repository;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -11,8 +13,8 @@ public class NewSubmissionPage extends Page {
 	public static By customerAccountName = By.xpath("//input[@type='text']");
 
 	public static WebElement CustomerAccountName(SeHelper se) throws InterruptedException {
-		Thread.sleep(10000);
-		return se.element().getElement(customerAccountName, true);
+		se.element().waitForElementIsDisplayed(customerAccountName);
+		return se.element().getElement(customerAccountName,true);
 	}
 
 	public static By zipcode = By.xpath("//input[@id='location']");
@@ -146,8 +148,11 @@ public class NewSubmissionPage extends Page {
 	public static By CreateSubmission1 = By.xpath("//*[@ng-click='accountproceed()']");
 
 	public static WebElement CreateSubmission1(SeHelper se) {
-		se.element().waitForElement(CreateSubmission1);
-		return se.element().getElement(CreateSubmission1, true);
+		se.element().waitForElementToDisappear(SelectAndProceed,6);
+		se.element().waitForElementIsClickable(CreateSubmission1);
+		//se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
+		return se.element().getElement(CreateSubmission1);
+		
 	}
 
 	public static By cancel = By.xpath("//*[@id=\"scrollToDivID\"]/div[1]/form/div[3]/a");

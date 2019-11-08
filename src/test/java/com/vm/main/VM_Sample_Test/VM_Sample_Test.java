@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -54,7 +55,8 @@ public class VM_Sample_Test extends BaseTest {
 		SeHelper se = new SeHelper();
 		se.setReporter(reporter);
 		setSe(se);
-		getSe().startSession(Browsers.Chrome);
+		se().startSession(Browsers.Chrome);
+		se().driver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		super.beforeMethod(method, params);
 		reporter.startTest(this.getClass().getSimpleName(), method.getName());
 	}
@@ -74,7 +76,8 @@ public class VM_Sample_Test extends BaseTest {
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Three() {
-		testUtil.ExecuteTest("103", getSe());
+	
+		testUtil.ExecuteTest("103", se());
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
