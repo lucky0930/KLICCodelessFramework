@@ -13,7 +13,7 @@ public class IndexPage extends Page {
 
 	public static WebElement NewSubmission(SeHelper se) {
 		
-		
+		se.element().waitForPageLoad();
 		se.element().waitForElementIsClickable(newSubmission);
 		return se.element().getElement(newSubmission);
 	}

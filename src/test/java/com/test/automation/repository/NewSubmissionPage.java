@@ -13,6 +13,7 @@ public class NewSubmissionPage extends Page {
 	public static By customerAccountName = By.xpath("//input[@type='text']");
 
 	public static WebElement CustomerAccountName(SeHelper se) throws InterruptedException {
+		se.element().waitForPageLoad();
 		se.element().waitForElementIsDisplayed(customerAccountName);
 		return se.element().getElement(customerAccountName,true);
 	}

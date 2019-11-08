@@ -139,6 +139,27 @@ public class Element {
 		}
 		
 	}
+public boolean waitForPageLoad() {
+		
+		try {
+			new WebDriverWait(se.driver(), 10000).until(WebDriver -> ((JavascriptExecutor) WebDriver)
+		            .executeScript("return document.readyState").equals("complete"));
+			return true;
+			
+		}catch (TimeoutException e) {
+			//se.log().logSeStep("Timed out waiting for element " + element.toString());
+			se.verify().reportError("Timed Out Waiting For Element");
+			return false;
+		} catch (Exception e) {
+			String errorName = "Un-handled Exception in waitForElement: ";
+			se.log().logSeStep(errorName + e + ": " + e.getMessage());
+			return false;
+		}
+		
+	}
+	
+	
+
 
 	public boolean waitForElement(final By locator, int timeOutInSeconds) {
 		try {
