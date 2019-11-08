@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -73,27 +74,35 @@ public class PageProcess {
 				e.printStackTrace();
 			}
 		} catch (InstantiationException e) {
-			se.log().error("InstantiationException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
+			se.log().error("InstantiationException encountered when new instance of: " + sheetName
+					+ " was attempted to be created.", e);
+			se.reporter().reportErrorCapture("Error occurred on page: " + sheetName + ".", sheetName + "_failed", se);
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			se.log().error("IllegalAccessException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
+			se.log().error("IllegalAccessException encountered when new instance of: " + sheetName
+					+ " was attempted to be created.", e);
+			se.reporter().reportErrorCapture("Error occurred on page: " + sheetName + ".", sheetName + "_failed", se);
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			se.log().error("IllegalArgumentException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
+			se.log().error("IllegalArgumentException encountered when new instance of: " + sheetName
+					+ " was attempted to be created.", e);
+			se.reporter().reportErrorCapture("Error occurred on page: " + sheetName + ".", sheetName + "_failed", se);
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			se.log().error("InvocationTargetException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
+			se.log().error("InvocationTargetException encountered when new instance of: " + sheetName
+					+ " was attempted to be created.", e);
+			se.reporter().reportErrorCapture("Error occurred on page: " + sheetName + ".", sheetName + "_failed", se);
 			e.getCause().printStackTrace();
 			e.printStackTrace();
-		} 
+		} catch (ElementNotInteractableException e) {
+			se.log().error("ElementNotInteractableException encountered when new instance of: " + sheetName + " was attempted to be created.", e);
+			se.reporter().reportErrorCapture("Error occurred on page: " + sheetName + ".", sheetName + "_failed", se);
+			e.printStackTrace();
+		}  catch (Exception e) {
+			se.log().error("Exception encountered when new instance of: " + sheetName + " was attempted to be created.", e);
+			se.reporter().reportErrorCapture("Error occurred on page: " + sheetName + ".", sheetName + "_failed", se);
+			e.printStackTrace();
+		}
 		return element;
 	}
 
@@ -112,19 +121,29 @@ public class PageProcess {
 
 		switch (element.getTagName()) {
 		case "input":
-			if (value.equalsIgnoreCase("Click")) {
+			try {
+				if (value.equalsIgnoreCase("Click")) {
+					se.element().Click(element);
+					//element.click();
+				} else {
+					element.clear();
+					element.sendKeys(value);
+				}
+			} catch (NoSuchElementException e) {
+				se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
+				se.reporter().reportErrorCapture("Failed to find " + key + "\"", "could_not_find_" + key, se);
+				e.printStackTrace();
+			}
+			break;
+		case "button":
+			try {
 				se.element().Click(element);
 				//element.click();
-				break;
-			} else {
-				element.clear();
-				element.sendKeys(value);
-				break;
+			} catch (NoSuchElementException e) {
+				se.log().error("NoSuchElementException encountered when trying to click \"" + key + "\"", e);
+				se.reporter().reportErrorCapture("Failed to click " + key + "\"", "could_not_find_" + key, se);
+				e.printStackTrace();
 			}
-
-		case "button":
-			se.element().Click(element);
-			//element.click();
 			break;
 		case "select":
 			try {
@@ -133,24 +152,30 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
 						+ "\" in element \"" + key + "\" \n", e);
-				se.reporter().reportErrorCapture("Failed to find value \"" + value + "\" in dropdown: \"" 
-						+ key + "\"", value + "_not_found", se);
+				se.reporter().reportErrorCapture("Failed to find value \"" + value + "\" in dropdown: \""
+						+ key + "\"", "could_not_find_" + key, se);
 				e.printStackTrace();
-			} catch (Exception e) {
-				se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \"" + key
-						+ "\" \n", e);
-				se.reporter().reportErrorCapture("Failed to find value \"" + value + "\" in dropdown: \"" 
-						+ key + "\"", value + "_not_found", se);
+			} 
+			break;
+		case "a":
+			try {
+				se.element().Click(element);
+				//element.click();
+			} catch (NoSuchElementException e) {
+				se.log().error("NoSuchElementException encountered when trying to click \"" + key + "\"", e);
+				se.reporter().reportErrorCapture("Failed to click " + key + "\"", "could_not_find_" + key, se);
 				e.printStackTrace();
 			}
 			break;
-		case "a":
-			se.element().Click(element);
-			//element.click();
-			break;
 		case "label":
-			se.element().Click(element);
-			//element.click();
+			try {
+				se.element().Click(element);
+				//element.click();
+			} catch (NoSuchElementException e) {
+				se.log().error("NoSuchElementException encountered when trying to click \"" + key + "\"", e);
+				se.reporter().reportErrorCapture("Failed to click " + key + "\"", "could_not_find_" + key, se);
+				e.printStackTrace();
+			}
 			break;
 		default:
 			ActionBasedOnValue(se, element, value);
