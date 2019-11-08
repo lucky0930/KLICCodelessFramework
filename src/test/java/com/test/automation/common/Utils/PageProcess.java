@@ -20,6 +20,9 @@ public class PageProcess {
 	public static WebElement findElement(SeHelper se, String sheetName, String key, String value) {
 		Class<?> objClass = null;
 		WebElement element = null;
+		if (key.contains("Verify")) {
+			key = key.replaceFirst("Verify", "");
+		}
 		try {
 			// se.log().logSeStep("Creating repository for page: \"" + sheetName + "\"");
 			objClass = Class.forName("com.test.automation.repository." + sheetName);
@@ -32,9 +35,9 @@ public class PageProcess {
 			e.printStackTrace();
 		}
 
-		Constructor<?> constuctor = null;
+		Constructor<?> constructor = null;
 		try {
-			constuctor = objClass.getConstructor();
+			constructor = objClass.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
 			se.log().error("Exception encountered when attempting to get constructor for page repository: " 
 					+ sheetName, e);
@@ -43,7 +46,7 @@ public class PageProcess {
 			e.printStackTrace();
 		}
 		try {
-			Object obj = constuctor.newInstance();
+			Object obj = constructor.newInstance();
 
 			try {
 				se.log().logSeStep("Getting element: \"" + key + "\" on " + sheetName
@@ -56,10 +59,16 @@ public class PageProcess {
 
 				element = (WebElement) callMethod.invoke(obj, se);
 				// element = (WebElement) callMethod.invoke(obj);
-
 				if (element != null) {
+					if (value.contains(">")) {
+						Assertions asrt = new Assertions(se);
+						asrt.verify(element, value);
+						return element;
+					}
 					FillElement(se, element, key, value);
 				}
+			} catch (NoSuchElementException e) {
+				System.out.println("NoSuchElementException passed from verify()");
 			} catch (NoSuchMethodException e) {
 				se.log().error("NoSuchMethodException encountered when attempting to get element: "
 						+ key + " on " + sheetName, e);
@@ -108,12 +117,6 @@ public class PageProcess {
 
 	private static void FillElement(SeHelper se, WebElement element, String key, String value) {
 
-		Assertions asrt = new Assertions();
-		String argValue = null;
-		if (value.contains(">")) {
-			argValue = value;
-			value = value.substring(value.indexOf('>') + 1);
-		}
 		if(value.contains("()"))
 		{
 			value = new CustomHandler().handle(value); 
@@ -179,10 +182,6 @@ public class PageProcess {
 			break;
 		default:
 			ActionBasedOnValue(se, element, value);
-		}
-
-		if (argValue != null) {
-			System.out.println(argValue + " resolved " + asrt.verify(element, argValue));
 		}
 	}
 
