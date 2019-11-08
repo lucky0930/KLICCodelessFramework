@@ -26,6 +26,8 @@ public class PageProcess {
 		} catch (ClassNotFoundException e) {
 			se.log().error("ClassNotFoundException encountered when the repository for page: " + sheetName
 					+ " was attempted to be created.", e);
+			se.reporter().reportErrorCapture("Could not get page: \"" + sheetName + "\"",
+					sheetName + "_not_found", se);
 			e.printStackTrace();
 		}
 
@@ -33,17 +35,20 @@ public class PageProcess {
 		try {
 			constuctor = objClass.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
-			se.log().error("Exception encountered when attempting to get constructor for page repository: " + sheetName,
-					e);
+			se.log().error("Exception encountered when attempting to get constructor for page repository: " 
+					+ sheetName, e);
+			se.reporter().reportErrorCapture("Could not get page: \"" + sheetName + "\"",
+					sheetName + "_not_found", se);
 			e.printStackTrace();
 		}
 		try {
 			Object obj = constuctor.newInstance();
 
 			try {
-				se.log().logSeStep(
-						"Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
-				se.reporter().reportStep("Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
+				se.log().logSeStep("Getting element: \"" + key + "\" on " + sheetName
+						+ ". Using value: \"" + value + "\"");
+				se.reporter().reportStep("Found element: \"" + key + "\" on page " + sheetName
+						+ ". Using value: \"" + value + "\"");
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
 				callMethod.setAccessible(true);
@@ -55,36 +60,37 @@ public class PageProcess {
 					FillElement(se, element, key, value);
 				}
 			} catch (NoSuchMethodException e) {
-				se.log().error(
-						"NoSuchMethodException encountered when attempting to get element: " + key + " on " + sheetName,
-						e);
-				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
+				se.log().error("NoSuchMethodException encountered when attempting to get element: "
+						+ key + " on " + sheetName, e);
+				se.reporter().reportErrorCapture("Could not find: \"" + key + "\" on page" + sheetName
+						+ ".", key + "_not_found", se);
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				se.log().error(
-						"SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
-				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
+				se.log().error("SecurityException encountered when attempting to get element: "
+						+ key + " on " + sheetName, e);
+				se.reporter().reportErrorCapture("Could not find: \"" + key + "\" on page" + sheetName
+						+ ".", key + "_not_found", se);
 				e.printStackTrace();
 			}
 		} catch (InstantiationException e) {
 			se.log().error("InstantiationException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			se.log().error("IllegalAccessException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			se.log().error("IllegalArgumentException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			se.log().error("InvocationTargetException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Failed to get page: " + sheetName + ".", sheetName + "_failed", se);
 			e.getCause().printStackTrace();
 			e.printStackTrace();
 		}
@@ -125,12 +131,14 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
 						+ "\" in element \"" + key + "\" \n", e);
-				se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value + "\" in element \"" + key + "\"");
+				se.reporter().reportErrorCapture("Failed to find value \"" + value + "\" in dropdown: \"" 
+						+ key + "\"", value + "_not_found", se);
 				e.printStackTrace();
 			} catch (Exception e) {
 				se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \"" + key
 						+ "\" \n", e);
-				se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value + "\" in element \"" + key + "\"");
+				se.reporter().reportErrorCapture("Failed to find value \"" + value + "\" in dropdown: \"" 
+						+ key + "\"", value + "_not_found", se);
 				e.printStackTrace();
 			}
 			break;
@@ -142,13 +150,11 @@ public class PageProcess {
 			break;
 		default:
 			ActionBasedOnValue(se, element, value);
-			
 		}
 
 		if (argValue != null) {
 			System.out.println(argValue + " resolved " + asrt.verify(element, argValue));
 		}
-
 	}
 
 	private static void ActionBasedOnValue(SeHelper se,WebElement element, String value) {

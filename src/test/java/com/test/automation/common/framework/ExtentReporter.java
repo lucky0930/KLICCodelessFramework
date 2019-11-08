@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import com.test.automation.common.SeHelper;
 
 public class ExtentReporter {
 
@@ -35,6 +36,14 @@ public class ExtentReporter {
 	
 	public void reportError(String step) {
 		test.log(LogStatus.ERROR, step);
+	}
+	
+	public void reportErrorCapture(String step, String captureName, SeHelper se) {
+		try {
+			test.log(LogStatus.ERROR, step + test.addScreenCapture(Util.captureScreenshot(captureName, se)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void endTest() {

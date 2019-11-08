@@ -19,6 +19,7 @@ public class Assertions {
 	public boolean verify(String arg) {
 		if (!arg.contains(">")) {
 			se.log().logSeStep("VERIFY FAILED: No assertion provided - '>' missing");
+			se.reporter().reportError("VERIFY FAILED: No assertion provided - '>' missing");
 			return false;
 		}
 
@@ -28,13 +29,16 @@ public class Assertions {
 		if (assertion.equals("CheckURL")) {
 			if (expectedValue.equals(se.browser().getCurrentUrl())) {
 				se.log().logSeStep("VERIFY CheckURL: " + expectedValue);
+				se.reporter().reportStep("VERIFY CheckURL: " + expectedValue);
 				return true;
 			}
 			se.log().logSeStep("VERIFY FAILED - CheckURL: URL does not match expected: " + expectedValue);
+			se.reporter().reportError("VERIFY FAILED - CheckURL: URL does not match expected: " + expectedValue);
 			return false;
 		} else {
 			System.out.println("WARNING: verify() calls must include WebElement unless asserting 'CheckURL'");
 			se.log().logSeStep("VERIFY FAILED: No valid assertion provided");
+			se.reporter().reportError("VERIFY FAILED: No valid assertion provided");
 			return false;
 		}
 	}
@@ -48,6 +52,7 @@ public class Assertions {
 		boolean result = false;
 		if (!arg.contains(">")) {
 			se.log().logSeStep("VERIFY FAILED: No assertion provided - '>' missing");
+			se.reporter().reportError("VERIFY FAILED: No assertion provided - '>' missing");
 			return false;
 		}
 
@@ -75,8 +80,10 @@ public class Assertions {
 			result = element.isDisplayed();
 			if (result) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is visible");
+				se.reporter().reportStep("VERIFY " + assertion + ": " + element.getTagName() + " is visible");
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT visible");
+				se.reporter().reportError("VERIFY FAILED: " + element.getTagName() + " is NOT visible");
 			}
 			return result;
 
@@ -84,9 +91,11 @@ public class Assertions {
 			actualValue = element.getAttribute("value");
 			if (actualValue.equals("Enable")) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is enabled");
+				se.reporter().reportError("VERIFY " + assertion + ": " + element.getTagName() + " is enabled");
 				return true;
 			} else {
-				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT enabled");
+				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is enabled");
+				se.reporter().reportError("VERIFY FAILED: " + element.getTagName() + " is NOT enabled");
 				return false;
 			}
 
@@ -94,18 +103,22 @@ public class Assertions {
 			actualValue = element.getAttribute("value");
 			if (actualValue.equals("Select")) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is selected");
+				se.reporter().reportError("VERIFY " + assertion + ": " + element.getTagName() + " is selected");
 				return true;
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
+				se.reporter().reportError("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
 				return false;
 			}
 
 		case "IsSelectedValue":
 			if (element.getAttribute("checked").equals("checked")) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is selected");
+				se.reporter().reportError("VERIFY " + assertion + ": " + element.getTagName() + " is selected");
 				return true;
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
+				se.reporter().reportError("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
 				return false;
 			}
 
@@ -141,13 +154,17 @@ public class Assertions {
 
 		default:
 			se.log().logSeStep("VERIFY FAILED: No valid assertion provided");
+			se.reporter().reportError("VERIFY FAILED: No valid assertion provided");
 			return false;
 		}
 
 		if (result == true) {
 			se.log().logSeStep("VERIFY " + assertion + ": " + expectedValue);
+			se.reporter().reportError("VERIFY " + assertion + ": " + expectedValue);
 		} else {
 			se.log().logSeStep("VERIFY FAILED - " + assertion + ": " + expectedValue
+					+ " does not match actual value -> " + actualValue);
+			se.reporter().reportError("VERIFY FAILED - " + assertion + ": " + expectedValue
 					+ " does not match actual value -> " + actualValue);
 		}
 

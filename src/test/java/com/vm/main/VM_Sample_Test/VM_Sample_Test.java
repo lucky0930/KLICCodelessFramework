@@ -57,7 +57,6 @@ public class VM_Sample_Test extends BaseTest {
 		getSe().startSession(Browsers.Chrome);
 		super.beforeMethod(method, params);
 		reporter.startTest(this.getClass().getSimpleName(), method.getName());
-		reporter.reportStep("Testing report method.");
 	}
 
 //	@SuppressWarnings("unchecked")
