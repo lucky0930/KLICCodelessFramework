@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.test.automation.common.Page;
 import com.test.automation.common.SeHelper;
@@ -14,7 +15,7 @@ public class NewSubmissionPage extends Page {
 
 	public static WebElement CustomerAccountName(SeHelper se) throws InterruptedException {
 		se.element().waitForElementIsDisplayed(customerAccountName);
-		return se.element().getElement(customerAccountName,true);
+		return se.element().getElement(customerAccountName, true);
 	}
 
 	public static By zipcode = By.xpath("//input[@id='location']");
@@ -148,11 +149,11 @@ public class NewSubmissionPage extends Page {
 	public static By CreateSubmission1 = By.xpath("//*[@ng-click='accountproceed()']");
 
 	public static WebElement CreateSubmission1(SeHelper se) {
-		se.element().waitForElementToDisappear(SelectAndProceed,6);
+		se.element().waitForElementToDisappear(SelectAndProceed, 6);
 		se.element().waitForElementIsClickable(CreateSubmission1);
-		//se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
+		// se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
 		return se.element().getElement(CreateSubmission1);
-		
+
 	}
 
 	public static By cancel = By.xpath("//*[@id=\"scrollToDivID\"]/div[1]/form/div[3]/a");
@@ -162,9 +163,10 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(cancel);
 	}
 
-	public static By SelectUser = By.xpath("//input[@name=\"Duplicate\"]");
+	public static By SelectUser = By.xpath("(//input[@name=\"Duplicate\"])[1]");
 
 	public static WebElement SelectUser(SeHelper se) {
+		se.element().waitForElementIsDisplayed(SelectUser);
 		return se.element().getElement(SelectUser, true);
 	}
 
@@ -174,6 +176,7 @@ public class NewSubmissionPage extends Page {
 		se.element().waitForElement(SelectAndProceed);
 		return se.element().getElement(SelectAndProceed, true);
 	}
+
 	public static By SelectAndProceed1 = By.xpath("//button[@class=\"btn btn-success pull-right\"]");
 
 	public static WebElement SelectAndProceed1(SeHelper se) {
