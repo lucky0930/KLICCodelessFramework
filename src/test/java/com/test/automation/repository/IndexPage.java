@@ -10,16 +10,9 @@ import com.test.automation.common.SeHelper;
 
 public class IndexPage extends Page {
 	
-	public IndexPage()
-	{
-		se.element().waitForPageLoad();
-	}
-	
 	public static By newSubmission = By.xpath("//*[@ng-click='navigateToMultiQuote()']");
 
 	public static WebElement NewSubmission(SeHelper se) {
-		
-		
 		se.element().waitForElementIsClickable(newSubmission);
 		return se.element().getElement(newSubmission);
 	}
@@ -33,7 +26,8 @@ public class IndexPage extends Page {
 
 	public static By VerifyUser = By.xpath("//*[@class='user hidden-xs']/span");
 
-	public static WebElement VerifyUser(SeHelper se) {
+	public static WebElement VerifyUser(SeHelper se) throws InterruptedException {
+		se.element().waitForElementToDisappear(LogInPage.login, 6);
 		se.element().waitForElement(VerifyUser);
 		return se.element().getElement(VerifyUser);
 	}
