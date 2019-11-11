@@ -13,6 +13,7 @@ public class IndexPage extends Page {
 	public static By newSubmission = By.xpath("//*[@ng-click='navigateToMultiQuote()']");
 
 	public static WebElement NewSubmission(SeHelper se) {
+		
 		se.element().waitForElementIsClickable(newSubmission);
 		return se.element().getElement(newSubmission);
 	}
