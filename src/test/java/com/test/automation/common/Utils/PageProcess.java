@@ -43,7 +43,8 @@ public class PageProcess {
 			try {
 				se.log().logSeStep(
 						"Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
-				se.reporter().reportStep("Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
+				se.reporter().reportStep(
+						"Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
 				callMethod.setAccessible(true);
@@ -58,36 +59,42 @@ public class PageProcess {
 				se.log().error(
 						"NoSuchMethodException encountered when attempting to get element: " + key + " on " + sheetName,
 						e);
-				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
+				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName
+						+ " using value: \"" + value + "\"");
 				e.printStackTrace();
 			} catch (SecurityException e) {
 				se.log().error(
 						"SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
-				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
+				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName
+						+ " using value: \"" + value + "\"");
 				e.printStackTrace();
 			}
 		} catch (InstantiationException e) {
 			se.log().error("InstantiationException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportStep(
+					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			se.log().error("IllegalAccessException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportStep(
+					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			se.log().error("IllegalArgumentException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportStep(
+					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			se.log().error("InvocationTargetException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep("Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportStep(
+					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
 			e.getCause().printStackTrace();
 			e.printStackTrace();
-		} 
+		}
 		return element;
 	}
 
@@ -99,54 +106,56 @@ public class PageProcess {
 			argValue = value;
 			value = value.substring(value.indexOf('>') + 1);
 		}
-		if(value.contains("()"))
-		{
-			value = new CustomHandler().handle(value); 
-		}
+		else if (value.contains("()")) {
+			value = new CustomHandler().handle(value);
+		} else {
 
-		switch (element.getTagName()) {
-		case "input":
-			if (value.equalsIgnoreCase("Click")) {
+			switch (element.getTagName()) {
+			case "input":
+				if (value.equalsIgnoreCase("Click")) {
+					se.element().Click(element);
+					// element.click();
+					break;
+				} else {
+					element.clear();
+					element.sendKeys(value);
+					break;
+				}
+
+			case "button":
 				se.element().Click(element);
-				//element.click();
+				// element.click();
 				break;
-			} else {
-				element.clear();
-				element.sendKeys(value);
+			case "select":
+				try {
+					Select dropDownValue = new Select(element);
+					dropDownValue.selectByValue(value);
+				} catch (NoSuchElementException e) {
+					se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
+							+ "\" in element \"" + key + "\" \n", e);
+					se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value
+							+ "\" in element \"" + key + "\"");
+					e.printStackTrace();
+				} catch (Exception e) {
+					se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \""
+							+ key + "\" \n", e);
+					se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value
+							+ "\" in element \"" + key + "\"");
+					e.printStackTrace();
+				}
 				break;
-			}
+			case "a":
+				se.element().Click(element);
+				// element.click();
+				break;
+			case "label":
+				se.element().Click(element);
+				// element.click();
+				break;
+			default:
+				ActionBasedOnValue(se, element, value);
 
-		case "button":
-			se.element().Click(element);
-			//element.click();
-			break;
-		case "select":
-			try {
-				Select dropDownValue = new Select(element);
-				dropDownValue.selectByValue(value);
-			} catch (NoSuchElementException e) {
-				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
-						+ "\" in element \"" + key + "\" \n", e);
-				se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value + "\" in element \"" + key + "\"");
-				e.printStackTrace();
-			} catch (Exception e) {
-				se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \"" + key
-						+ "\" \n", e);
-				se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value + "\" in element \"" + key + "\"");
-				e.printStackTrace();
 			}
-			break;
-		case "a":
-			se.element().Click(element);
-			//element.click();
-			break;
-		case "label":
-			se.element().Click(element);
-			//element.click();
-			break;
-		default:
-			ActionBasedOnValue(se, element, value);
-			
 		}
 
 		if (argValue != null) {
@@ -155,10 +164,10 @@ public class PageProcess {
 
 	}
 
-	private static void ActionBasedOnValue(SeHelper se,WebElement element, String value) {
+	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
 		if (value.contains("Click")) {
 			se.element().Click(element);
-			//element.click();
+			// element.click();
 		} else {
 			se.log().debug("No tag and value is identified!");
 		}

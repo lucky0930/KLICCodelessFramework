@@ -14,7 +14,7 @@ public class NewSubmissionPage extends Page {
 
 	public static WebElement CustomerAccountName(SeHelper se) throws InterruptedException {
 		se.element().waitForElementIsDisplayed(customerAccountName);
-		return se.element().getElement(customerAccountName,true);
+		return se.element().getElement(customerAccountName, true);
 	}
 
 	public static By zipcode = By.xpath("//input[@id='location']");
@@ -148,11 +148,11 @@ public class NewSubmissionPage extends Page {
 	public static By CreateSubmission1 = By.xpath("//*[@ng-click='accountproceed()']");
 
 	public static WebElement CreateSubmission1(SeHelper se) {
-		se.element().waitForElementToDisappear(SelectAndProceed,6);
+		se.element().waitForElementToDisappear(SelectAndProceed, 6);
 		se.element().waitForElementIsClickable(CreateSubmission1);
-		//se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
+		// se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
 		return se.element().getElement(CreateSubmission1);
-		
+
 	}
 
 	public static By cancel = By.xpath("//*[@id=\"scrollToDivID\"]/div[1]/form/div[3]/a");
@@ -175,54 +175,62 @@ public class NewSubmissionPage extends Page {
 		se.element().waitForElement(SelectAndProceed);
 		return se.element().getElement(SelectAndProceed, true);
 	}
+
 	public static By SelectAndProceed1 = By.xpath("//button[@class=\"btn btn-success pull-right\"]");
 
 	public static WebElement SelectAndProceed1(SeHelper se) {
 		se.element().waitForElement(SelectAndProceed1);
 		return se.element().getElement(SelectAndProceed1, true);
 	}
+
 	public static By VerifyCustomerAccountName1 = By.xpath("//*[@id='IdCustomerAccountName']");
 
 	public static WebElement VerifyCustomerAccountName1(SeHelper se) {
 
 		return se.element().getElement(VerifyCustomerAccountName1, true);
 	}
+
 	public static By Verifycity1 = By.xpath("//*[@id='PrimaryAccountCity']");
 
 	public static WebElement Verifycity1(SeHelper se) {
 		return se.element().getElement(Verifycity1, true);
 	}
+
 	public static By Verifystate1 = By.xpath("//input[@id='PrimaryAccountState']");
 
 	public static WebElement VerifyState1(SeHelper se) {
 
 		return se.element().getElement(Verifystate1, true);
 	}
+
 	public static By VerifyMailingAddress1 = By.xpath("//*[@class='vam-maillabel']/label");
 
 	public static WebElement VerifyMailingAddress1(SeHelper se) {
 
-		return se.element().getElement(VerifyMailingAddress1, true);	
+		return se.element().getElement(VerifyMailingAddress1, true);
 	}
+
 	public static By VerifyLegalEntityType1 = By.xpath("//*[@id='Id_legal_entity_type']");
 
 	public static WebElement VerifyLegalEntityType1(SeHelper se) {
 		return se.element().getElement(VerifyLegalEntityType1, true);
 	}
+
 	public static By VerifySSN1 = By.xpath("//span[contains(text(),'SSN')]");
 
 	public static WebElement VerifySSN1(SeHelper se) {
 		return se.element().getElement(VerifySSN1, true);
-    }
+	}
+
 	public static By VerifyFEIN1 = By.xpath("//span[contains(text(),'FEIN')]");
 
 	public static WebElement VerifyFEIN1(SeHelper se) {
 		return se.element().getElement(VerifyFEIN1, true);
-    }
+	}
+
 	public static By VerifyColourofCS = By.xpath("//*[@ng-click='accountproceed()']");
 
 	public static WebElement VerifyColourofCS(SeHelper se) {
 		return se.element().getElement(VerifyColourofCS, true);
-    }
+	}
 }
-	
