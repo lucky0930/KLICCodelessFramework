@@ -58,8 +58,7 @@ public class VM_Sample_Test extends BaseTest {
 		se().startSession(Browsers.Chrome);
 		se().driver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		super.beforeMethod(method, params);
-		reporter.startTest(this.getClass().getSimpleName(), method.getName());
-		reporter.reportStep("Testing report method.");
+		reporter.startTest(this.getClass().getSimpleName(), method.getName(), se);
 	}
 
 //	@SuppressWarnings("unchecked")

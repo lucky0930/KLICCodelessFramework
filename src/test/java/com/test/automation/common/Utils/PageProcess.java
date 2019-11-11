@@ -8,6 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import org.openqa.selenium.ElementNotInteractableException;
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.framework.Assertions;
 import com.test.automation.common.framework.CustomHandler;
@@ -20,12 +21,11 @@ public class PageProcess {
 		Class<?> objClass = null;
 		WebElement element = null;
 		try {
-			// se.log().logSeStep("Creating repository for page: \"" + sheetName + "\"");
 			objClass = Class.forName("com.test.automation.repository." + sheetName);
 
 		} catch (ClassNotFoundException e) {
-			se.log().error("ClassNotFoundException encountered when the repository for page: " + sheetName
-					+ " was attempted to be created.", e);
+			se.log().error("ClassNotFoundException encountered when accessing page: " + sheetName, e);
+			se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		}
 
@@ -33,18 +33,14 @@ public class PageProcess {
 		try {
 			constuctor = objClass.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
-			se.log().error("Exception encountered when attempting to get constructor for page repository: " + sheetName,
-					e);
+			se.log().error("Exception encountered when accessing page: " + sheetName, e);
+			se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		}
 		try {
 			Object obj = constuctor.newInstance();
 
 			try {
-				se.log().logSeStep(
-						"Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
-				se.reporter().reportStep(
-						"Getting element: \"" + key + "\" on " + sheetName + " using value: \"" + value + "\"");
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
 				callMethod.setAccessible(true);
@@ -53,45 +49,40 @@ public class PageProcess {
 				// element = (WebElement) callMethod.invoke(obj);
 
 				if (element != null) {
+					se.log().logSeStep("Getting element: \"" + key + "\" on " + sheetName
+							+ " using value: \"" + value + "\"");
 					FillElement(se, element, key, value);
 				}
 			} catch (NoSuchMethodException e) {
-				se.log().error(
-						"NoSuchMethodException encountered when attempting to get element: " + key + " on " + sheetName,
-						e);
-				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName
-						+ " using value: \"" + value + "\"");
+				se.log().error("NoSuchMethodException encountered when attempting to get element: "
+								+ key + " on " + sheetName, e);
+				se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				se.log().error(
-						"SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
-				se.reporter().reportStep("Encountered a problem when getting element: \"" + key + "\" on " + sheetName
-						+ " using value: \"" + value + "\"");
+				se.log().error("SecurityException encountered when attempting to get element: "
+						+ key + " on " + sheetName, e);
+				se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 				e.printStackTrace();
 			}
 		} catch (InstantiationException e) {
 			se.log().error("InstantiationException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep(
-					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			se.log().error("IllegalAccessException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep(
-					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			se.log().error("IllegalArgumentException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep(
-					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			se.log().error("InvocationTargetException encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
-			se.reporter().reportStep(
-					"Encountered a problem when new instance of page: " + sheetName + " attempted to be created.");
+			se.reporter().reportErrorCapture("Page not displayed.", "Page Name: " + sheetName, sheetName, se);
 			e.getCause().printStackTrace();
 			e.printStackTrace();
 		}
@@ -112,19 +103,29 @@ public class PageProcess {
 
 			switch (element.getTagName()) {
 			case "input":
-				if (value.equalsIgnoreCase("Click")) {
+				try {
+					if (value.equalsIgnoreCase("Click")) {
+						se.element().Click(element);
+						// element.click();
+					} else {
+						element.clear();
+						element.sendKeys(value);
+					}
+				} catch (NoSuchElementException e) {
+					se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
+					se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "\nValue: " + value, key, se);
+					e.printStackTrace();
+				}
+				break;
+			case "button":
+				try {
 					se.element().Click(element);
 					// element.click();
-					break;
-				} else {
-					element.clear();
-					element.sendKeys(value);
-					break;
+				} catch (NoSuchElementException e) {
+					se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
+					se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "\nValue: " + value, key, se);
+					e.printStackTrace();
 				}
-
-			case "button":
-				se.element().Click(element);
-				// element.click();
 				break;
 			case "select":
 				try {
@@ -133,24 +134,34 @@ public class PageProcess {
 				} catch (NoSuchElementException e) {
 					se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
 							+ "\" in element \"" + key + "\" \n", e);
-					se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value
-							+ "\" in element \"" + key + "\"");
+					se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "\nValue: " + value, key, se);
 					e.printStackTrace();
 				} catch (Exception e) {
 					se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \""
 							+ key + "\" \n", e);
-					se.reporter().reportStep("Encountered a problem when trying to locate value \"" + value
-							+ "\" in element \"" + key + "\"");
+					se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "\nValue: " + value, key, se);
 					e.printStackTrace();
 				}
 				break;
 			case "a":
-				se.element().Click(element);
-				// element.click();
+				try {
+					se.element().Click(element);
+					// element.click();
+				} catch (NoSuchElementException e) {
+					se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
+					se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "\nValue: " + value, key, se);
+					e.printStackTrace();
+				}
 				break;
 			case "label":
-				se.element().Click(element);
-				// element.click();
+				try {
+					se.element().Click(element);
+					// element.click();
+				} catch (NoSuchElementException e) {
+					se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
+					se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "\nValue: " + value, key, se);
+					e.printStackTrace();
+				}
 				break;
 			default:
 				ActionBasedOnValue(se, element, value);

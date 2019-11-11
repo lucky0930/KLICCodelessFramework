@@ -6,6 +6,8 @@ import java.io.IOException;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
 
 public class ExtentReporter {
 
@@ -22,19 +24,35 @@ public class ExtentReporter {
 		}
 	}
 	
-	public void startTest(String testClass, String testMethod) {
+	public void startTest(String testClass, String testMethod, SeHelper se) {
 		test = extent.startTest((testClass + " :: " + testMethod), testMethod);
 		test.assignAuthor("VAM QA");
 		test.assignCategory(testMethod);
-		test.log(LogStatus.INFO, "Report Start");
+		test.log(LogStatus.INFO, "Started Execution", "URL: " + SystemPropertyUtil.getBaseStoreUrl() + "Browser: " + se.browser().getBrowserName());
 	}
 	
-	public void reportStep(String step) {
-		test.log(LogStatus.INFO, step);
+	public void reportInfo(String step, String details) {
+		test.log(LogStatus.INFO, step, details);
 	}
 	
-	public void reportError(String step) {
-		test.log(LogStatus.ERROR, step);
+	public void reportPass(String step, String details) {
+		test.log(LogStatus.PASS, step, details);
+	}
+	
+	public void reportFail(String step, String details) {
+		test.log(LogStatus.FAIL, step, details);
+	}
+	
+	public void reportError(String step, String details) {
+		test.log(LogStatus.ERROR, step, details);
+	}
+	
+	public void reportErrorCapture(String step, String details, String captureName, SeHelper se) {
+		try {
+			test.log(LogStatus.ERROR, step + test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)), details);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void endTest() {
