@@ -81,24 +81,28 @@ public class Assertions {
 			return result;
 
 		case "IsEnable":
-			actualValue = element.getAttribute("value");
-			if (actualValue.equals("Enable")) {
+			// actualValue = element.getAttribute("value");
+			result = element.isEnabled();
+			if (result) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is enabled");
-				return true;
+
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT enabled");
-				return false;
+
 			}
+			return result;
 
 		case "IsSelected":
-			actualValue = element.getAttribute("value");
-			if (actualValue.equals("Select")) {
+			// actualValue = element.getAttribute("value");
+			result = element.isSelected();
+			if (result) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is selected");
-				return true;
+
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
-				return false;
+
 			}
+			return result;
 
 		case "IsSelectedValue":
 			if (element.getAttribute("checked").equals("checked")) {
