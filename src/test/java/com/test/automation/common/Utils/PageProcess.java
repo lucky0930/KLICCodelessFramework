@@ -20,6 +20,9 @@ public class PageProcess {
 	public static WebElement findElement(SeHelper se, String sheetName, String key, String value) {
 		Class<?> objClass = null;
 		WebElement element = null;
+		if (key.contains("Verify")) {
+			key = key.replaceFirst("Verify", "");
+		}
 		try {
 			objClass = Class.forName("com.test.automation.repository." + sheetName);
 
@@ -49,8 +52,11 @@ public class PageProcess {
 				// element = (WebElement) callMethod.invoke(obj);
 
 				if (element != null) {
-					se.log().logSeStep("Getting element: \"" + key + "\" on " + sheetName
-							+ " using value: \"" + value + "\"");
+					if (value.contains(">")) {
+						Assertions asrt = new Assertions(se);
+						asrt.verify(element, value);
+						return element;
+					}
 					FillElement(se, element, key, value);
 				}
 			} catch (NoSuchMethodException e) {
@@ -91,16 +97,10 @@ public class PageProcess {
 
 	private static void FillElement(SeHelper se, WebElement element, String key, String value) {
 
-		Assertions asrt = new Assertions();
-		String argValue = null;
-		if (value.contains(">")) {
-			argValue = value;
-			value = value.substring(value.indexOf('>') + 1);
-		}
-		else if (value.contains("()")) {
+		if (value.contains("()")) {
 			value = new CustomHandler().handle(value);
-		} else {
-
+		}
+		
 			switch (element.getTagName()) {
 			case "input":
 				try {
@@ -167,12 +167,6 @@ public class PageProcess {
 				ActionBasedOnValue(se, element, value);
 
 			}
-		}
-
-		if (argValue != null) {
-			System.out.println(argValue + " resolved " + asrt.verify(element, argValue));
-		}
-
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
