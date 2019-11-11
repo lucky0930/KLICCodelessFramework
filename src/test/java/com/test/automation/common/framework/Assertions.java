@@ -2,7 +2,8 @@ package com.test.automation.common.framework;
 
 import com.test.automation.common.SeHelper;
 
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 public class Assertions {
@@ -114,15 +115,40 @@ public class Assertions {
 			}
 
 		case "CheckMultipleValues":
-			String eVals[] = expectedValue.split("||");
-			actualValue = element.getAttribute("value").trim();
-			for (String value : eVals) {
-				if (value.equals(actualValue)) {
-					result = true;
-					expectedValue = value;
+			String eVals[] = expectedValue.split("\\|\\|");
+			String resultString = new String();
+			result = true;
+
+			element.sendKeys(Keys.ENTER);			
+			String elementPrintOut = element.findElement(By.tagName("option")).toString();
+			String xpath = elementPrintOut.substring(elementPrintOut.indexOf("//*[@id"), elementPrintOut.indexOf("]]]")+1);
+			System.out.println(element.findElements(By.xpath(xpath)));
+			System.out.println("xpath: " + xpath);
+
+			for (String expectedOption : eVals) {
+				int check = 0;
+				for (WebElement option : se.driver().findElements(By.xpath(xpath + "/child::option"))) {
+
+				if(expectedOption.equals(option.getText())) {
+						resultString = resultString.concat("true, ");
+						break;
+					}
+					check++;
+				}
+				if(check == eVals.length)
+				{
+					resultString = resultString.concat("false, ");
+					result = false;
 				}
 			}
-			break;
+			if(result) {
+				se.log().logSeStep("VERIFY " + assertion + ": " + expectedValue);
+			}
+			else {
+				resultString = resultString.substring(0, resultString.length()-2);
+				se.log().logSeStep("VERIFY FAILED - " + assertion + ": " + expectedValue + " resolved " + resultString);
+			}
+			return result;
 
 		case "CheckColor":
 			String color = element.getCssValue("color");

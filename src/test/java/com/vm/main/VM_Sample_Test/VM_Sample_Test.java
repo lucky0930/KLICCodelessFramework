@@ -78,7 +78,7 @@ public class VM_Sample_Test extends BaseTest {
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Three() {
 	
-		testUtil.ExecuteTest("103", se());
+		testUtil.ExecuteTest("105", se());
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
