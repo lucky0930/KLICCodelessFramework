@@ -14,7 +14,6 @@ public class NewSubmissionPage extends Page {
 	public static By customerAccountName = By.xpath("//*[@id='IdCustomerAccountName']");
 
 	public static WebElement CustomerAccountName(SeHelper se) throws InterruptedException {
-		
 		se.element().waitForElementIsDisplayed(customerAccountName);
 		return se.element().getElement(customerAccountName, true);
 	}
