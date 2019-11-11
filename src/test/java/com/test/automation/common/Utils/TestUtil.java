@@ -66,6 +66,7 @@ public class TestUtil {
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData) {
 
+		se.log().logSeStep("Accessing page: " + sheetName);
 		se.reporter().reportInfo("Accessing Page", "Page Name: " + sheetName);
 		actualData.entrySet().forEach(entry -> {
 			System.out.println(entry.getKey() + " => " + entry.getValue());

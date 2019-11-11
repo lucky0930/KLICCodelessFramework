@@ -28,7 +28,7 @@ public class ExtentReporter {
 		test = extent.startTest((testClass + " :: " + testMethod), testMethod);
 		test.assignAuthor("VAM QA");
 		test.assignCategory(testMethod);
-		test.log(LogStatus.INFO, "Started Execution", "URL: " + SystemPropertyUtil.getBaseStoreUrl() + "Browser: " + se.browser().getBrowserName());
+		test.log(LogStatus.INFO, "Started Execution", "URL: " + SystemPropertyUtil.getBaseStoreUrl() + ":: Browser: " + se.browser().getBrowserName());
 	}
 	
 	public void reportInfo(String step, String details) {
@@ -43,13 +43,21 @@ public class ExtentReporter {
 		test.log(LogStatus.FAIL, step, details);
 	}
 	
+	public void reportFailCapture(String step, String details, String captureName, SeHelper se) {
+		try {
+			test.log(LogStatus.FAIL, step, details + test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void reportError(String step, String details) {
 		test.log(LogStatus.ERROR, step, details);
 	}
 	
 	public void reportErrorCapture(String step, String details, String captureName, SeHelper se) {
 		try {
-			test.log(LogStatus.ERROR, step + test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)), details);
+			test.log(LogStatus.ERROR, step, details + test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
