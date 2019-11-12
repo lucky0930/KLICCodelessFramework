@@ -6,10 +6,13 @@ import java.lang.reflect.Method;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.Keys;
+
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.framework.Assertions;
 import com.test.automation.common.framework.CustomHandler;
@@ -43,7 +46,11 @@ public class PageProcess {
 			Object obj = constuctor.newInstance();
 
 			try {
-				
+				if(key.equals("ControlKeys")) {
+					System.out.println("Starting ControlKeys function");
+					ControlKeys(se, value);
+					return null;
+				}
 				
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
@@ -182,10 +189,33 @@ public class PageProcess {
 		if (value.contains("Click")) {
 			se.element().Click(element);
 			// element.click();
+			
+		} else if(value.contains("Keys.")){
+			value = value.replace("Keys.", "");
+			element.sendKeys(Keys.valueOf(value.toUpperCase()));
+			
 		} else {
 			se.log().debug("No tag and value is identified!");
 		}
 	}
+	
+	private static void ControlKeys(SeHelper se, String key) {
+		Actions action = new Actions(se.driver());
+		if (key.contains(",")) {
+			String[] keys = key.split(",");
+			for (String value : keys) {
+				value = value.toUpperCase();
+				if(value.equals("SHIFT") || value.equals("ALT"))
+					action.keyDown(value);
+				else
+					action.sendKeys(value);
+			}
+			action.sendKeys(Keys.NULL);
+		} else {
+			action.sendKeys(key.toUpperCase());
+		}
+	}
+
 	
 	private static boolean checkOptional(SeHelper se, WebElement element, String key, String value) {
 		if(key.charAt(0)  == '[' && key.charAt(key.length()) - 1 == ']'){
