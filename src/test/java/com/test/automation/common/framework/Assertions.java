@@ -33,7 +33,8 @@ public class Assertions {
 				return true;
 			}
 			se.log().logSeStep("VERIFY FAILED - CheckURL: URL does not match expected: " + expectedValue);
-			se.reporter().reportFail("URL is: " + expectedValue, "Actual: " + se.browser().getCurrentUrl() + " || Expected: " + expectedValue);
+			se.reporter().reportFailCapture("URL is: " + expectedValue, "Actual: "
+					+ se.browser().getCurrentUrl() + " || Expected: " + expectedValue, assertion, se);
 			return false;
 		} else {
 			System.out.println("WARNING: verify() calls must include WebElement unless asserting 'CheckURL'");
@@ -81,7 +82,8 @@ public class Assertions {
 				se.reporter().reportPass(element.getTagName() + " Is Visible", "Actual: " + result + " || Expected: true");
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT visible");
-				se.reporter().reportFail(element.getTagName() + " Is Visible", "Actual: " + result + " || Expected: true");
+				se.reporter().reportFailCapture(element.getTagName() + " Is Visible", "Actual: "
+						+ result + " || Expected: true", assertion + "_failed", se);
 			}
 			return result;
 
@@ -90,10 +92,12 @@ public class Assertions {
 			result = element.isEnabled();
 			if (result) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is enabled");
-				se.reporter().reportPass(element.getTagName() + " Is Enabled", "Actual: " + result + " || Expected: true");
+				se.reporter().reportPass(element.getTagName() + " Is Enabled", "Actual: " 
+						+ result + " || Expected: true");
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT enabled");
-				se.reporter().reportFail(element.getTagName() + " Is Enabled", "Actual: " + result + " || Expected: true");
+				se.reporter().reportFailCapture(element.getTagName() + " Is Enabled", "Actual: " 
+						+ result + " || Expected: true", assertion + "_failed", se);
 			}
 			return result;
 
@@ -105,7 +109,8 @@ public class Assertions {
 				se.reporter().reportPass(element.getTagName() + " Is Selected", "Actual: " + result + " || Expected: true");
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
-				se.reporter().reportFail(element.getTagName() + " Is Selected", "Actual: " + result + " || Expected: true");
+				se.reporter().reportFailCapture(element.getTagName() + " Is Selected", "Actual: " 
+						+ result + " || Expected: true", assertion + "_failed", se);
 			}
 			return result;
 
@@ -116,7 +121,8 @@ public class Assertions {
 				return true;
 			} else {
 				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
-				se.reporter().reportFail(element.getTagName() + " Is Selected", "Actual: " + result + " || Expected: true");
+				se.reporter().reportFailCapture(element.getTagName() + " Is Selected", "Actual: " 
+						+ result + " || Expected: true", assertion + "_failed", se);
 				return false;
 			}
 
@@ -187,7 +193,8 @@ public class Assertions {
 		} else {
 			se.log().logSeStep("VERIFY FAILED - " + assertion + ": " + expectedValue
 					+ " does not match actual value -> " + actualValue);
-			se.reporter().reportFail("Verify " + assertion, "Actual: " + actualValue + "\nExpected: " + expectedValue);
+			se.reporter().reportFailCapture("Verify " + assertion, "Actual: " 
+					+ actualValue + "\nExpected: " + expectedValue, assertion + "_failed", se);
 		}
 
 		return result;
@@ -198,7 +205,6 @@ public class Assertions {
 		for (int i = 0; i < arg.length; i++) {
 			result[i] = verify(element[i], arg[i]);
 		}
-
 		return result;
 	}
 

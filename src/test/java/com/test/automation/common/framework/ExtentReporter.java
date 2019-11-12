@@ -63,6 +63,25 @@ public class ExtentReporter {
 		}
 	}
 	
+	public void endResult(Boolean result, SeHelper se) {
+		if (result) {
+			try {
+				test.log(LogStatus.PASS, "Test Result", "Result: " + result + 
+						test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_PASS", se)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			try {
+				test.log(LogStatus.FAIL, "Test Result", "Result: " + result + 
+						test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_FAIL", se)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void endTest() {
 		extent.endTest(test);
 	}

@@ -83,7 +83,6 @@ public class VM_Sample_Test extends BaseTest {
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result, Object[] params) {
 		super.afterMethod(method, result, params);
-		reporter.endTest();
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
