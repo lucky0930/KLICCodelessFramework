@@ -61,22 +61,21 @@ public class VM_Sample_Test extends BaseTest {
 		reporter.startTest(this.getClass().getSimpleName(), method.getName(), se);
 	}
 
-//	@SuppressWarnings("unchecked")
-//	@Test(description = "VM Automation Framework", timeOut = 500000000)
-//	public void VM_Test_One() {
-//		testUtil.ExecuteTest("101", getSe());
-//	}
-//
-//	@SuppressWarnings("unchecked")
-//	@Test(description = "VM Automation Framework", timeOut = 500000000)
-//	public void VM_Test_Two() {
-//		testUtil.ExecuteTest("102", getSe());
-//	}
+	//@SuppressWarnings("unchecked")
+	//@Test(description = "VM Automation Framework", timeOut = 500000000)
+	//public void VM_Test_One() {
+	//	testUtil.ExecuteTest("101", se());
+	//}
+	
+	//@SuppressWarnings("unchecked")
+	//@Test(description = "VM Automation Framework", timeOut = 500000000)
+	//public void VM_Test_Two() {
+	//	testUtil.ExecuteTest("102", se());
+	//}
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Three() {
-	
 		testUtil.ExecuteTest("105", se());
 	}
 
@@ -87,6 +86,7 @@ public class VM_Sample_Test extends BaseTest {
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void afterSuite() throws IOException {
+		reporter.endTest();
 		reporter.closeExtent();
 	}
 

@@ -8,7 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.framework.Assertions;
@@ -51,6 +51,10 @@ public class PageProcess {
 
 				element = (WebElement) callMethod.invoke(obj, se);
 				// element = (WebElement) callMethod.invoke(obj);
+				
+				if (value.contains("$")) {
+					element = dynamicXpath(se, value);
+				}
 
 				if (element != null) {
 					if (value.contains(">")) {
@@ -60,6 +64,7 @@ public class PageProcess {
 					}
 					FillElement(se, element, key, value);
 				}
+				
 			} catch (NoSuchMethodException e) {
 				se.log().error("NoSuchMethodException encountered when attempting to get element: "
 								+ key + " on " + sheetName, e);
@@ -97,8 +102,6 @@ public class PageProcess {
 	}
 
 	private static void FillElement(SeHelper se, WebElement element, String key, String value) {
-
-		
 		
 		if (value.contains("()")) {
 			value = new CustomHandler().handle(value);
@@ -183,6 +186,7 @@ public class PageProcess {
 			se.log().debug("No tag and value is identified!");
 		}
 	}
+	
 	private static boolean checkOptional(SeHelper se, WebElement element, String key, String value) {
 		if(key.charAt(0)  == '[' && key.charAt(key.length()) - 1 == ']'){
 			if(element.isDisplayed() && element.isEnabled()) {
@@ -195,4 +199,12 @@ public class PageProcess {
 			return false;
 	}
 	
+	private static WebElement dynamicXpath(SeHelper se, String value) {
+		//*[contains(text(), '{}')]
+			
+		String[] split = value.split("\\$");			
+		String xpath = "(//*[contains(text(), '" + split[1].trim() + "')] | //*[@value='" + split[1].trim() + "'])";
+		By el = By.xpath(xpath);
+		return se.element().getElement(el, true);
+	}
 }

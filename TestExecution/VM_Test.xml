@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="VMAutomation Suite" parallel="methods"
-	thread-count="1" data-provider-thread-count="1">
+<suite name="VMAutomation Suite" parallel="methods" thread-count="8" verbose="1">
 
+<!-- 
 	<listeners>
 		<listener
 			class-name="com.test.automation.common.RetryListener" />
 		<listener
 			class-name="com.test.automation.common.TestListener" />
 	</listeners>
+	 -->
 
 
-	<test name="All">
+	<test name="All" parallel="methods" thread-count="8" verbose="1">
 		<!-- <groups> -->
 		<!-- <run> -->
 		<!-- <include name="VMTest" /> -->
@@ -21,10 +22,11 @@
 		<!-- </groups> -->
 		<classes>
 			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test" />
-			<methods>
-				<exclude name="VM_Test_Two" />
-				<include name="VM_Test_One" />
-			</methods>
+			 <methods>
+			 	<!--  <include name="VM_Test_One" /> -->
+				<!--  <include name="VM_Test_Two" /> -->
+			  	<include name="VM_Test_Three" />
+			 </methods>
 		</classes>
 	</test>
 </suite>
