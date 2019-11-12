@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import org.openqa.selenium.ElementNotInteractableException;
@@ -42,6 +43,8 @@ public class PageProcess {
 			Object obj = constuctor.newInstance();
 
 			try {
+				
+				
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
 				callMethod.setAccessible(true);
@@ -180,4 +183,16 @@ public class PageProcess {
 			se.log().debug("No tag and value is identified!");
 		}
 	}
+	private static boolean checkOptional(SeHelper se, WebElement element, String key, String value) {
+		if(key.charAt(0)  == '[' && key.charAt(key.length()) - 1 == ']'){
+			if(element.isDisplayed() && element.isEnabled()) {
+				
+			}
+			
+			return true;
+		}
+		else
+			return false;
+	}
+	
 }

@@ -121,15 +121,14 @@ public class Element {
 	}
 	
 	
-	public boolean waitForElementIs(WebElement element) {
+	public boolean waitForElementIsVisible(final By locator) {
 		
 		try {
-			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
-				.invisibilityOf(element));
+			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions.visibilityOfElementLocated(locator));
 			return true;
 			
 		}catch (TimeoutException e) {
-			se.log().logSeStep("Timed out waiting for element " + element.toString());
+			se.log().logSeStep("Timed out waiting for element " + locator.toString());
 			se.verify().reportError("Timed Out Waiting For Element");
 			return false;
 		} catch (Exception e) {
@@ -1039,14 +1038,19 @@ public boolean waitForPageLoad() {
 			try {
 				// se.log().logSeStep("Click Element : " + Element.toString());
 				Element.click();
+				
 				return true;
 			}
 			
 			catch (InvalidElementStateException e) {
-				se.util().sleep(1000);
-				Element.click();
-				return true;
+				se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
+				//this.waitForElementLoading(Element);
+				
+				//Element.click();
+				//return true;
 			}
+		
+			
 		} else
 			se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
 		return false;
@@ -1236,7 +1240,7 @@ public boolean waitForPageLoad() {
 	 */
 
 	public void waitForElementLoading(WebElement we) {
-
+		
 		try {
 			int i = 0;
 			while (i < 10) {

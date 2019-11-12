@@ -15,6 +15,8 @@ public class IndexPage extends Page {
 	public static WebElement NewSubmission(SeHelper se) {
 		
 		se.element().waitForElementIsClickable(newSubmission);
+		se.element().waitForElementIsVisible(newSubmission);
+		//se.element().waitForElementLoading();
 		return se.element().getElement(newSubmission);
 	}
 
