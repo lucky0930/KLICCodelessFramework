@@ -190,17 +190,17 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(VerifyCustomerAccountName1, true);
 	}
 
-	public static By Verifycity1 = By.xpath("//*[@id='PrimaryAccountCity']");
+	public static By VerifyCity1 = By.xpath("//*[@id='PrimaryAccountCity']");
 
-	public static WebElement Verifycity1(SeHelper se) {
-		return se.element().getElement(Verifycity1, true);
+	public static WebElement VerifyCity1(SeHelper se) {
+		return se.element().getElement(VerifyCity1, true);
 	}
 
-	public static By Verifystate1 = By.xpath("//input[@id='PrimaryAccountState']");
+	public static By VerifyState1 = By.xpath("//input[@id='PrimaryAccountState']");
 
 	public static WebElement VerifyState1(SeHelper se) {
 
-		return se.element().getElement(Verifystate1, true);
+		return se.element().getElement(VerifyState1, true);
 	}
 
 	public static By VerifyMailingAddress1 = By.xpath("//*[@class='vam-maillabel']/label");
