@@ -190,30 +190,30 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(VerifyCustomerAccountName1, true);
 	}
 
-	public static By Verifycity1 = By.xpath("//*[@id='PrimaryAccountCity']");
+	public static By Verifycity = By.xpath("//*[@id='PrimaryAccountCity']");
 
-	public static WebElement Verifycity1(SeHelper se) {
-		return se.element().getElement(Verifycity1, true);
+	public static WebElement VerifyCity(SeHelper se) {
+		return se.element().getElement(Verifycity, true);
 	}
 
-	public static By Verifystate1 = By.xpath("//input[@id='PrimaryAccountState']");
+	public static By Verifystate = By.xpath("//input[@id='PrimaryAccountState']");
 
-	public static WebElement VerifyState1(SeHelper se) {
+	public static WebElement VerifyState(SeHelper se) {
 
-		return se.element().getElement(Verifystate1, true);
+		return se.element().getElement(Verifystate, true);
 	}
 
-	public static By VerifyMailingAddress1 = By.xpath("//*[@class='vam-maillabel']/label");
+	public static By VerifyMailingAddress = By.xpath("//*[@class='vam-maillabel']/label");
 
-	public static WebElement VerifyMailingAddress1(SeHelper se) {
+	public static WebElement VerifyMailingAddress(SeHelper se) {
 
-		return se.element().getElement(VerifyMailingAddress1, true);
+		return se.element().getElement(VerifyMailingAddress, true);
 	}
 
-	public static By VerifyLegalEntityType1 = By.xpath("//*[@id='Id_legal_entity_type']");
+	public static By VerifyLegalEntityType = By.xpath("//*[@id='Id_legal_entity_type']");
 
-	public static WebElement VerifyLegalEntityType1(SeHelper se) {
-		return se.element().getElement(VerifyLegalEntityType1, true);
+	public static WebElement VerifyLegalEntityType(SeHelper se) {
+		return se.element().getElement(VerifyLegalEntityType, true);
 	}
 
 	public static By VerifySSN1 = By.xpath("//span[contains(text(),'SSN')]");
@@ -222,10 +222,10 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(VerifySSN1, true);
 	}
 
-	public static By VerifyFEIN1 = By.xpath("//span[contains(text(),'FEIN')]");
+	public static By VerifyFEIN = By.xpath("//span[contains(text(),'FEIN')]");
 
-	public static WebElement VerifyFEIN1(SeHelper se) {
-		return se.element().getElement(VerifyFEIN1, true);
+	public static WebElement VerifyFEIN(SeHelper se) {
+		return se.element().getElement(VerifyFEIN, true);
 	}
 
 	public static By VerifyColourofCS = By.xpath("//*[@ng-click='accountproceed()']");

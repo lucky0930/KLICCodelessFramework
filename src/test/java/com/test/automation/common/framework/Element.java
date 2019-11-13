@@ -1043,9 +1043,13 @@ public boolean waitForPageLoad() {
 			}
 			
 			catch (InvalidElementStateException e) {
-				se.util().sleep(1000);
+				se.log().logSeStep("Could not click on " + Element.toString() + "Trying again");
+				se.util().sleep(10000);
 				Element.click();
 				return true;
+			}
+			catch(Throwable ex) {
+				se.log().logSeStep("Could not click after trying");
 			}
 		} else
 			se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");

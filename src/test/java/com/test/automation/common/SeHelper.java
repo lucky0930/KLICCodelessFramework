@@ -5,6 +5,11 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.*;
@@ -15,6 +20,7 @@ import com.test.automation.common.framework.*;
 import com.test.automation.common.framework.Browser.Browsers;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -205,7 +211,7 @@ public class SeHelper {
 	@SuppressWarnings("static-access")
 	private WebDriver buildDriver(Browsers myBrowser, Proxy proxy) {
 		WebDriver driver = null;
-		DesiredCapabilities capabilities;
+		DesiredCapabilities capabilities = null;
 		LoggingPreferences loggingPreferences = new LoggingPreferences();
 		ChromeOptions chromeOptions;
 
@@ -245,6 +251,7 @@ public class SeHelper {
 				capabilities.setCapability("ignoreZoomSetting", true);
 				capabilities.setCapability("ie.ensureCleanSession", true);
 				driver = new InternetExplorerDriver(capabilities);
+								
 				break;
 
 			case VMChrome:
@@ -284,8 +291,27 @@ public class SeHelper {
 				((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
 
 				break;
+			case geckodrivers:
+				
+//				System.setProperty("webdriver.gecko.driver", "C:\\Users\\saipriyal\\git\\VMSeleniumFramework\\tools\\geckodriver.exe");
+//				capabilities = DesiredCapabilities.firefox();
+//				capabilities.setCapability("marionette", true);
+				
+//				FirefoxOptions options = new FirefoxOptions();
+//				options.setLegacy(true);
+//				 driver = new FirefoxDriver(options);
+				System.setProperty("webdriver.firefox.marionette",  "C:\\Users\\saipriyal\\git\\VMSeleniumFramework\\tools\\geckodriver.exe");
+				capabilities = DesiredCapabilities.firefox();
+				capabilities.setCapability("marionette",true);     
+				driver = new FirefoxDriver(capabilities);
 
+				break;
+			case edgedriver:
+				System.setProperty("webdriver.edge.driver", getedgedriverPath());
+				driver = new EdgeDriver();
+				break;			
 			case GridInternetExplorer:
+			
 				capabilities = DesiredCapabilities.internetExplorer();
 				capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 				capabilities.setJavascriptEnabled(true);
@@ -365,6 +391,18 @@ public class SeHelper {
 		return driver;
 	}
 
+	private String getgeckodriverPath() {
+		// TODO Auto-generated method stub
+		try {
+			return SystemPropertyUtil.getRootPath() + "\\tools\\geckodriver.exe";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
 	private URL getSeGridUrl() {
 		URL seGrid = null;
 		try {
@@ -396,7 +434,24 @@ public class SeHelper {
 	 * @return full path to IEDriverServer
 	 */
 	public String getIEDriverPath() {
-		return OSTools.getUserHome() + "/selenium/IEDriverServer.exe";
+		try {
+			return  SystemPropertyUtil.getRootPath() + "\\tools\\IEDriverServer.exe";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	//public String getedgedriverPath() {
+		//return "C:\\Users\\saipriyal\\git\\VMSeleniumFramework\\tools\\MicrosoftWebDriver.exe";
+		public String getedgedriverPath() {
+			try {
+				return  SystemPropertyUtil.getRootPath() + "\\tools\\MicrosoftWebDriver.exe";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
 	}
 
 	/**
@@ -409,7 +464,12 @@ public class SeHelper {
 		System.out.println(OSTools.getUserHome() + "/selenium/" + chomedriverFilename);
 		return OSTools.getUserHome() + "/selenium/" + chomedriverFilename;
 	}
-
+	public  String String () throws IOException {
+		String geckodriverFilename = "geckodriver.exe";
+		//System.out.println(OSTools.getUserHome() + "/selenium/" + geckodriverFilename);
+		return SystemPropertyUtil.getRootPath() + "/tools/" + geckodriverFilename;
+	}
+	
 	// toString returns the "currentBrowser" so the reports look all pretty like.
 	@Override
 	public String toString() {

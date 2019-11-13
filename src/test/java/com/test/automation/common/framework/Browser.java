@@ -27,10 +27,9 @@ public class Browser {
 	 * Supported Browsers
 	 */
 	public static enum Browsers {
-		HtmlUnit, Chrome, InternetExplorer, SauceChrome, SauceIE, GridChrome, GridInternetExplorer, VMChrome, VMIE
-	}
-
-	;
+		HtmlUnit, Chrome, InternetExplorer, SauceChrome, SauceIE, GridChrome, GridInternetExplorer, VMChrome, VMIE,
+		edgedriver, geckodrivers
+	};
 
 	// Wait Conditions
 	private static ExpectedCondition<Boolean> windowTitleContains(final String windowTitle) {
@@ -84,8 +83,8 @@ public class Browser {
 	}
 
 	/**
-	 * Description: Get the window handle by iterating all windows searching for
-	 * the title.
+	 * Description: Get the window handle by iterating all windows searching for the
+	 * title.
 	 *
 	 * @param title
 	 * @return Window handle of window with the specified title.
@@ -103,8 +102,8 @@ public class Browser {
 	}
 
 	/**
-	 * Description: Get the window handle by iterating all windows searching for
-	 * the url.
+	 * Description: Get the window handle by iterating all windows searching for the
+	 * url.
 	 *
 	 * @param url
 	 * @return Window handle of window with the specified url
@@ -151,8 +150,7 @@ public class Browser {
 	}
 
 	/**
-	 * Description: Delete the cookies for the current domain (page must be
-	 * opened)
+	 * Description: Delete the cookies for the current domain (page must be opened)
 	 */
 	public void deleteCookies() {
 		se.driver().manage().deleteAllCookies();
@@ -161,8 +159,7 @@ public class Browser {
 	/**
 	 * Description: Deletes a specific cookie
 	 *
-	 * @param name
-	 *            Name of cookie to delete
+	 * @param name Name of cookie to delete
 	 */
 	public void deleteCookieNamed(String name) {
 		se.driver().manage().deleteCookieNamed(name);
@@ -190,9 +187,8 @@ public class Browser {
 	}
 
 	/**
-	 * Description: Load a new url in the browser. Does not log the test case
-	 * start time. Use openUrl() instead, if this is the first url loaded for
-	 * the test.
+	 * Description: Load a new url in the browser. Does not log the test case start
+	 * time. Use openUrl() instead, if this is the first url loaded for the test.
 	 *
 	 * @param url
 	 */
@@ -258,8 +254,7 @@ public class Browser {
 	/**
 	 * Description: Switch to a window using the title
 	 *
-	 * @param title
-	 *            of window
+	 * @param title of window
 	 * @return true of successful
 	 */
 	public String switchToWindow(String title) {
@@ -304,8 +299,8 @@ public class Browser {
 	 * Description: Closes current window and returns to the previous window, if
 	 * this is the last window the browser will quit
 	 *
-	 * @return true if able to return to previous window, false of no more
-	 *         windows are open
+	 * @return true if able to return to previous window, false of no more windows
+	 *         are open
 	 */
 	public boolean closeCurrentWindow() {
 		se.driver().close();

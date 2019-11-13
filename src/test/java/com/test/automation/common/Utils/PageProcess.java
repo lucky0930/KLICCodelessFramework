@@ -21,9 +21,9 @@ public class PageProcess {
 		
 		Class<?> objClass = null;
 		WebElement element = null;
-		if (key.contains("Verify")) {
-			key = key.replaceFirst("Verify", "");
-		}
+//		if (key.contains("Verify")) {
+//			key = key.replaceFirst("Verify", "");
+//		}
 		try {
 			objClass = Class.forName("com.test.automation.repository." + sheetName);
 

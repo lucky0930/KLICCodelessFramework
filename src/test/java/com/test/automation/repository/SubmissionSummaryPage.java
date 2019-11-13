@@ -8,10 +8,10 @@ import com.test.automation.common.SeHelper;
 
 public class SubmissionSummaryPage extends Page {
 
-	public static By Back = By.xpath("//*[@ng-click='navgateToSource()']");
+	public static By Back = By.xpath("//*[@class='btn btn-blue']");
 
 	public static WebElement Back(SeHelper se) {
-
+		se.element().waitForElementIsClickable(Back);
 		return se.element().getElement(Back);
 	}
 }
