@@ -68,6 +68,7 @@ public class PageProcess {
 						asrt.verify(element, value);
 						return element;
 					}
+					
 					FillElement(se, element, key, value);
 				}
 			} catch (NoSuchMethodException e) {
@@ -108,7 +109,9 @@ public class PageProcess {
 
 	private static void FillElement(SeHelper se, WebElement element, String key, String value) {
 
-		
+		if(checkOptional(element,value)) {
+			return;
+		}
 		
 		if (value.contains("()")) {
 			value = new CustomHandler().handle(value);
@@ -222,4 +225,19 @@ public class PageProcess {
 		By el = By.xpath(xpath);
 		return se.element().getElement(el, true);
 	}
+	
+	private static boolean checkOptional( WebElement element, String value) {
+		if(value.charAt(0)  == '[' && value.charAt(value.length()) - 1 == ']'){
+			if(element.isDisplayed() && element.isEnabled()) {
+				return false;
+			}
+			
+			else {
+				return true;
+			}
+		}
+		else
+			return false;
+	}
+	
 }

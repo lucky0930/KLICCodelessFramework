@@ -101,15 +101,15 @@ public class Element {
 	 * @return
 	 */
 	
-	public boolean waitForElementIsClickable(final By locator) {
+	public boolean waitForElementIsClickable(WebElement element) {
 		
 		try {
 			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
-					.elementToBeClickable(locator));
+					.elementToBeClickable(element));
 			return true;
 			
 		}catch (TimeoutException e) {
-			se.log().logSeStep("Timed out waiting for element " + locator.toString());
+			se.log().logSeStep("Timed out waiting for element " + element.toString());
 			se.verify().reportError("Timed Out Waiting For Element");
 			return false;
 		} catch (Exception e) {
@@ -121,15 +121,15 @@ public class Element {
 	}
 	
 	
-	public boolean waitForElementIs(WebElement element) {
+	public boolean waitForElementVisible(final By locator) {
 		
 		try {
 			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
-				.invisibilityOf(element));
+				.invisibilityOfElementLocated(locator));
 			return true;
 			
 		}catch (TimeoutException e) {
-			se.log().logSeStep("Timed out waiting for element " + element.toString());
+			se.log().logSeStep("Timed out waiting for element " + locator.toString());
 			se.verify().reportError("Timed Out Waiting For Element");
 			return false;
 		} catch (Exception e) {
@@ -1034,9 +1034,12 @@ public boolean waitForPageLoad() {
 
 	public boolean Click(WebElement Element) {
 		
-		WebDriverWait wait = new WebDriverWait(se.driver(), 30);
+		
+		
 		if (Element != null && Element.isDisplayed() && Element.isEnabled()) {
 			try {
+				se.element().waitForElementIsClickable(Element);
+				
 				// se.log().logSeStep("Click Element : " + Element.toString());
 				Element.click();
 				return true;

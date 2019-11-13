@@ -149,7 +149,7 @@ public class NewSubmissionPage extends Page {
 
 	public static WebElement CreateSubmission1(SeHelper se) {
 		se.element().waitForElementToDisappear(SelectAndProceed, 6);
-		se.element().waitForElementIsClickable(CreateSubmission1);
+		se.element().waitForElementIsClickable(se.element().getElement(CreateSubmission1));
 		// se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
 		return se.element().getElement(CreateSubmission1);
 
