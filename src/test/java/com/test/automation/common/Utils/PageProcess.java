@@ -6,14 +6,16 @@ import java.lang.reflect.Method;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.Keys;
+
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.framework.Assertions;
 import com.test.automation.common.framework.CustomHandler;
-import com.test.automation.common.framework.Assertions;
-import com.test.automation.common.framework.CustomHandler;
+
 
 public class PageProcess {
 
@@ -21,9 +23,7 @@ public class PageProcess {
 		
 		Class<?> objClass = null;
 		WebElement element = null;
-//		if (key.contains("Verify")) {
-//			key = key.replaceFirst("Verify", "");
-//		}
+
 		try {
 			objClass = Class.forName("com.test.automation.repository." + sheetName);
 
@@ -33,18 +33,24 @@ public class PageProcess {
 			e.printStackTrace();
 		}
 
-		Constructor<?> constuctor = null;
+		Constructor<?> constructor = null;
 		try {
-			constuctor = objClass.getConstructor();
+			constructor = objClass.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
 			se.log().error("Exception encountered when accessing page: " + sheetName, e);
 			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		}
 		try {
-			Object obj = constuctor.newInstance();
+			Object obj = constructor.newInstance();
 
 			try {
+				if(key.equals("ControlKeys")) {
+					System.out.println("Starting ControlKeys function");
+					ControlKeys(se, value);
+					return null;
+				}
+
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
 				callMethod.setAccessible(true);
@@ -179,8 +185,28 @@ public class PageProcess {
 		if (value.contains("Click")) {
 			se.element().Click(element);
 			// element.click();
+		} else if(value.contains("Keys.")){
+			value = value.replace("Keys.", "");
+			element.sendKeys(Keys.valueOf(value.toUpperCase()));
 		} else {
 			se.log().debug("No tag and value is identified!");
+		}
+	}
+	
+	private static void ControlKeys(SeHelper se, String key) {
+		Actions action = new Actions(se.driver());
+		if (key.contains(",")) {
+			String[] keys = key.split(",");
+			for (String value : keys) {
+				value = value.toUpperCase();
+				if(value.equals("SHIFT") || value.equals("ALT"))
+					action.keyDown(value);
+				else
+					action.sendKeys(value);
+			}
+			action.sendKeys(Keys.NULL);
+		} else {
+			action.sendKeys(key.toUpperCase());
 		}
 	}
 }

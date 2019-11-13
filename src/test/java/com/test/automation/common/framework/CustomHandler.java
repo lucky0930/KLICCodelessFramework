@@ -6,54 +6,104 @@ public class CustomHandler {
 	
 	public String handle(String function)
 	{
+		String var = "";
+		if (!function.contains("()")) {
+			var = function.substring(function.indexOf('('+1),function.length()-1);
+			function.replace(var, "");
+		}
 		switch(function)
 		{
 			case "RandomName()":
-				int lowerLimitA = 65; // letter 'A'
-			    int upperLimitZ = 90; // letter 'Z'
-			    int targetStringLength = 10;
-			    Random randomChar = new Random();
-			    StringBuilder buffer = new StringBuilder(targetStringLength);
-			    for (int i = 0; i < targetStringLength; i++) {
-			        int randomLimitedInt = lowerLimitA + 
-			        	(int) (randomChar.nextFloat() * (upperLimitZ - lowerLimitA + 1) + /*chooses A-Z*/
-			        	(randomChar.nextBoolean()? 0 : 32)); //chooses 'UPPER' or 'lower' case
-			        buffer.append((char) randomLimitedInt);
-			    }
-			    String generatedString = buffer.toString();
-			 
-			    System.out.println(generatedString);
-			    return generatedString;
+				RandomName(var);
 			    
 			case "RandomNameWithNumbers()":
-				int aLowerLimit = 65; // letter 'A'
-			    int zUpperLimit = 90; // letter 'Z'
-			    int targetSequenceLength = 10;
-			    Random randomAll = new Random();
-			    StringBuilder bufferNum = new StringBuilder(targetSequenceLength);
-			    for (int i = 0; i < targetSequenceLength; i++) {
-			    	if(randomAll.nextInt(4) == 3)
-			    	{
-			    		bufferNum.append(randomAll.nextInt(10));
-			    	}
-			    	else
-			    	{
-				        int randomLimitedInt = aLowerLimit + 
-				        	(int) (randomAll.nextFloat() * (zUpperLimit - aLowerLimit + 1) + /*chooses A-Z*/
-				        	(randomAll.nextBoolean()? 0 : 32)); //chooses 'UPPER' or 'lower' case
-				        bufferNum.append((char) randomLimitedInt);
-				    }
-			    }
-			    String generatedSequence = bufferNum.toString();
-			 
-			    System.out.println(generatedSequence);
-			    return generatedSequence;
+				RandomNameWithNumbers(var);
 				
-			    default:
-			    	System.out.println("WARNING: Unhandled custom function");
+			case "RandomNumbers()":
+				RandomNumbers(var);
+				
+			case "RandomEmail()":
+				String email = RandomNameWithNumbers("");
+				if(var.equals(""))
+					email = email.concat("@" + RandomName("5") + ".com");
+				else
+					email = email.concat("@" + var);
+
+				return email;
+
+		    default:
+		    	System.out.println("WARNING: Unhandled custom function");
 				
 		}
 		return null;
+	}
+
+	private String RandomName(String var)
+	{
+		int lowerLimitA = 65; // letter 'A'
+	    int upperLimitZ = 90; // letter 'Z'
+	    int targetStringLength = 10;
+	    if(!var.contentEquals("")) {
+	    targetStringLength = Integer.parseInt(var);
+	    }
+	    StringBuilder buffer = new StringBuilder(targetStringLength);
+	    Random randomChar = new Random();
+	    for (int i = 0; i < targetStringLength; i++) {
+	        int randomLimitedInt = lowerLimitA + 
+	        	(int) (randomChar.nextFloat() * (upperLimitZ - lowerLimitA + 1) + /*chooses A-Z*/
+	        	(randomChar.nextBoolean()? 0 : 32)); //chooses 'UPPER' or 'lower' case
+	        buffer.append((char) randomLimitedInt);
+	    }
+	    String generatedSequence = buffer.toString();
+
+	    System.out.println(generatedSequence);
+	    return generatedSequence;
+	}
+
+	private String RandomNameWithNumbers(String var)
+	{
+		int lowerLimitA = 65; // letter 'A'
+	    int upperLimitZ = 90; // letter 'Z'
+	    int targetSequenceLength = 10;
+	    if(!var.contentEquals("")) {
+	    targetSequenceLength = Integer.parseInt(var);
+	    }
+	    StringBuilder buffer = new StringBuilder(targetSequenceLength);
+	    Random random = new Random(); 
+	    for (int i = 0; i < targetSequenceLength; i++) {
+	    	if(random.nextInt(4) == 3)
+	    	{
+	    		buffer.append(random.nextInt(10));
+	    	}
+	    	else
+	    	{
+		        int randomLimitedInt = lowerLimitA + 
+		        	(int) (random.nextFloat() * (upperLimitZ - lowerLimitA + 1) + /*chooses A-Z*/
+		        	(random.nextBoolean()? 0 : 32)); //chooses 'UPPER' or 'lower' case
+		        buffer.append((char) randomLimitedInt);
+		    }
+	    }
+	    String generatedSequence = buffer.toString();
+
+	    System.out.println(generatedSequence);
+	    return generatedSequence;
+	}
+
+	private String RandomNumbers(String var)
+	{
+		int targetNumLength = 10;
+	    if(!var.contentEquals("")) {
+	    targetNumLength = Integer.parseInt(var);
+	    }
+	    StringBuilder buffer = new StringBuilder(targetNumLength);
+	    Random random= new Random(); 
+	    for (int i = 0; i < targetNumLength; i++)
+    		buffer.append(random.nextInt(10));
+
+	    String generatedSequence = buffer.toString();
+
+	    System.out.println(generatedSequence);
+	    return generatedSequence;
 	}
 
 }
