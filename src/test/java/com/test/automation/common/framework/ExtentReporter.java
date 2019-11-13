@@ -73,6 +73,27 @@ public class ExtentReporter {
 		}
 	}
 
+	
+	public void endResult(Boolean result, SeHelper se) {
+		if (result) {
+			try {
+				test.log(LogStatus.PASS, "Test Result", "Result: " + result + 
+						test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_PASS", se)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			try {
+				test.log(LogStatus.FAIL, "Test Result", "Result: " + result + 
+						test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_FAIL", se)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+
 	public void endTest() {
 		extent.endTest(test);
 		extent.getReportId();
@@ -87,8 +108,14 @@ public class ExtentReporter {
 	
 	private void copyfile(String reportPath2) {
 		File source = new File(reportPath2);
-		File dest = new File(
-				"C:\\Users\\VMQApractice\\Desktop\\VAMQAPractice\\VM_Framework_Base\\VM_Framework_Base\\Automation_Report\\Report\\");
+		File dest = null;
+		try {
+			dest = new File(
+					SystemPropertyUtil.getRootPath() + "\\Automation_Report\\Report\\");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			FileUtils.copyDirectory(source, dest);
 		} catch (IOException e) {
