@@ -86,7 +86,7 @@ public class CommonBaseTest {
 	protected void afterMethod(Method method,  ITestResult result, Object[] params) {
 		//SeHelper se = ((SeHelper) params[1]);
 		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
-		
+		se.reporter().endResult(result.isSuccess(), se);
 		//params[params.length-1]="";
 		se.log().printLogBuilder();
 		se.log().testSeperator();

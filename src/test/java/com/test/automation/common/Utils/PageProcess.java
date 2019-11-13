@@ -8,7 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
-
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.Keys;
 
@@ -57,6 +57,10 @@ public class PageProcess {
 
 				element = (WebElement) callMethod.invoke(obj, se);
 				// element = (WebElement) callMethod.invoke(obj);
+				
+				if (value.contains("$")) {
+					element = dynamicXpath(se, value);
+				}
 
 				if (element != null) {
 					if (value.contains(">")) {
@@ -208,5 +212,14 @@ public class PageProcess {
 		} else {
 			action.sendKeys(key.toUpperCase());
 		}
+	}
+	
+	private static WebElement dynamicXpath(SeHelper se, String value) {
+		//*[contains(text(), '{}')]
+		
+		String[] split = value.split("\\$");			
+		String xpath = "(//*[contains(text(), '" + split[1].trim() + "')] | //*[@value='" + split[1].trim() + "'])";
+		By el = By.xpath(xpath);
+		return se.element().getElement(el, true);
 	}
 }

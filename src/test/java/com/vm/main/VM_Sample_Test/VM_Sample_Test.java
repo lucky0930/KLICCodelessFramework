@@ -55,6 +55,7 @@ public class VM_Sample_Test extends BaseTest {
 		reporter.startTest(this.getClass().getSimpleName(), method.getName(), se);
 	}
 
+	/*
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_One() {
@@ -66,12 +67,12 @@ public class VM_Sample_Test extends BaseTest {
 	public void VM_Test_Two() {
 		testUtil.ExecuteTest("102", se());
 	}
+	 */
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Three() {
-
-		testUtil.ExecuteTest("103", se());
+		testUtil.ExecuteTest("105", se());
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
