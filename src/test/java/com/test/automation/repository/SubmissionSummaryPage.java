@@ -11,7 +11,7 @@ public class SubmissionSummaryPage extends Page {
 	public static By Back = By.xpath("//*[@class='btn btn-blue']");
 
 	public static WebElement Back(SeHelper se) {
-		se.element().waitForElementIsDisplayed(Back);
+		se.waits().waitForElementIsDisplayed(Back);
 		return se.element().getElement(Back);
 	}
 }

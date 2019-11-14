@@ -33,6 +33,7 @@ public class SeHelper {
 	private final Verification verification = new Verification(this);
 	private final Data data = new Data();
 	private final Element element = new Element(this);
+	private final Waits waits = new Waits(this);
 	private final Util util = new Util();
 	private final Settings settings = buildSettings();
 	private final Log log = new Log(settings().value("couchDb.url"),
@@ -114,6 +115,11 @@ public class SeHelper {
 	 */
 	public Element element() {
 		return element;
+	}
+	
+	
+	public Waits waits() {
+		return waits;
 	}
 
 	/**
@@ -241,16 +247,9 @@ public class SeHelper {
 			case InternetExplorer:
 				capabilities = DesiredCapabilities.internetExplorer();
 				System.setProperty("webdriver.ie.driver", getIEDriverPath());
-				capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-				capabilities.setJavascriptEnabled(true);
-				capabilities.setCapability("requireWindowFocus", true);
-				capabilities.setCapability("nativeEvents", false);
-				capabilities.setCapability("unexpectedAlertBehaviour", "accept");
-				capabilities.setCapability("disable-popup-blocking", true);
-				capabilities.setCapability("enablePersistentHover", true);
-				capabilities.setCapability("ignoreZoomSetting", true);
-				capabilities.setCapability("ie.ensureCleanSession", true);
+				
 				driver = new InternetExplorerDriver(capabilities);
+			
 								
 				break;
 
@@ -307,14 +306,19 @@ public class SeHelper {
 //				FirefoxOptions options = new FirefoxOptions();
 //				options.setLegacy(true);
 //				 driver = new FirefoxDriver(options);
-				System.setProperty("webdriver.firefox.marionette",  "C:\\Users\\saipriyal\\git\\VMSeleniumFramework\\tools\\geckodriver.exe");
+			    
+				System.setProperty("webdriver.gecko.driver",  this.getgeckodriverPath());
+				
 				capabilities = DesiredCapabilities.firefox();
-				capabilities.setCapability("marionette",true);     
-				driver = new FirefoxDriver(capabilities);
+				capabilities.setCapability("marionette",true);
+				
+				driver = new FirefoxDriver();
+				
 
 				break;
 			case edgedriver:
 				System.setProperty("webdriver.edge.driver", getedgedriverPath());
+				capabilities = DesiredCapabilities.edge();
 				driver = new EdgeDriver();
 				break;			
 			case GridInternetExplorer:

@@ -13,7 +13,7 @@ public class NewSubmissionPage extends Page {
 	public static By customerAccountName = By.xpath("//*[@id='IdCustomerAccountName']");
 
 	public static WebElement CustomerAccountName(SeHelper se) throws InterruptedException {
-		se.element().waitForElementIsDisplayed(customerAccountName);
+		se.waits().waitForElementIsDisplayed(customerAccountName);
 		return se.element().getElement(customerAccountName, true);
 	}
 
@@ -62,21 +62,21 @@ public class NewSubmissionPage extends Page {
 	public static By LegalEntityType = By.xpath("//*[@id='Id_legal_entity_type']");
 
 	public static WebElement LegalEntityType(SeHelper se) {
-		se.element().waitForElement(LegalEntityType);
+		se.waits().waitForElement(LegalEntityType);
 		return se.element().getElement(LegalEntityType, true);
 	}
 
 	public static By IndustryType = By.xpath("//*[@id='Id_industry_type']");
 
 	public static WebElement IndustryType(SeHelper se) {
-		se.element().waitForElement(IndustryType);
+		se.waits().waitForElement(IndustryType);
 		return se.element().getElement(IndustryType, true);
 	}
 
 	public static By SubIndustryType = By.xpath("//*[@id='Id_subIndustry_type']");
 
 	public static WebElement SubIndustryType(SeHelper se) {
-		se.element().waitForElement(SubIndustryType);
+		se.waits().waitForElement(SubIndustryType);
 		return se.element().getElement(SubIndustryType, true);
 	}
 
@@ -84,14 +84,14 @@ public class NewSubmissionPage extends Page {
 			"//span[contains(text(),'SSN')]//ancestor::label//following-sibling::div[@ng-show='isHideSSN']//input");
 
 	public static WebElement SSN(SeHelper se) {
-		se.element().waitForElement(SSN);
+		se.waits().waitForElement(SSN);
 		return se.element().getElement(SSN, true);
 	}
 
 	public static By FEIN = By.xpath("//*[@ng-blur=\"validatefeinNumber()\"]");
 
 	public static WebElement FEIN(SeHelper se) {
-		se.element().waitForElement(FEIN);
+		se.waits().waitForElement(FEIN);
 		return se.element().getElement(FEIN, true);
 	}
 
@@ -99,21 +99,21 @@ public class NewSubmissionPage extends Page {
 
 	public static WebElement BusinessPhone(SeHelper se) {
 
-		se.element().waitForElement(BusinessPhone);
+		se.waits().waitForElement(BusinessPhone);
 		return se.element().getElement(BusinessPhone, true);
 	}
 
 	public static By EmailId = By.xpath("//*[@ng-blur='validateemail()']");
 
 	public static WebElement EmailId(SeHelper se) {
-		se.element().waitForElement(EmailId);
+		se.waits().waitForElement(EmailId);
 		return se.element().getElement(EmailId);
 	}
 
 	public static By SelectProduct = By.xpath("//*[@id='id-selected-products']/div/button");
 
 	public static WebElement SelectProduct(SeHelper se) {
-		se.element().waitForElement(SelectProduct);
+		se.waits().waitForElement(SelectProduct);
 		return se.element().getElement(SelectProduct, true);
 	}
 
@@ -127,29 +127,29 @@ public class NewSubmissionPage extends Page {
 	public static By AgencyName = By.xpath("//*[@id='Id_agency_name']");
 
 	public static WebElement AgencyName(SeHelper se) {
-		se.element().waitForElement(AgencyName);
+		se.waits().waitForElement(AgencyName);
 		return se.element().getElement(AgencyName, true);
 	}
 
 	public static By AgentName = By.xpath("//*[@id='Id_agent_name']");
 
 	public static WebElement AgentName(SeHelper se) {
-		se.element().waitForElement(AgentName);
+		se.waits().waitForElement(AgentName);
 		return se.element().getElement(AgentName, true);
 	}
 
 	public static By CreateSubmission = By.xpath("//*[@ng-click='accountproceed()']");
 
 	public static WebElement CreateSubmission(SeHelper se) {
-		se.element().waitForElement(CreateSubmission);
+		se.waits().waitForElement(CreateSubmission);
 		return se.element().getElement(CreateSubmission, true);
 	}
 
 	public static By CreateSubmission1 = By.xpath("//*[@ng-click='accountproceed()']");
 
 	public static WebElement CreateSubmission1(SeHelper se) {
-		se.element().waitForElementToDisappear(SelectAndProceed, 6);
-		se.element().waitForElementIsClickable(se.element().getElement(CreateSubmission1));
+		se.waits().waitForElementToDisappear(SelectAndProceed, 6);
+		se.waits().waitForElementIsClickable(se.element().getElement(CreateSubmission1));
 		// se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
 		return se.element().getElement(CreateSubmission1);
 
@@ -158,28 +158,28 @@ public class NewSubmissionPage extends Page {
 	public static By cancel = By.xpath("//*[@id=\"scrollToDivID\"]/div[1]/form/div[3]/a");
 
 	public static WebElement Cancel(SeHelper se) {
-		se.element().waitForElement(cancel);
+		se.waits().waitForElement(cancel);
 		return se.element().getElement(cancel);
 	}
 
 	public static By SelectUser = By.xpath("//input[@name=\"Duplicate\"]");
 
 	public static WebElement SelectUser(SeHelper se) {
-		se.element().waitForElementIsDisplayed(SelectUser);
+		se.waits().waitForElementIsDisplayed(SelectUser);
 		return se.element().getElement(SelectUser, true);
 	}
 
 	public static By SelectAndProceed = By.xpath("//*[@id=\"existingAccountpopup\"]/div/div/div[3]/button");
 
 	public static WebElement SelectAndProceed(SeHelper se) {
-		se.element().waitForElement(SelectAndProceed);
+		se.waits().waitForElement(SelectAndProceed);
 		return se.element().getElement(SelectAndProceed, true);
 	}
 
 	public static By SelectAndProceed1 = By.xpath("//button[@class=\"btn btn-success pull-right\"]");
 
 	public static WebElement SelectAndProceed1(SeHelper se) {
-		se.element().waitForElement(SelectAndProceed1);
+		se.waits().waitForElement(SelectAndProceed1);
 		return se.element().getElement(SelectAndProceed1, true);
 	}
 

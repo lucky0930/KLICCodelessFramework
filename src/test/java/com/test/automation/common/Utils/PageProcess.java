@@ -68,7 +68,8 @@ public class PageProcess {
 						asrt.verify(element, value);
 						return element;
 					}
-					
+					se.waits().waitForPageLoad();
+					se.waits().waitForElementIsClickable(element);
 					FillElement(se, element, key, value);
 				}
 			} catch (NoSuchMethodException e) {
