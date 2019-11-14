@@ -16,7 +16,9 @@ public class SystemPropertyUtil {
 	private final static String localeUrlKey = "locale.url";
 	// private final static String baseUrlDefault =
 	// "http://138.91.124.246:1050/pages/login.html";
-	private final static String baseUrlDefault = "https://vam-bd-agentuw-qa-wapp.azurewebsites.net";
+	private static PullFromConfig config = new PullFromConfig();
+
+	private final static String baseUrlDefault = config.getConfigProp().getProperty("BaseURL");
 	private final static String localeUrlDefault = "";
 
 	// Default values
@@ -24,8 +26,11 @@ public class SystemPropertyUtil {
 	private final static int windowHeightDefault = 1080;
 	private final static String testDataDirectoryDefault = "target/test-classes";
 	private final static String httpCredentialsDefault = "true";
-	private final static String browsersDefault = "Chrome";
+	//private final static String browsersDefault = "Chrome";
+	private final static String browsersDefault = config.getConfigProp().getProperty("Browser");
 
+	
+	
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
 			? Integer.parseInt(System.getProperty(windowWidthKey))
 			: windowWidthDefault;
