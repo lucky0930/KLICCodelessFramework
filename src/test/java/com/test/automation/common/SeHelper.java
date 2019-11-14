@@ -287,8 +287,15 @@ public class SeHelper {
 				 * capabilities.setCapability("chrome.switches", Arrays.asList("--no-sandbox"));
 				 * addChromeExtension(capabilities);
 				 */
-				driver = (new Augmenter()).augment(new RemoteWebDriver(getSeGridUrl(), capabilities));
-				((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
+//				driver = (new Augmenter()).augment(new RemoteWebDriver(getSeGridUrl(), capabilities));
+//				((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
+				
+				try {
+					driver = new RemoteWebDriver(new URL("http://10.0.1.5:9999/wd/hub"), capabilities);
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				break;
 			case geckodrivers:
