@@ -1,4 +1,4 @@
-package com.test.automation.common.framework;
+package com.test.automation.customs;
 
 import java.util.Random;
 

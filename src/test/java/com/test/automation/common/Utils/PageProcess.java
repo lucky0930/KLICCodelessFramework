@@ -13,8 +13,8 @@ import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.Keys;
 
 import com.test.automation.common.SeHelper;
-import com.test.automation.common.framework.Assertions;
-import com.test.automation.common.framework.CustomHandler;
+import com.test.automation.customs.Assertions;
+import com.test.automation.customs.CustomHandler;
 
 
 public class PageProcess {
