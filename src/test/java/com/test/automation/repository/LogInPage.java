@@ -13,7 +13,7 @@ public class LogInPage extends Page {
 	public static By username = By.xpath("//*[@id='UserName']");
 
 	public static WebElement UserName(SeHelper se) {
-
+		
 		return se.element().getElement(username);
 	}
 
