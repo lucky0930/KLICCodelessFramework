@@ -50,6 +50,14 @@ public class PageProcess {
 					ControlKeys(se, value);
 					return null;
 				}
+				
+				if(checkAlert(se,key,value)) {
+					return null;
+				}
+				
+				if(checkPageCmd(se,key,value)) {
+					return null;
+				}
 
 				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
 				// Method callMethod = obj.getClass().getDeclaredMethod(key);
@@ -217,6 +225,54 @@ public class PageProcess {
 			action.sendKeys(key.toUpperCase());
 		}
 	}
+	private static boolean checkAlert(SeHelper se, String key, String value) {
+		if(key.equals("Alert")) {
+			switch (value) {
+			case "dismiss" :
+				se.waits().dismissPopup();
+				return true;
+			
+			case "accept" :
+				se.waits().acceptPopup();
+				return true;
+				
+			case "text" : 
+				se.waits().sendKeysPopup(value);
+				return true;
+				
+			default:
+				return false;
+			}
+		}
+		
+	
+		else
+			return false;
+	}
+	
+	
+	private static boolean checkPageCmd(SeHelper se, String key, String value) {
+		switch (key) {
+		
+		case "Backward":
+			se.driver().navigate().back();
+			return true;
+		case "Forward":
+			se.driver().navigate().forward();
+			return true;
+			
+		case "Refresh":
+			se.driver().navigate().refresh();
+			return true;
+	    default:
+	    	return false;
+		}
+		
+		
+		
+		
+	}
+	
 	
 	private static WebElement dynamicXpath(SeHelper se, String value) {
 		//*[contains(text(), '{}')]

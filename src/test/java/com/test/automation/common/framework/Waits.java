@@ -21,6 +21,7 @@ public class Waits {
 
 	public Waits(SeHelper se) {
 		this.se = se;
+	
 	}
 
 	/**
@@ -87,6 +88,19 @@ public class Waits {
 	 * @param timeOutInSeconds
 	 * @return
 	 */
+	
+	public void dismissPopup() {
+		se.driver().switchTo().alert().dismiss();
+	}
+	
+	public void acceptPopup() {
+		se.driver().switchTo().alert().accept();
+	}
+	public void sendKeysPopup(String keys) {
+		se.driver().switchTo().alert().sendKeys(keys);
+	}
+	
+	
 	
 	public boolean waitForElementIsClickable(WebElement element) {
 		
