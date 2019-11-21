@@ -36,8 +36,6 @@ public class CommonBaseTest {
 	public static String myMethod = null;
 	public static String[] myMethods = new String[50];
 	public static int myMethodCount=0;
-	private SeHelper se;
-	private Log logger = LogFactory.getLog(CommonBaseTest.class);
 	
 	public String getMethod(Method method) {
 
@@ -47,55 +45,24 @@ public class CommonBaseTest {
 		//System.out.println("Running the methods :");
 		//System.out.println(sMethod + " " + myMethodCount);
 		return myMethods[myMethodCount];
-		
-		
 	}
 	
 	public String getEnv() {
-		
 		String Strurl = SystemPropertyUtil.getBaseStoreUrl();
 		//String[] env = Strurl.split("/");
 		//return env[2];
 		return Strurl;
 	}
-	public SeHelper se() {
-		
-		return this.se;
-	}
-	public void setSe(SeHelper se) {
-		this.se = se;
-	}
-	
 	
 	@BeforeMethod(alwaysRun = true)
 	protected void beforeMethod(Method method, Object[] params) {
-		Test test = method.getAnnotation(Test.class);
-		//Browsers myBrowser = (Browsers) params[0];		
-		//SeHelper se = ((SeHelper) params[1]);
-		Browsers myBrowser = se.currentBrowser();
-		getMethod(method);
-		se.log().trace("Test Method: " + method.getName());
-		se.log().trace("Description: " + test.description());
-		se.log().trace("Browser: " + myBrowser.toString());		
-		se.util().sleep(1000);
-
 		
 	}
 	
 	@AfterMethod(alwaysRun = true)
 	protected void afterMethod(Method method,  ITestResult result, Object[] params) {
-		//SeHelper se = ((SeHelper) params[1]);
-		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
-		se.reporter().endResult(result.isSuccess(), se);
-		//params[params.length-1]="";
-		se.log().printLogBuilder();
-		se.log().testSeperator();
-		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
-		se.browser().quit();
+		
 	}
-	
-	
-	
 	
 	/**    
      * @author SaiGnapika
@@ -372,10 +339,4 @@ public class CommonBaseTest {
 		sFileName = filenam;		
 		return map;
 	}
-	
-	
-	
-	
-	
-	
 }

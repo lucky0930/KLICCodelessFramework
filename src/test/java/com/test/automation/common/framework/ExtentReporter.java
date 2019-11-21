@@ -93,11 +93,9 @@ public class ExtentReporter {
 		}
 	}
 	
-
 	public void endTest() {
 		extent.endTest(test);
 		extent.getReportId();
-		
 	}
 
 	public void closeExtent() {

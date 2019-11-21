@@ -31,59 +31,49 @@ import com.test.automation.common.framework.ExtentReporter;
 
 public class VM_Sample_Test extends BaseTest {
 
-	private ExtentReporter reporter;
-	TestUtil testUtil = new TestUtil();
-
-//	@Test
-//	public void AddVehicle_101() {
-//		testUtil.ExecuteTest("101");
-//	}
+	TestUtil testUtil;
 
 	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
-		reporter = new ExtentReporter();
+
 	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	protected void beforeMethod(Method method, Object[] params) {
-		SeHelper se = new SeHelper();
-		se.setReporter(reporter);
-		setSe(se);
-		se().startSession(Browsers.Chrome);
-		se().driver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		super.beforeMethod(method, params);
-		reporter.startTest(this.getClass().getSimpleName(), method.getName(), se);
+	protected void beforeMethod(Method method, ITestResult result, Object[] params) {
+		testUtil = new TestUtil();
+		testUtil.testDetails(result, method, this.getClass().getSimpleName());
 	}
 
 	/*
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_One() {
-		testUtil.ExecuteTest("101", se());
+		testUtil.ExecuteTest("101", new SeHelper());
 	}
+	*/
 
+	/*
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Two() {
-		testUtil.ExecuteTest("102", se());
+		testUtil.ExecuteTest("102", new SeHelper());
 	}
-	 */
+	*/
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Three() {
-		testUtil.ExecuteTest("108", se());
+		testUtil.ExecuteTest("105", new SeHelper());
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result, Object[] params) {
-		super.afterMethod(method, result, params);
-		reporter.endTest();
+		
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void afterSuite() throws IOException {
-		reporter.closeExtent();
+		testUtil.closeExtent();
 	}
 
 //	@SuppressWarnings("unchecked")

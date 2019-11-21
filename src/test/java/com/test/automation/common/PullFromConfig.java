@@ -1,9 +1,6 @@
 package com.test.automation.common;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -34,8 +31,7 @@ public class PullFromConfig {
 //        }
     }
 	
-	public Properties getConfigProp() {
-		return this.prop;
+	public String getConfigProp(String property) {
+		return this.prop.getProperty(property);
 	}
-
 }

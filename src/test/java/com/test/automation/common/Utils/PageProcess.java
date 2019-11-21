@@ -46,7 +46,6 @@ public class PageProcess {
 
 			try {
 				if(key.equals("ControlKeys")) {
-					System.out.println("Starting ControlKeys function");
 					ControlKeys(se, value);
 					return null;
 				}
@@ -124,7 +123,7 @@ public class PageProcess {
 			return;
 		}
 		
-		if ((value.contains("(")) && (value.contains(")"))) {
+		if ((value.contains("(")) && (value.indexOf(')') == value.length()-1)) {
 			value = new CustomHandler().handle(value);
 		}
 		

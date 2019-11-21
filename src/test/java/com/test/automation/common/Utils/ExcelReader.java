@@ -17,7 +17,7 @@ import org.apache.poi.ss.util.NumberToTextConverter;
 
 public class ExcelReader {
 
-	private static org.apache.poi.ss.usermodel.Workbook workbook;
+	private org.apache.poi.ss.usermodel.Workbook workbook;
 	LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 	protected List<String> sheetCollection = new ArrayList<String>();
 	int indexflow;
@@ -52,6 +52,8 @@ public class ExcelReader {
 			
 		}
 
+		// If you want to run in parallel, comment out SortByFlow(tableData) and uncomment return tableData.
+		//return tableData;
 		return SortByFlow(tableData);
 	}
 
@@ -127,13 +129,10 @@ public class ExcelReader {
 		try {
 			workbook = WorkbookFactory.create(file);
 		} catch (EncryptedDocumentException e) {
-
 			e.printStackTrace();
 		} catch (InvalidFormatException e) {
-
 			e.printStackTrace();
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
 		return workbook;

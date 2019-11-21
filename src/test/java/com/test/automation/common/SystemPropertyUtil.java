@@ -18,7 +18,7 @@ public class SystemPropertyUtil {
 	// "http://138.91.124.246:1050/pages/login.html";
 	private static PullFromConfig config = new PullFromConfig();
 
-	private final static String baseUrlDefault = config.getConfigProp().getProperty("BaseURL");
+	private final static String baseUrlDefault = config.getConfigProp("BaseURL");
 	private final static String localeUrlDefault = "";
 
 	// Default values
@@ -27,7 +27,7 @@ public class SystemPropertyUtil {
 	private final static String testDataDirectoryDefault = "target/test-classes";
 	private final static String httpCredentialsDefault = "true";
 	//private final static String browsersDefault = "Chrome";
-	private final static String browsersDefault = config.getConfigProp().getProperty("Browser");
+	private final static String browsersDefault = config.getConfigProp("Browser");
 
 	
 	
