@@ -72,6 +72,9 @@ public class PageProcess {
 				}
 
 				if (element != null) {
+					if(checkOptional(element,value)) {
+						return null;
+					}
 					if (value.contains(">")) {
 						Assertions asrt = new Assertions(se);
 						asrt.verify(element, value);
@@ -303,7 +306,7 @@ public class PageProcess {
 	}
 	
 	private static boolean checkOptional( WebElement element, String value) {
-		if(value.charAt(0)  == '[' && value.charAt(value.length()) - 1 == ']'){
+		if(value.charAt(0)  == '[' && value.charAt(value.length() - 1) == ']'){
 			if(element.isDisplayed() && element.isEnabled()) {
 				return false;
 			}
