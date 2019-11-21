@@ -7,20 +7,22 @@ public class CustomHandler {
 	public String handle(String function)
 	{
 		String var = "";
-		if (!function.contains("()")) {
-			var = function.substring(function.indexOf('('+1),function.length()-1);
-			function.replace(var, "");
-		}
+		
+		var = function.substring((function.indexOf('(') + 1), (function.length() - 1));
+		System.out.println(var);
+		function = function.replace(var, "");
+			
+		System.out.println(function);
 		switch(function)
 		{
 			case "RandomName()":
-				RandomName(var);
+				return RandomName(var);
 			    
 			case "RandomNameWithNumbers()":
-				RandomNameWithNumbers(var);
+				return RandomNameWithNumbers(var);
 				
 			case "RandomNumbers()":
-				RandomNumbers(var);
+				return RandomNumbers(var);
 				
 			case "RandomEmail()":
 				String email = RandomNameWithNumbers("");

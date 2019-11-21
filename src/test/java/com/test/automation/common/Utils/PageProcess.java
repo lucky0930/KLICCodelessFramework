@@ -59,15 +59,17 @@ public class PageProcess {
 					return null;
 				}
 
-				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
-				// Method callMethod = obj.getClass().getDeclaredMethod(key);
-				callMethod.setAccessible(true);
-
-				element = (WebElement) callMethod.invoke(obj, se);
-				// element = (WebElement) callMethod.invoke(obj);
-				
 				if (value.contains("$")) {
-					element = dynamicXpath(se, value);
+					dynamicXpath(se, value);
+					return null;
+				}
+				else {
+					Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
+					// Method callMethod = obj.getClass().getDeclaredMethod(key);
+					callMethod.setAccessible(true);
+
+					element = (WebElement) callMethod.invoke(obj, se);
+					// element = (WebElement) callMethod.invoke(obj);
 				}
 
 				if (element != null) {
@@ -122,11 +124,11 @@ public class PageProcess {
 			return;
 		}
 		
-		if (value.contains("()")) {
+		if ((value.contains("(")) && (value.contains(")"))) {
 			value = new CustomHandler().handle(value);
 		}
 		
-		se.log().logSeStep("Accessing element: \"" + key + ".\" Using value: \"" + value + ".\"");
+		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");
 		se.reporter().reportInfo("Accessing Element", "Element: " + key + " || Value: " + value);
 		
 			switch (element.getTagName()) {
@@ -225,6 +227,7 @@ public class PageProcess {
 			action.sendKeys(key.toUpperCase());
 		}
 	}
+	
 	private static boolean checkAlert(SeHelper se, String key, String value) {
 		if(key.equals("Alert")) {
 			switch (value) {
@@ -250,37 +253,54 @@ public class PageProcess {
 			return false;
 	}
 	
-	
 	private static boolean checkPageCmd(SeHelper se, String key, String value) {
 		switch (key) {
-		
 		case "Backward":
 			se.driver().navigate().back();
 			return true;
 		case "Forward":
 			se.driver().navigate().forward();
 			return true;
-			
 		case "Refresh":
 			se.driver().navigate().refresh();
 			return true;
 	    default:
 	    	return false;
 		}
-		
-		
-		
-		
 	}
-	
-	
-	private static WebElement dynamicXpath(SeHelper se, String value) {
-		//*[contains(text(), '{}')]
 		
+	private static void dynamicXpath(SeHelper se, String value) {
+		//*[contains(text(), '{}')]
 		String[] split = value.split("\\$");			
+		String action = split[0].trim();
+		System.out.println(action);
 		String xpath = "(//*[contains(text(), '" + split[1].trim() + "')] | //*[@value='" + split[1].trim() + "'])";
+		System.out.println("DYNAMIC X PATH: " + xpath);
 		By el = By.xpath(xpath);
-		return se.element().getElement(el, true);
+		WebElement element = se.element().getElement(el, true);
+		
+		try {
+			if (action.equalsIgnoreCase("Click")) {
+				se.element().Click(element);
+				return;
+			}
+			//else if (action.equalsIgnoreCase("SendKeys")) {
+			//	element.clear();
+			//	element.sendKeys(value);
+			//	return;
+			//}
+			else {
+				se.log().debug("Dynamic XPATH invoked with invalid action: " + action);
+				se.reporter().reportError("Dynamic XPATH invoked with invalid action.", "Action: " + action);
+				return;
+			}
+		} catch (NoSuchElementException e) {
+			se.log().error("NoSuchElementException encountered for dynamic XPATH: " + xpath + "\n", e);
+			se.reporter().reportError("Error encountered with dynamic XPATH: " + xpath, "Action: " + action);
+		} catch (Exception e) {
+			se.log().error("Exception encountered with the dynamic XPATH: " + xpath + "\n", e);
+			se.reporter().reportError("Error encountered with dynamic XPATH: " + xpath, "Action: " + action);
+		}
 	}
 	
 	private static boolean checkOptional( WebElement element, String value) {
