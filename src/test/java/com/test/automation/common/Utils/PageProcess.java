@@ -239,15 +239,15 @@ public class PageProcess {
 		if (key.equals("Alert")) {
 			switch (value) {
 			case "dismiss":
-				se.waits().dismissPopup();
+				se.browser().dismissPopup();
 				return true;
 
 			case "accept":
-				se.waits().acceptPopup();
+				se.browser().acceptPopup();
 				return true;
 
 			case "text":
-				se.waits().sendKeysPopup(value);
+				se.browser().sendKeysPopup(value);
 				return true;
 
 			default:
@@ -275,6 +275,16 @@ public class PageProcess {
 		}
 	}
 
+	private static boolean checkWindow(SeHelper se, String key, String value) {
+		if(key.equals("Window")){
+			
+		}
+		
+		
+		
+		return false;
+	}
+	
 	private static void dynamicXpath(SeHelper se, String value) {
 		// *[contains(text(), '{}')]
 		String[] split = value.split("\\$");
