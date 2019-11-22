@@ -262,13 +262,13 @@ public class PageProcess {
 	private static boolean checkPageCmd(SeHelper se, String key, String value) {
 		switch (key) {
 		case "Backward":
-			se.driver().navigate().back();
+			se.browser().navigateBack();
 			return true;
 		case "Forward":
-			se.driver().navigate().forward();
+			se.browser().navigateForward();
 			return true;
 		case "Refresh":
-			se.driver().navigate().refresh();
+			se.browser().refresh();
 			return true;
 		default:
 			return false;
