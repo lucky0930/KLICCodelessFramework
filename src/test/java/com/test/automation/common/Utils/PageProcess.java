@@ -276,15 +276,13 @@ public class PageProcess {
 	}
 
 	private static boolean checkWindow(SeHelper se, String key, String value) {
-		if(key.equals("Window")){
-			
+		if (key.equals("Window")) {
+
 		}
-		
-		
-		
+
 		return false;
 	}
-	
+
 	private static void dynamicXpath(SeHelper se, String value) {
 		// *[contains(text(), '{}')]
 		String[] split = value.split("\\$");
