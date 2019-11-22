@@ -89,6 +89,10 @@ public class Browser {
 	 * @param title
 	 * @return Window handle of window with the specified title.
 	 */
+	
+	
+	
+	
 	private String getHandleByTitle(String title) {
 		String currentHandle = se.driver().getWindowHandle();
 		for (String handle : se.driver().getWindowHandles()) {
@@ -117,6 +121,9 @@ public class Browser {
 		}
 		return currentHandle;
 	}
+	
+	
+	
 
 	/**
 	 * Description: Gets the browser version
@@ -131,6 +138,9 @@ public class Browser {
 			return browserCapabilities.getVersion();
 		}
 	}
+	
+	
+	
 
 	/**
 	 * Description: Maximize the browser
@@ -274,6 +284,8 @@ public class Browser {
 
 		return null;
 	}
+	
+
 
 	/**
 	 * Description: Return to the previous window, previous window was saved by
@@ -376,4 +388,17 @@ public class Browser {
 		jse.executeScript("scroll(0, 500);");
 
 	}
+	
+	public void dismissPopup() {
+		se.driver().switchTo().alert().dismiss();
+	}
+	
+	public void acceptPopup() {
+		se.driver().switchTo().alert().accept();
+	}
+	public void sendKeysPopup(String keys) {
+		se.driver().switchTo().alert().sendKeys(keys);
+	}
+	
+	
 }

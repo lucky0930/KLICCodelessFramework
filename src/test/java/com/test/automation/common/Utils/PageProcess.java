@@ -234,15 +234,15 @@ public class PageProcess {
 		if(key.equals("Alert")) {
 			switch (value) {
 			case "dismiss" :
-				se.waits().dismissPopup();
+				se.browser().dismissPopup();
 				return true;
 			
 			case "accept" :
-				se.waits().acceptPopup();
+				se.browser().acceptPopup();
 				return true;
 				
 			case "text" : 
-				se.waits().sendKeysPopup(value);
+				se.browser().sendKeysPopup(value);
 				return true;
 				
 			default:
@@ -258,17 +258,27 @@ public class PageProcess {
 	private static boolean checkPageCmd(SeHelper se, String key, String value) {
 		switch (key) {
 		case "Backward":
-			se.driver().navigate().back();
+			se.browser().navigateBack();
 			return true;
 		case "Forward":
-			se.driver().navigate().forward();
+			se.browser().navigateForward();
 			return true;
 		case "Refresh":
-			se.driver().navigate().refresh();
+			se.browser().refresh();
 			return true;
 	    default:
 	    	return false;
 		}
+	}
+	
+	private static boolean checkWindow(SeHelper se, String key, String value) {
+		if(key.equals("Window")){
+			
+		}
+		
+		
+		
+		return false;
 	}
 		
 	private static void dynamicXpath(SeHelper se, String value) {
