@@ -20,15 +20,15 @@ public class TestUtil {
 	String TESTDATA_SHEET_PATH = SystemPropertyUtil.getTestDataSheetPath();
 
 	ExcelReader excelReader = new ExcelReader();
-	
+
 	private static ExtentReporter reporter = new ExtentReporter();
 	Method method;
 	ITestResult result;
 	String className;
+	private Boolean testRunning = true;
 
-	
 	public void ExecuteTest(String TestCaseNumber) {
-		
+
 		List<String> sheetCollection = excelReader.sheetCollection;
 
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
@@ -54,7 +54,7 @@ public class TestUtil {
 
 		initialize(se);
 		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
-	
+
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
 				TESTDATA_SHEET_PATH);
 
@@ -72,10 +72,16 @@ public class TestUtil {
 		});
 
 		for (int i = 0; i < tableData.size(); i++) {
-			LinkedHashMap<String, String> actualData = tableData.get(actualSheetCollection.get(i));
-			ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
+			
+			if(se.keepRunning()) {
+				LinkedHashMap<String, String> actualData = tableData.get(actualSheetCollection.get(i));
+				ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
+			}
+			else {
+				break;
+			}
 		}
-		
+
 		endTest(se);
 	}
 
@@ -83,8 +89,13 @@ public class TestUtil {
 
 		se.log().logSeStep("Accessing page: " + sheetName);
 		se.reporter().reportInfo("Accessing Page", "Page Name: " + sheetName);
-		
+
 		actualData.entrySet().forEach(entry -> {
+			
+			if (!se.keepRunning()) {
+				return;
+			}
+			
 			System.out.println(entry.getKey() + " => " + entry.getValue());
 
 			if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
@@ -95,8 +106,8 @@ public class TestUtil {
 			}
 		});
 	}
-	
-	private void initialize(SeHelper se) {
+
+	public void initialize(SeHelper se) {
 		se.setReporter(reporter);
 		se.startSession(Browsers.valueOf(SystemPropertyUtil.getBrowsers()));
 		se.driver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -104,18 +115,18 @@ public class TestUtil {
 		Browsers myBrowser = se.currentBrowser();
 		se.log().trace("Test Method: " + method.getName());
 		se.log().trace("Description: " + test.description());
-		se.log().trace("Browser: " + myBrowser.toString());		
+		se.log().trace("Browser: " + myBrowser.toString());
 		se.util().sleep(1000);
 		reporter.startTest(className, method.getName(), se);
 	}
-	
+
 	public void testDetails(ITestResult r, Method m, String className) {
 		this.result = r;
 		this.method = m;
 		this.className = className;
 	}
-	
-	private void endTest(SeHelper se) {
+
+	public void endTest(SeHelper se) {
 		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
 		se.reporter().endResult(result.isSuccess(), se);
 		se.reporter().endTest();
@@ -124,7 +135,7 @@ public class TestUtil {
 		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
 		se.browser().quit();
 	}
-	
+
 	public void closeExtent() {
 		reporter.closeExtent();
 	}

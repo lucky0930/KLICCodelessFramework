@@ -44,6 +44,8 @@ public class SeHelper {
 	private Browser.Browsers currentBrowser;
 	
 	private ExtentReporter reporter;
+	
+	private Boolean keepRunning = true; //flag used to stop the test when an exception occurs (configure in properties)
 
 	// Sauce Labs
 	private final String USERNAME = "saignapika";
@@ -496,5 +498,13 @@ public class SeHelper {
 	
 	public ExtentReporter reporter() {
 		return reporter;
+	}
+
+	public Boolean keepRunning() {
+		return keepRunning;
+	}
+
+	public void stopRunning() {
+		this.keepRunning = false;
 	}
 }

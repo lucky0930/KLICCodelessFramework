@@ -28,8 +28,8 @@ public class SystemPropertyUtil {
 	private final static String httpCredentialsDefault = "true";
 	//private final static String browsersDefault = "Chrome";
 	private final static String browsersDefault = config.getConfigProp("Browser");
-
 	
+	private final static String continueIfException = config.getConfigProp("ContinueIfException");	
 	
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
 			? Integer.parseInt(System.getProperty(windowWidthKey))
@@ -92,6 +92,10 @@ public class SystemPropertyUtil {
 
 	public static String getRootPath() throws IOException {
 		return new File(".").getCanonicalPath();
+	}
+	
+	public static String getContinueIfException() {
+		return continueIfException;
 	}
 
 	public static String getTestDataSheetPath() {

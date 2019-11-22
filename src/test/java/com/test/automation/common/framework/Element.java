@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
+import com.test.automation.common.Utils.TestUtil;
 
 /**
  * Element wrapper class. Contains all things WebElement related. Each method
@@ -58,6 +60,7 @@ public class Element {
 			String errorName = "NoSuchElementException Exception in getElement:";
 			se.log().logSeStep(errorName + e.getMessage());
 			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			continueIfException(e);
 			return null;
 		} catch (Exception e) {
 			String errorName = "Un-handled Exception in getElement:";
@@ -75,6 +78,7 @@ public class Element {
 			String errorName = "NoSuchElementException Exception in getElement:";
 			se.log().logSeStep(errorName + e.getMessage());
 			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			continueIfException(e);
 			return null;
 		} catch (Exception e) {
 			String errorName = "Un-handled Exception in getElement:";
@@ -990,8 +994,6 @@ public class Element {
 		return true;
 	}
 
-
-
 	public boolean isElementPresent(WebElement we) {
 		boolean flag = false;
 		try {
@@ -1002,5 +1004,23 @@ public class Element {
 			return flag;
 		}
 	}
+	
+	private void continueIfException(Exception e) {
+		String continueIfException = SystemPropertyUtil.getContinueIfException().trim();
+		
+		if (continueIfException.equalsIgnoreCase("Yes")) {
+			return;
+		} else if (continueIfException.equalsIgnoreCase("No")) {
+			//end test
 
+			String errorName = "NoSuchElementException Exception in getElement:";
+			se.log().logSeStep(errorName + e.getMessage());
+			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			se.log().debug("The test ended early due to an error.");
+			se.reporter().reportInfo("The test ended early due to an error.", e.getClass().getSimpleName());
+			se.stopRunning();
+		}
+
+		return;
+	}
 }
