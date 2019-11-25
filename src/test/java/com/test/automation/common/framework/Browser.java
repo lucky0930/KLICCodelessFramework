@@ -124,6 +124,7 @@ public class Browser {
 	
 	
 	
+	
 
 	/**
 	 * Description: Gets the browser version
@@ -285,6 +286,29 @@ public class Browser {
 		return null;
 	}
 	
+	public void switchToWindow(int index) {
+		try {
+			
+			Set<String> windows = se.driver().getWindowHandles();
+			Object[] arr = windows.toArray();
+			se.driver().switchTo().window(((String)arr[index]));
+			
+		}
+		catch(Exception e) {
+			 
+		}
+	}
+	
+	
+	
+	public void switchToIFrame(int index) {
+		try {
+		se.driver().switchTo().frame(index);
+		}
+		catch(Exception e) {
+			
+		}
+	}
 
 
 	/**
