@@ -9,6 +9,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
 
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -399,7 +400,7 @@ public class Util {
 		
 		File screenshotSource = null;
 		screenshotSource = ((TakesScreenshot) se.driver()).getScreenshotAs(OutputType.FILE);
-		String dest = new File(".").getCanonicalPath()+"\\Screenshots\\"+"Run_"+Util.getCurrentDate()+"_"+Util.getCurrentTime()+"\\Automation\\"+screenshotName+".png";
+		String dest = SystemPropertyUtil.getScreenshotPath()+"Run_"+Util.getCurrentDate()+"_"+Util.getCurrentTime()+"\\Automation\\"+screenshotName+".png";
 		File screenshotDest = new File(dest);
 		FileUtils.copyFile(screenshotSource, screenshotDest);
 		return dest;
