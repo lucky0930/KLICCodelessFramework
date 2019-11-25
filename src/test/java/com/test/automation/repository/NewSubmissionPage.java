@@ -1,236 +1,214 @@
 package com.test.automation.repository;
 
-import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-import com.test.automation.common.Page;
 import com.test.automation.common.SeHelper;
 
-public class NewSubmissionPage extends Page {
-
-	public static By customerAccountName = By.xpath("//*[@id='IdCustomerAccountName']");
-
-	public static WebElement CustomerAccountName(SeHelper se) throws InterruptedException {
-		se.waits().waitForElementIsDisplayed(customerAccountName);
-		return se.element().getElement(customerAccountName, true);
+public class NewSubmissionPage {
+	
+	public NewSubmissionPage(SeHelper se) {
+		PageFactory.initElements(se.driver(), this);
 	}
 
-	public static By zipcode = By.xpath("//input[@id='location']");
+	@FindBy(xpath = "//*[@id='IdCustomerAccountName']")
+	static WebElement customerAccountName;
+
+	public static WebElement CustomerAccountName(SeHelper se) {
+		return customerAccountName;
+	}
+	@FindBy(xpath = "//input[@id='location']")
+	static WebElement zipcode;
 
 	public static WebElement ZipCode(SeHelper se) {
-
-		return se.element().getElement(zipcode, true);
+		return zipcode;
 	}
 
-	public static By city = By.xpath("//*[@id='PrimaryAccountCity']");
-
+	@FindBy(xpath = "//*[@id='PrimaryAccountCity']")
+	static WebElement city;
+	
 	public static WebElement City(SeHelper se) {
-		return se.element().getElement(city, true);
+		return city;
 	}
 
-	public static By state = By.xpath("//input[@id='PrimaryAccountState']");
+	@FindBy(xpath = "//input[@id='PrimaryAccountState']")
+	static WebElement state;
 
 	public static WebElement State(SeHelper se) {
-
-		return se.element().getElement(state, true);
+		return state;
 	}
 
-	public static By streetAddress = By.xpath(" //input[@id='IDphysical_streetaddress']");
+	@FindBy(xpath = " //input[@id='IDphysical_streetaddress']")
+	static WebElement streetAddress;
 
 	public static WebElement StreetAddress(SeHelper se) {
-
-		return se.element().getElement(streetAddress, true);
-
+		return streetAddress;
 	}
 
-	public static By apt = By.xpath("//input[@id='IDphysical_aptsuit']");
+	@FindBy(xpath = "//input[@id='IDphysical_aptsuit']")
+	static WebElement apt;
 
 	public static WebElement Apt(SeHelper se) {
-
-		return se.element().getElement(apt, true);
+		return apt;
 	}
 
-	public static By MailingAddress = By.xpath("//*[@class='vam-maillabel']/label");
+	@FindBy(xpath = "//*[@class='vam-maillabel']/label")
+	static WebElement MailingAddress;
 
 	public static WebElement MailingAddress(SeHelper se) {
-
-		return se.element().getElement(MailingAddress, true);
+		return MailingAddress;
 	}
 
-	public static By LegalEntityType = By.xpath("//*[@id='Id_legal_entity_type']");
+	@FindBy(xpath = "//*[@id='Id_legal_entity_type']")
+	static WebElement LegalEntityType;
 
 	public static WebElement LegalEntityType(SeHelper se) {
-		se.waits().waitForElement(LegalEntityType);
-		return se.element().getElement(LegalEntityType, true);
+		return LegalEntityType;
 	}
 
-	public static By IndustryType = By.xpath("//*[@id='Id_industry_type']");
+	@FindBy(xpath = "//*[@id='Id_industry_type']")
+	static WebElement IndustryType;
 
 	public static WebElement IndustryType(SeHelper se) {
-		se.waits().waitForElement(IndustryType);
-		return se.element().getElement(IndustryType, true);
+		return IndustryType;
 	}
 
-	public static By SubIndustryType = By.xpath("//*[@id='Id_subIndustry_type']");
+	@FindBy(xpath = "//*[@id='Id_subIndustry_type']")
+	static WebElement SubIndustryType;
 
 	public static WebElement SubIndustryType(SeHelper se) {
-		se.waits().waitForElement(SubIndustryType);
-		return se.element().getElement(SubIndustryType, true);
+		return SubIndustryType;
 	}
 
-	public static By SSN = By.xpath(
-			"//span[contains(text(),'SSN')]//ancestor::label//following-sibling::div[@ng-show='isHideSSN']//input");
+	@FindBy(xpath = "//span[contains(text(),'SSN')]//ancestor::label//following-sibling::div[@ng-show='isHideSSN']//input")
+	static WebElement SSN;
 
 	public static WebElement SSN(SeHelper se) {
-		se.waits().waitForElement(SSN);
-		return se.element().getElement(SSN, true);
+		return SSN;
 	}
 
-	public static By FEIN = By.xpath("//*[@ng-blur=\"validatefeinNumber()\"]");
+	@FindBy(xpath = "//*[@ng-blur=\"validatefeinNumber()\"]")
+	static WebElement FEIN;
 
 	public static WebElement FEIN(SeHelper se) {
-		se.waits().waitForElement(FEIN);
-		return se.element().getElement(FEIN, true);
+		return FEIN;
 	}
 
-	public static By BusinessPhone = By.xpath("//*[@id='IdbusinessPhone']");
+	@FindBy(xpath = "//*[@id='IdbusinessPhone']")
+	static WebElement BusinessPhone;
 
 	public static WebElement BusinessPhone(SeHelper se) {
-
-		se.waits().waitForElement(BusinessPhone);
-		return se.element().getElement(BusinessPhone, true);
+		return BusinessPhone;
 	}
 
-	public static By EmailId = By.xpath("//*[@ng-blur='validateemail()']");
+	@FindBy(xpath = "//*[@ng-blur='validateemail()']")
+	static WebElement EmailId;
 
 	public static WebElement EmailId(SeHelper se) {
-		se.waits().waitForElement(EmailId);
-		return se.element().getElement(EmailId);
+		return EmailId;
 	}
 
-	public static By SelectProduct = By.xpath("//*[@id='id-selected-products']/div/button");
+	@FindBy(xpath = "//*[@id='id-selected-products']/div/button")
+	static WebElement SelectProduct;
 
 	public static WebElement SelectProduct(SeHelper se) {
-		se.waits().waitForElement(SelectProduct);
-		return se.element().getElement(SelectProduct, true);
+		return SelectProduct;
 	}
 
-	public static By commercialAuto = By.xpath("//*[contains(text(),'Commercial Auto')]");
+	@FindBy(xpath = "//*[contains(text(),'Commercial Auto')]")
+	static WebElement CommercialAuto;
 
 	public static WebElement CommercialAuto(SeHelper se) {
-
-		return se.element().getElement(commercialAuto, true);
+		return CommercialAuto;
 	}
 
-	public static By AgencyName = By.xpath("//*[@id='Id_agency_name']");
+	@FindBy(xpath = "//*[@id='Id_agency_name']")
+	static WebElement AgencyName;
 
 	public static WebElement AgencyName(SeHelper se) {
-		se.waits().waitForElement(AgencyName);
-		return se.element().getElement(AgencyName, true);
+		return AgencyName;
 	}
 
-	public static By AgentName = By.xpath("//*[@id='Id_agent_name']");
+	@FindBy(xpath = "//*[@id='Id_agent_name']")
+	static WebElement AgentName;
 
 	public static WebElement AgentName(SeHelper se) {
-		se.waits().waitForElement(AgentName);
-		return se.element().getElement(AgentName, true);
+		return AgentName;
 	}
 
-	public static By CreateSubmission = By.xpath("//*[@ng-click='accountproceed()']");
+	@FindBy(xpath = "//*[@ng-click='accountproceed()']")
+	static WebElement CreateSubmission;
 
 	public static WebElement CreateSubmission(SeHelper se) {
-		se.waits().waitForElement(CreateSubmission);
-		return se.element().getElement(CreateSubmission, true);
+		return CreateSubmission;
 	}
-
-	public static By CreateSubmission1 = By.xpath("//*[@ng-click='accountproceed()']");
 
 	public static WebElement CreateSubmission1(SeHelper se) {
 		se.waits().waitForElementToDisappear(SelectAndProceed, 6);
-		se.waits().waitForElementIsClickable(se.element().getElement(CreateSubmission1));
+		se.waits().waitForElementIsClickable(CreateSubmission);
 		// se.element().waitForElementIs(se.element().getElement(CreateSubmission1));
-		return se.element().getElement(CreateSubmission1);
+		return CreateSubmission;
 
 	}
 
-	public static By cancel = By.xpath("//*[@id=\"scrollToDivID\"]/div[1]/form/div[3]/a");
+	@FindBy(xpath = "//*[@id=\"scrollToDivID\"]/div[1]/form/div[3]/a")
+	static WebElement cancel;
 
 	public static WebElement Cancel(SeHelper se) {
-		se.waits().waitForElement(cancel);
-		return se.element().getElement(cancel);
+		return cancel;
 	}
 
-	public static By SelectUser = By.xpath("//input[@name=\"Duplicate\"]");
+	@FindBy(xpath = "//input[@name=\"Duplicate\"]")
+	static WebElement SelectUser;
 
 	public static WebElement SelectUser(SeHelper se) {
-		se.waits().waitForElementIsDisplayed(SelectUser);
-		return se.element().getElement(SelectUser, true);
+		return SelectUser;
 	}
 
-	public static By SelectAndProceed = By.xpath("//*[@id=\"existingAccountpopup\"]/div/div/div[3]/button");
+	@FindBy(xpath = "//*[@id=\"existingAccountpopup\"]/div/div/div[3]/button")
+	static WebElement SelectAndProceed;
 
 	public static WebElement SelectAndProceed(SeHelper se) {
-		se.waits().waitForElement(SelectAndProceed);
-		return se.element().getElement(SelectAndProceed, true);
+		return SelectAndProceed;
 	}
 
-	public static By SelectAndProceed1 = By.xpath("//button[@class=\"btn btn-success pull-right\"]");
+	@FindBy(xpath = "//button[@class=\"btn btn-success pull-right\"]")
+	static WebElement SelectAndProceed1;
 
 	public static WebElement SelectAndProceed1(SeHelper se) {
-		se.waits().waitForElement(SelectAndProceed1);
-		return se.element().getElement(SelectAndProceed1, true);
+		return SelectAndProceed1;
 	}
-
-	public static By VerifyCustomerAccountName1 = By.xpath("//*[@id='IdCustomerAccountName']");
 
 	public static WebElement VerifyCustomerAccountName1(SeHelper se) {
-
-		return se.element().getElement(VerifyCustomerAccountName1, true);
+		return customerAccountName;
 	}
-
-	public static By Verifycity = By.xpath("//*[@id='PrimaryAccountCity']");
 
 	public static WebElement VerifyCity(SeHelper se) {
-		return se.element().getElement(Verifycity, true);
+		return city;
 	}
-
-	public static By Verifystate = By.xpath("//input[@id='PrimaryAccountState']");
 
 	public static WebElement VerifyState(SeHelper se) {
-
-		return se.element().getElement(Verifystate, true);
+		return state;
 	}
-
-	public static By VerifyMailingAddress = By.xpath("//*[@class='vam-maillabel']/label");
 
 	public static WebElement VerifyMailingAddress(SeHelper se) {
-
-		return se.element().getElement(VerifyMailingAddress, true);
+		return MailingAddress;
 	}
-
-	public static By VerifyLegalEntityType = By.xpath("//*[@id='Id_legal_entity_type']");
 
 	public static WebElement VerifyLegalEntityType(SeHelper se) {
-		return se.element().getElement(VerifyLegalEntityType, true);
+		return LegalEntityType;
 	}
-
-	public static By VerifySSN1 = By.xpath("//span[contains(text(),'SSN')]");
 
 	public static WebElement VerifySSN1(SeHelper se) {
-		return se.element().getElement(VerifySSN1, true);
+		return SSN;
 	}
-
-	public static By VerifyFEIN = By.xpath("//span[contains(text(),'FEIN')]");
 
 	public static WebElement VerifyFEIN(SeHelper se) {
-		return se.element().getElement(VerifyFEIN, true);
+		return FEIN;
 	}
 
-	public static By VerifyColourofCS = By.xpath("//*[@ng-click='accountproceed()']");
-
 	public static WebElement VerifyColourofCS(SeHelper se) {
-		return se.element().getElement(VerifyColourofCS, true);
+		return CreateSubmission;
 	}
 }

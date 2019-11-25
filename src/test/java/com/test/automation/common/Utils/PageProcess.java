@@ -34,14 +34,14 @@ public class PageProcess {
 
 		Constructor<?> constructor = null;
 		try {
-			constructor = objClass.getConstructor();
+			constructor = objClass.getConstructor(SeHelper.class);
 		} catch (NoSuchMethodException | SecurityException e) {
 			se.log().error("Exception encountered when accessing page: " + sheetName, e);
 			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		}
 		try {
-			Object obj = constructor.newInstance();
+			Object obj = constructor.newInstance(se);
 
 			try {
 				if (key.equals("ControlKeys")) {

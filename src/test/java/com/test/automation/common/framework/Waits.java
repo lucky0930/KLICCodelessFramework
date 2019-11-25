@@ -276,6 +276,30 @@ public class Waits {
 		return !elementIsFound;
 	}
 	
+	public boolean waitForElementToDisappear(WebElement element, int timeoutSeconds) {
+		boolean elementIsFound = true;
+		int timeout = 0;
+		// se.log().logSeStep("Waiting for element: " + locator.toString() + "
+		// to disappear");
+		do {
+			try {
+				if (element.isDisplayed() && element.isEnabled()) // &&
+																	// !element.getAttribute("style").contains("none")
+				{
+					se.util().sleep(1000);
+					timeout++;
+				} else
+					elementIsFound = false;
+			} catch (Exception e) {
+				elementIsFound = false;
+			}
+		} while (elementIsFound && (timeout < timeoutSeconds));
+
+		if (timeout == timeoutSeconds)
+			se.log().logSeStep("Timed out in waitForElementToDisappear");
+		return !elementIsFound;
+	}
+	
 	
 	/**
 	 * Wait for an element to be displayed, using specified timeout

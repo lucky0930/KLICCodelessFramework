@@ -1,17 +1,21 @@
 package com.test.automation.repository;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-import com.test.automation.common.Page;
 import com.test.automation.common.SeHelper;
 
-public class SubmissionSummaryPage extends Page {
+public class SubmissionSummaryPage {
+	
+	public SubmissionSummaryPage(SeHelper se) {
+		PageFactory.initElements(se.driver(), this);
+	}
 
-	public static By Back = By.xpath("//*[@class='btn btn-blue']");
+	@FindBy(xpath = "//*[@class='btn btn-blue']")
+	static WebElement Back;
 
 	public static WebElement Back(SeHelper se) {
-		se.waits().waitForElementIsDisplayed(Back);
-		return se.element().getElement(Back);
+		return Back;
 	}
 }

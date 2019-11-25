@@ -1,41 +1,44 @@
 package com.test.automation.repository;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-import com.test.automation.common.Page;
 import com.test.automation.common.SeHelper;
-import com.test.automation.common.framework.Element;
 
-public class LogInPage extends Page {
-
-	public static By username = By.xpath("//*[@id='UserName']");
-
-	public static WebElement UserName(SeHelper se) {
-		
-		return se.element().getElement(username);
+public class LogInPage {
+	
+	@FindBy(xpath = "//*[@id='Password']")
+	static WebElement password;
+	
+	@FindBy(xpath = "//*[@id='Password']//following::button")
+	static WebElement loginButton;
+	
+	
+	public LogInPage(SeHelper se)
+	{
+		PageFactory.initElements(se.driver(), this);
 	}
-
-	public static By next = By.xpath("//*[@id='UserName']//following::button");
-
-	public static WebElement Next(SeHelper se) {
-		se.waits().waitForElement(next);
-		return se.element().getElement(next);
+	
+	
+	public static void Password(String name)	//encapsulates webelements
+	{
+		password.sendKeys(name);
 	}
-
-	public static By password = By.xpath("//*[@id='Password']");
-
-	public static WebElement Password(SeHelper se) {
-		se.waits().waitForElement(password);
-		return se.element().getElement(password);
+	
+	public static WebElement Password(SeHelper se)			//original handling (temporary for testing purposes)
+	{
+		return password;
 	}
-
-	public static By login = By.xpath("//*[@id='Password']//following::button");
-
-	public static WebElement LogIn(SeHelper se) {
-		se.waits().waitForElement(login);
-		return se.element().getElement(login);
+	
+	public static void LogIn()
+	{
+		loginButton.click();
+	}
+	
+	public static WebElement LogIn(SeHelper se)				//original handling (temporary for testing purposes)
+	{
+		return loginButton;
 	}
 
 }

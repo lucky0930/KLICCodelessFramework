@@ -1,34 +1,36 @@
 package com.test.automation.repository;
 
-import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-import com.test.automation.common.Page;
 import com.test.automation.common.SeHelper;
 
-public class IndexPage extends Page {
+public class IndexPage {
 	
-	public static By newSubmission = By.xpath("//*[@ng-click='navigateToMultiQuote()']");
+	public IndexPage(SeHelper se) {
+		PageFactory.initElements(se.driver(), this);
+	}
+	
+	@FindBy(xpath = "//*[@ng-click='navigateToMultiQuote()']")
+	static WebElement newSubmission; 
 
 	public static WebElement NewSubmission(SeHelper se) {
-			   se.waits().waitForElementIsDisplayed(newSubmission);
-		return se.element().getElement(newSubmission);
+		return newSubmission;
 	}
 
-	public static By ServicePolicy = By.xpath("//a[@ng-click=\"CustomerAndPolicySearch()\"]");
+	@FindBy(xpath = "//a[@ng-click=\"CustomerAndPolicySearch()\"]")
+	static WebElement ServicePolicy;
 
 	public static WebElement ServicePolicy(SeHelper se) {
-		se.waits().waitForElementIsDisplayed(ServicePolicy);
-		return se.element().getElement(ServicePolicy);
+		return ServicePolicy;
 	}
 
-	public static By VerifyUser = By.xpath("//*[@class='user hidden-xs']/span");
+	@FindBy(xpath = "//*[@class='user hidden-xs']/span")
+	static WebElement VerifyUser;
 
 	public static WebElement VerifyUser(SeHelper se) throws InterruptedException {
-		se.waits().waitForElementToDisappear(LogInPage.login, 6);
-		se.waits().waitForElement(VerifyUser);
-		return se.element().getElement(VerifyUser);
+		se.waits().waitForElementToDisappear(LogInPage.LogIn(se), 6);
+		return VerifyUser;
 	}
 }
