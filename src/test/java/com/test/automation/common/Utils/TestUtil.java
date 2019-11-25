@@ -19,14 +19,12 @@ public class TestUtil {
 
 	String TESTDATA_SHEET_PATH = SystemPropertyUtil.getTestDataSheetPath();
 
-	ExcelReader excelReader = new ExcelReader();
-
 	private static ExtentReporter reporter = new ExtentReporter();
+	ExcelReader excelReader = new ExcelReader();
 	Method method;
 	ITestResult result;
 	String className;
-	private Boolean testRunning = true;
-
+	
 	public void ExecuteTest(String TestCaseNumber) {
 
 		List<String> sheetCollection = excelReader.sheetCollection;
@@ -55,8 +53,14 @@ public class TestUtil {
 		initialize(se);
 		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
 
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
-				TESTDATA_SHEET_PATH);
+		//LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
+		//		TESTDATA_SHEET_PATH);
+		
+		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = null;
+
+        synchronized (TestCaseNumber) {
+            tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+        }
 
 		List<String> sheetCollection1 = new ArrayList<String>();
 		List<String> actualSheetCollection = new ArrayList<String>();
