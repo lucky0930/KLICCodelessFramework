@@ -53,7 +53,15 @@ public class PageProcess {
 					return null;
 				}
 
-				if (checkPageCmd(se, key, value)) {
+				if (checkPageNav(se, key, value)) {
+					return null;
+				}
+
+				if (checkWindow(se,key,value)) {
+					return null;
+				}
+
+				if(checkIframe(se, key, value)) {
 					return null;
 				}
 
@@ -259,7 +267,7 @@ public class PageProcess {
 			return false;
 	}
 
-	private static boolean checkPageCmd(SeHelper se, String key, String value) {
+	private static boolean checkPageNav(SeHelper se, String key, String value) {
 		switch (key) {
 		case "Backward":
 			se.browser().navigateBack();
@@ -277,10 +285,20 @@ public class PageProcess {
 
 	private static boolean checkWindow(SeHelper se, String key, String value) {
 		if (key.equals("Window")) {
-
+			se.browser().switchToWindow(Integer.parseInt(value));
+			return true;
 		}
 
 		return false;
+	}
+	
+	private static boolean checkIframe(SeHelper se, String key, String value) {
+		if(key.equals("Iframe")){
+			se.browser().switchToIFrame(Integer.parseInt(value));
+			return true;
+		}
+		 return false;
+
 	}
 
 	private static void dynamicXpath(SeHelper se, String value) {
