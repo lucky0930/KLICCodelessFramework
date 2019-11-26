@@ -316,8 +316,7 @@ public class Log {
 	/**
 	 * Add a Selenium level step to the report.
 	 *
-	 * @param step
-	 *            Description of the Selenium Step
+	 * @param step Description of the Selenium Step
 	 */
 	public void logSeStep(String step) {
 		// get current date
@@ -342,10 +341,8 @@ public class Log {
 	/**
 	 * Add a Test level step to the report.
 	 *
-	 * @param format
-	 *            Description of the Test Step (in sprintf format)
-	 * @param args
-	 *            list of variable substitution parameters
+	 * @param format Description of the Test Step (in sprintf format)
+	 * @param args   list of variable substitution parameters
 	 */
 	public void logTestStep(final String format, String... args) {
 		logTestStep(String.format(format, new Object[] { args }));
@@ -354,8 +351,7 @@ public class Log {
 	/**
 	 * Add a Test level step to the report.
 	 *
-	 * @param step
-	 *            Description of the Test Step
+	 * @param step Description of the Test Step
 	 */
 	public void logTestStep(String step) {
 		// get current date
@@ -478,15 +474,15 @@ public class Log {
 	}
 
 	/**
-	 * Log Selenium Log to couchDb This overload, gets everything it needs from
-	 * the ITestResult, simplifing the parameters Should be called from an
-	 * AfterMethod, passing the ITestResult from the main test method through
-	 * reflection example: protected void afterMethod(Method method, ITestResult
-	 * result, Object[] params)
+	 * Log Selenium Log to couchDb This overload, gets everything it needs from the
+	 * ITestResult, simplifing the parameters Should be called from an AfterMethod,
+	 * passing the ITestResult from the main test method through reflection example:
+	 * protected void afterMethod(Method method, ITestResult result, Object[]
+	 * params)
 	 * 
-	 * Normally the AfterMethod would use its own ITestResult, but in this case
-	 * we want the logs from the Before and After methods to be included in the
-	 * main test log
+	 * Normally the AfterMethod would use its own ITestResult, but in this case we
+	 * want the logs from the Before and After methods to be included in the main
+	 * test log
 	 * 
 	 * @param iTest
 	 */
@@ -620,12 +616,12 @@ public class Log {
 		logger.debug(logString);
 		logBuilder.append(logString).append("\n");
 	}
-	
+
 	public void error(String logString, Exception e) {
 		logger.error(logString, e);
 		logBuilder.append(logString).append("\n");
 	}
-	
+
 	public void testSeperator() {
 		logger.trace("----------------------- END OF TEST -----------------------");
 		logBuilder.append("----------------------- END OF TEST -----------------------").append("\n");

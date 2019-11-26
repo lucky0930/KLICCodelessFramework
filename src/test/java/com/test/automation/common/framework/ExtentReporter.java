@@ -18,17 +18,9 @@ public class ExtentReporter {
 	private String reportPath = null;
 
 	public ExtentReporter() {
-		try {
-			String homepath = new File(".").getCanonicalPath();
-//			reportPath = homepath + "\\Automation_Report\\" + "Run_" + Util.getCurrentDate() + "_"
-//					+ Util.getCurrentTime() + "\\ReportSummary.html";
-
-			reportPath = homepath + "\\Automation_Report\\" + "Run_" + Util.getCurrentDate() + "_"
-					+ Util.getCurrentTime();
-			extent = new ExtentReports(reportPath + "\\ReportSummary.html");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
+				+ Util.getCurrentTime();
+		extent = new ExtentReports(reportPath + "\\ReportSummary.html");
 	}
 
 	public void startTest(String testClass, String testMethod, SeHelper se) {
@@ -73,26 +65,24 @@ public class ExtentReporter {
 		}
 	}
 
-	
 	public void endResult(Boolean result, SeHelper se) {
 		if (result) {
 			try {
-				test.log(LogStatus.PASS, "Test Result", "Result: " + result + 
-						test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_PASS", se)));
+				test.log(LogStatus.PASS, "Test Result", "Result: " + result
+						+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_PASS", se)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			try {
-				test.log(LogStatus.FAIL, "Test Result", "Result: " + result + 
-						test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_FAIL", se)));
+				test.log(LogStatus.FAIL, "Test Result", "Result: " + result
+						+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_FAIL", se)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public void endTest() {
 		extent.endTest(test);
 		extent.getReportId();
@@ -103,17 +93,11 @@ public class ExtentReporter {
 		extent.close();
 		copyfile(reportPath);
 	}
-	
+
 	private void copyfile(String reportPath2) {
 		File source = new File(reportPath2);
-		File dest = null;
-		try {
-			dest = new File(
-					SystemPropertyUtil.getRootPath() + "\\Automation_Report\\Report\\");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		File dest = new File(SystemPropertyUtil.getRecentReportPath());
+
 		try {
 			FileUtils.copyDirectory(source, dest);
 		} catch (IOException e) {
