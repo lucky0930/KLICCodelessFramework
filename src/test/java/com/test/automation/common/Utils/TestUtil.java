@@ -24,7 +24,7 @@ public class TestUtil {
 	Method method;
 	ITestResult result;
 	String className;
-	
+
 	public void ExecuteTest(String TestCaseNumber) {
 
 		List<String> sheetCollection = excelReader.sheetCollection;
@@ -53,14 +53,15 @@ public class TestUtil {
 		initialize(se);
 		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
 
-		//LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
-		//		TESTDATA_SHEET_PATH);
-		
+		// LinkedHashMap<String, LinkedHashMap<String, String>> tableData =
+		// excelReader.GetTestData(TestCaseNumber,
+		// TESTDATA_SHEET_PATH);
+
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = null;
 
-        synchronized (TestCaseNumber) {
-            tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
-        }
+		synchronized (TestCaseNumber) {
+			tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+		}
 
 		List<String> sheetCollection1 = new ArrayList<String>();
 		List<String> actualSheetCollection = new ArrayList<String>();
@@ -76,12 +77,11 @@ public class TestUtil {
 		});
 
 		for (int i = 0; i < tableData.size(); i++) {
-			
-			if(se.keepRunning()) {
+
+			if (se.keepRunning()) {
 				LinkedHashMap<String, String> actualData = tableData.get(actualSheetCollection.get(i));
 				ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
-			}
-			else {
+			} else {
 				break;
 			}
 		}
@@ -95,11 +95,11 @@ public class TestUtil {
 		se.reporter().reportInfo("Accessing Page", "Page Name: " + sheetName);
 
 		actualData.entrySet().forEach(entry -> {
-			
+
 			if (!se.keepRunning()) {
 				return;
 			}
-			
+
 			System.out.println(entry.getKey() + " => " + entry.getValue());
 
 			if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {

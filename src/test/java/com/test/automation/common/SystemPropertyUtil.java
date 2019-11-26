@@ -26,11 +26,23 @@ public class SystemPropertyUtil {
 	private final static int windowHeightDefault = 1080;
 	private final static String testDataDirectoryDefault = "target/test-classes";
 	private final static String httpCredentialsDefault = "true";
-	//private final static String browsersDefault = "Chrome";
+	// private final static String browsersDefault = "Chrome";
 	private final static String browsersDefault = config.getConfigProp("Browser");
-	
-	private final static String continueIfException = config.getConfigProp("ContinueIfException");	
-	
+
+	// file paths
+	private final static String testDataPath = config.getConfigProp("TestDataPath");
+	private final static String extentReportPath = config.getConfigProp("ExtentReportPath");
+	private final static String recentReportPath = config.getConfigProp("RecentReportPath");
+	private final static String logFilePath = config.getConfigProp("LogFilePath");
+	private final static String screenshotPath = config.getConfigProp("ScreenshotPath");
+	private final static String chromeDriverPath = config.getConfigProp("ChromeDriverPath");
+	private final static String geckoDriverPath = config.getConfigProp("GeckoDriverPath");
+	private final static String edgeDriverPath = config.getConfigProp("EdgeDriverPath");
+	private final static String ieDriverPath = config.getConfigProp("ieDriverPath");
+
+	// extra
+	private final static String continueIfException = config.getConfigProp("ContinueIfException");
+
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
 			? Integer.parseInt(System.getProperty(windowWidthKey))
 			: windowWidthDefault;
@@ -55,7 +67,6 @@ public class SystemPropertyUtil {
 	private final static String localeUrl = System.getProperties().containsKey(localeUrlKey)
 			? System.getProperty(localeUrlKey)
 			: localeUrlDefault;
-	private static String testDataPath = "\\resources\\test_data\\VM_TestData_Sample1.xlsx";
 
 	public static String getBaseUrl() {
 		return baseUrl;
@@ -93,14 +104,12 @@ public class SystemPropertyUtil {
 	public static String getRootPath() throws IOException {
 		return new File(".").getCanonicalPath();
 	}
-	
+
 	public static String getContinueIfException() {
 		return continueIfException;
 	}
 
 	public static String getTestDataSheetPath() {
-		
-
 		try {
 			return getRootPath() + testDataPath;
 		} catch (IOException e) {
@@ -110,4 +119,83 @@ public class SystemPropertyUtil {
 		}
 	}
 
+	public static String getLogFilePath() {
+		try {
+			return getRootPath() + logFilePath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getExtentReportPath() {
+		try {
+			return getRootPath() + extentReportPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getRecentReportPath() {
+		try {
+			return getRootPath() + recentReportPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getScreenshotPath() {
+		try {
+			return getRootPath() + screenshotPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getChromeDriverPath() {
+		try {
+			return getRootPath() + chromeDriverPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getGeckoDriverPath() {
+		try {
+			return getRootPath() + geckoDriverPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getEdgeDriverPath() {
+		try {
+			return getRootPath() + edgeDriverPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String getIEDriverPath() {
+		try {
+			return getRootPath() + ieDriverPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

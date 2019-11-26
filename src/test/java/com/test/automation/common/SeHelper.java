@@ -244,11 +244,12 @@ public class SeHelper {
 //				addChromeExtension(capabilities);
 //				System.out.println(capabilities);
 //				driver = new ChromeDriver(capabilities);
+				System.setProperty("webdriver.chrome.driver", SystemPropertyUtil.getChromeDriverPath());
 				driver = new ChromeDriver();
 				break;
 			case InternetExplorer:
 				capabilities = DesiredCapabilities.internetExplorer();
-				System.setProperty("webdriver.ie.driver", getIEDriverPath());
+				System.setProperty("webdriver.ie.driver", SystemPropertyUtil.getIEDriverPath());
 				//capabilities.setCapability()
 				driver = new InternetExplorerDriver(capabilities);
 			
@@ -257,14 +258,14 @@ public class SeHelper {
 
 			case VMChrome:
 				capabilities = DesiredCapabilities.chrome();
-				System.setProperty("webdriver.chrome.driver", getChromedriverPath());
+				System.setProperty("webdriver.chrome.driver", SystemPropertyUtil.getChromeDriverPath());
 				capabilities.setCapability(CapabilityType.PROXY, proxy);
 				addChromeExtension(capabilities);
 				driver = new ChromeDriver(capabilities);
 				break;
 			case VMIE:
 				capabilities = DesiredCapabilities.internetExplorer();
-				System.setProperty("webdriver.ie.driver", getIEDriverPath());
+				System.setProperty("webdriver.ie.driver", SystemPropertyUtil.getIEDriverPath());
 				capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,
 						true);
 				capabilities.internetExplorer().setCapability("ignoreProtectedModeSettings", true);
@@ -309,7 +310,7 @@ public class SeHelper {
 //				options.setLegacy(true);
 //				 driver = new FirefoxDriver(options);
 			    
-				System.setProperty("webdriver.gecko.driver",  this.getgeckodriverPath());
+				System.setProperty("webdriver.gecko.driver",  SystemPropertyUtil.getGeckoDriverPath());
 				
 				capabilities = DesiredCapabilities.firefox();
 				capabilities.setCapability("marionette",true);
@@ -319,7 +320,7 @@ public class SeHelper {
 
 				break;
 			case edgedriver:
-				System.setProperty("webdriver.edge.driver", getedgedriverPath());
+				System.setProperty("webdriver.edge.driver", SystemPropertyUtil.getEdgeDriverPath());
 				capabilities = DesiredCapabilities.edge();
 				driver = new EdgeDriver();
 				break;			
@@ -404,18 +405,6 @@ public class SeHelper {
 		return driver;
 	}
 
-	private String getgeckodriverPath() {
-		// TODO Auto-generated method stub
-		try {
-			return SystemPropertyUtil.getRootPath() + "\\tools\\geckodriver.exe";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		
-	}
-
 	private URL getSeGridUrl() {
 		URL seGrid = null;
 		try {
@@ -441,48 +430,6 @@ public class SeHelper {
 		}
 	}
 
-	/**
-	 * Returns full path to the IEDriverServer
-	 *
-	 * @return full path to IEDriverServer
-	 */
-	public String getIEDriverPath() {
-		try {
-			return  SystemPropertyUtil.getRootPath() + "\\tools\\IEDriverServer.exe";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	//public String getedgedriverPath() {
-		//return "C:\\Users\\saipriyal\\git\\VMSeleniumFramework\\tools\\MicrosoftWebDriver.exe";
-		public String getedgedriverPath() {
-			try {
-				return  SystemPropertyUtil.getRootPath() + "\\tools\\MicrosoftWebDriver.exe";
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-	}
-
-	/**
-	 * Returns full path to the chromedriver executable
-	 *
-	 * @return full path to chromedriver
-	 */
-	public String getChromedriverPath() {
-		String chomedriverFilename = "chromedriver.exe";
-		System.out.println(OSTools.getUserHome() + "/selenium/" + chomedriverFilename);
-		return OSTools.getUserHome() + "/selenium/" + chomedriverFilename;
-	}
-	public  String String () throws IOException {
-		String geckodriverFilename = "geckodriver.exe";
-		//System.out.println(OSTools.getUserHome() + "/selenium/" + geckodriverFilename);
-		return SystemPropertyUtil.getRootPath() + "/tools/" + geckodriverFilename;
-	}
-	
 	// toString returns the "currentBrowser" so the reports look all pretty like.
 	@Override
 	public String toString() {
