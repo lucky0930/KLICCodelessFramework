@@ -52,11 +52,13 @@ public class VM_Sample_Test extends BaseTest {
 	}
 	*/
 
+	/*
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Two() {
 		testUtil.ExecuteTest("102", new SeHelper());
 	}
+	*/
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
