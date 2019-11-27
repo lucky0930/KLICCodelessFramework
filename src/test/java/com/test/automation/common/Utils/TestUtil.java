@@ -114,7 +114,7 @@ public class TestUtil {
 	public void initialize(SeHelper se) {
 		se.setReporter(reporter);
 		se.startSession(Browsers.valueOf(SystemPropertyUtil.getBrowsers()));
-		se.driver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
 		Test test = method.getAnnotation(Test.class);
 		Browsers myBrowser = se.currentBrowser();
 		se.log().trace("Test Method: " + method.getName());

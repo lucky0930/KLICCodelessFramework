@@ -40,6 +40,10 @@ public class SystemPropertyUtil {
 	private final static String edgeDriverPath = config.getConfigProp("EdgeDriverPath");
 	private final static String ieDriverPath = config.getConfigProp("ieDriverPath");
 	
+	//waits
+	private final static String implicitWaitTime = config.getConfigProp("ImplicitWaitTime");
+	private final static String explicitWaitTime = config.getConfigProp("ExplicitWaitTime");
+	
 	//extra
 	private final static String continueIfException = config.getConfigProp("ContinueIfException");	
 	
@@ -107,6 +111,14 @@ public class SystemPropertyUtil {
 	
 	public static String getContinueIfException() {
 		return continueIfException;
+	}
+	
+	public static int getImplicitWaitTime() {
+		return Integer.parseInt(implicitWaitTime);
+	}
+	
+	public static int getExplicitWaitTime() {
+		return Integer.parseInt(explicitWaitTime);
 	}
 
 	public static String getTestDataSheetPath() {
