@@ -8,10 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
@@ -23,6 +26,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import com.test.automation.common.BaseTest;
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
 import com.test.automation.common.Utils.TestPageFactory;
 import com.test.automation.common.Utils.TestUtil;
 import com.test.automation.common.framework.Util;
@@ -31,17 +35,25 @@ import com.test.automation.common.framework.ExtentReporter;
 
 public class VM_Sample_Test extends BaseTest {
 
-	TestUtil testUtil;
+	Map<String, TestUtil> tests = new ConcurrentHashMap<>();
+	
+	private String reportPath;
+	private ExtentReports report;
 
 	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
 
+		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
+				+ Util.getCurrentTime();
+		
+		report = new ExtentReports(reportPath + "\\ReportSummary.html");
 	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	protected void beforeMethod(Method method, ITestResult result, Object[] params) {
-		testUtil = new TestUtil();
-		testUtil.testDetails(result, method, this.getClass().getSimpleName());
+	protected void beforeMethod(Method method) {
+		
+		TestUtil testUtil = new TestUtil(report, method);
+		tests.put(method.getName(), testUtil);
 	}
 
 	/*
@@ -52,28 +64,44 @@ public class VM_Sample_Test extends BaseTest {
 	}
 	*/
 
-	/*
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_Two() {
-		testUtil.ExecuteTest("102", new SeHelper());
+	public void VM_Test_Two(Method method) {
+		
+		TestUtil testUtil = tests.get(method.getName());
+		testUtil.ExecuteTest("102");
 	}
-	*/
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_Three() {
-		testUtil.ExecuteTest("108", new SeHelper());
+	public void VM_Test_Three(Method method) {
+		
+		TestUtil testUtil = tests.get(method.getName());
+		testUtil.ExecuteTest("103");
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	protected void afterMethod(Method method, ITestResult result, Object[] params) {
+	protected void afterMethod(Method method, ITestResult result) {
 		
+		TestUtil testUtil = tests.get(method.getName());
+		testUtil.endTest(result);
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	public void afterSuite() throws IOException {
-		testUtil.closeExtent();
+	public void afterSuite() {
+		
+		report.flush();
+		report.close();
+		
+		// Copy report file 
+		File source = new File(reportPath);
+		File dest = new File(SystemPropertyUtil.getRecentReportPath());
+
+		try {
+			FileUtils.copyDirectory(source, dest);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 //	@SuppressWarnings("unchecked")
