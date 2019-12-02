@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.testng.ITestResult;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -16,6 +17,7 @@ public class ExtentReporter {
 	private ExtentReports extent;
 	private ExtentTest test;
 	private String reportPath = null;
+	ITestResult result;
 
 	public ExtentReporter() {
 		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
@@ -41,12 +43,14 @@ public class ExtentReporter {
 
 	public void reportFail(String step, String details) {
 		test.log(LogStatus.FAIL, step, details);
+		result.setStatus(ITestResult.FAILURE);
 	}
 
 	public void reportFailCapture(String step, String details, String captureName, SeHelper se) {
 		try {
 			test.log(LogStatus.FAIL, step, details
 					+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
+			result.setStatus(ITestResult.FAILURE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,28 +58,30 @@ public class ExtentReporter {
 
 	public void reportError(String step, String details) {
 		test.log(LogStatus.ERROR, step, details);
+		result.setStatus(ITestResult.FAILURE);
 	}
 
 	public void reportErrorCapture(String step, String details, String captureName, SeHelper se) {
 		try {
 			test.log(LogStatus.ERROR, step, details
 					+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
+			result.setStatus(ITestResult.FAILURE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void endResult(Boolean result, SeHelper se) {
-		if (result) {
+	public void endResult(SeHelper se) {		
+		if (result.getStatus() == ITestResult.SUCCESS) {
 			try {
-				test.log(LogStatus.PASS, "Test Result", "Result: " + result
+				test.log(LogStatus.PASS, "Test Passed", ""
 						+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_PASS", se)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				test.log(LogStatus.FAIL, "Test Result", "Result: " + result
+				test.log(LogStatus.FAIL, "Test Failed", ""
 						+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_FAIL", se)));
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -104,5 +110,10 @@ public class ExtentReporter {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void setResult(ITestResult result) {
+		this.result = result;
+		this.result.setStatus(ITestResult.SUCCESS);
 	}
 }

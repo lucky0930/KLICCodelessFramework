@@ -113,6 +113,8 @@ public class TestUtil {
 
 	public void initialize(SeHelper se) {
 		se.setReporter(reporter);
+		result.setStatus(ITestResult.SUCCESS); //initial value for result
+		reporter.setResult(result);
 		se.startSession(Browsers.valueOf(SystemPropertyUtil.getBrowsers()));
 		se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
 		Test test = method.getAnnotation(Test.class);
@@ -132,7 +134,7 @@ public class TestUtil {
 
 	public void endTest(SeHelper se) {
 		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
-		se.reporter().endResult(result.isSuccess(), se);
+		se.reporter().endResult(se);
 		se.reporter().endTest();
 		se.log().printLogBuilder();
 		se.log().testSeperator();
