@@ -36,7 +36,7 @@ import com.test.automation.common.framework.ExtentReporter;
 public class VM_Sample_Test extends BaseTest {
 
 	Map<String, TestUtil> tests = new ConcurrentHashMap<>();
-	
+
 	private String reportPath;
 	private ExtentReports report;
 
@@ -45,29 +45,29 @@ public class VM_Sample_Test extends BaseTest {
 
 		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
 				+ Util.getCurrentTime();
-		
+
 		report = new ExtentReports(reportPath + "\\ReportSummary.html");
 	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void beforeMethod(Method method) {
-		
+
 		TestUtil testUtil = new TestUtil(report, method);
 		tests.put(method.getName(), testUtil);
 	}
 
-	/*
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_One() {
-		testUtil.ExecuteTest("101", new SeHelper());
+	public void VM_Test_One(Method method) {
+
+		TestUtil testUtil = tests.get(method.getName());
+		testUtil.ExecuteTest("105");
 	}
-	*/
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Two(Method method) {
-		
+
 		TestUtil testUtil = tests.get(method.getName());
 		testUtil.ExecuteTest("102");
 	}
@@ -75,25 +75,25 @@ public class VM_Sample_Test extends BaseTest {
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Three(Method method) {
-		
+
 		TestUtil testUtil = tests.get(method.getName());
 		testUtil.ExecuteTest("103");
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result) {
-		
+
 		TestUtil testUtil = tests.get(method.getName());
 		testUtil.endTest(result);
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void afterSuite() {
-		
+
 		report.flush();
 		report.close();
-		
-		// Copy report file 
+
+		// Copy report file
 		File source = new File(reportPath);
 		File dest = new File(SystemPropertyUtil.getRecentReportPath());
 
