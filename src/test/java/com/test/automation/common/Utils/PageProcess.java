@@ -57,11 +57,11 @@ public class PageProcess {
 					return null;
 				}
 
-				if (checkWindow(se,key,value)) {
+				if (checkWindow(se, key, value)) {
 					return null;
 				}
 
-				if(checkIframe(se, key, value)) {
+				if (checkIframe(se, key, value)) {
 					return null;
 				}
 
@@ -69,13 +69,22 @@ public class PageProcess {
 					dynamicXpath(se, value);
 					return null;
 				}
+				try {
+					Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
+					// Method callMethod = obj.getClass().getDeclaredMethod(key);
+					callMethod.setAccessible(true);
 
-				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
-				// Method callMethod = obj.getClass().getDeclaredMethod(key);
-				callMethod.setAccessible(true);
-
-				element = (WebElement) callMethod.invoke(obj, se);
-				// element = (WebElement) callMethod.invoke(obj);
+					element = (WebElement) callMethod.invoke(obj, se);
+					// element = (WebElement) callMethod.invoke(obj);
+					
+				} catch (NoSuchMethodException e) {
+					se.log().error(
+							"NoSuchMethodException encountered when attempting to get element: " + key + " on " + sheetName,
+							e);
+					System.out.println("***** Recommend reviewing data entry for this test *****");
+					se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+					e.printStackTrace();
+				}
 
 				if (element != null) {
 					if (checkOptional(element, value)) {
@@ -90,38 +99,16 @@ public class PageProcess {
 					se.waits().waitForElementIsClickable(element);
 					FillElement(se, element, key, value);
 				}
-			} catch (NoSuchMethodException e) {
-				se.log().error(
-						"NoSuchMethodException encountered when attempting to get element: " + key + " on " + sheetName,
-						e);
-				se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-				e.printStackTrace();
 			} catch (SecurityException e) {
 				se.log().error(
 						"SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
 				se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
 				e.printStackTrace();
 			}
-		} catch (InstantiationException e) {
-			se.log().error("InstantiationException encountered when new instance of page: " + sheetName
+		} catch (Exception e) {
+			se.log().error(e.toString() + " encountered when new instance of page: " + sheetName
 					+ " attempted to be created.", e);
 			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			se.log().error("IllegalAccessException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			se.log().error("IllegalArgumentException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			se.log().error("InvocationTargetException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.getCause().printStackTrace();
 			e.printStackTrace();
 		}
 		return element;
@@ -152,6 +139,7 @@ public class PageProcess {
 				}
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
+				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
 						key, se);
 				e.printStackTrace();
@@ -163,6 +151,7 @@ public class PageProcess {
 				// element.click();
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
+				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
 						key, se);
 				e.printStackTrace();
@@ -175,16 +164,11 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
 						+ "\" in element \"" + key + "\" \n", e);
+				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
 						key, se);
 				e.printStackTrace();
-			} catch (Exception e) {
-				se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \"" + key
-						+ "\" \n", e);
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
-						key, se);
-				e.printStackTrace();
-			}
+			} 
 			break;
 		case "a":
 			try {
@@ -291,13 +275,13 @@ public class PageProcess {
 
 		return false;
 	}
-	
+
 	private static boolean checkIframe(SeHelper se, String key, String value) {
-		if(key.equals("Iframe")){
+		if (key.equals("Iframe")) {
 			se.browser().switchToIFrame(Integer.parseInt(value));
 			return true;
 		}
-		 return false;
+		return false;
 
 	}
 
