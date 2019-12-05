@@ -60,24 +60,21 @@ public class VM_Sample_Test extends BaseTest {
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_One(Method method) {
 
-		TestUtil testUtil = tests.get(method.getName());
-		testUtil.ExecuteTest("105");
+		tests.get(method.getName()).ExecuteTest("105");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Two(Method method) {
 
-		TestUtil testUtil = tests.get(method.getName());
-		testUtil.ExecuteTest("102");
+		tests.get(method.getName()).ExecuteTest("102");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test_Three(Method method) {
 
-		TestUtil testUtil = tests.get(method.getName());
-		testUtil.ExecuteTest("103");
+		tests.get(method.getName()).ExecuteTest("103");
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)

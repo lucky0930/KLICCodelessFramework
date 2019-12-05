@@ -131,7 +131,7 @@ public class TestUtil {
 		test.assignAuthor("VAM QA");
 		test.assignCategory(method.getName());
 		test.log(LogStatus.INFO, "Started Execution",
-				"URL: " + SystemPropertyUtil.getBaseStoreUrl() + " :: Browser: " + se.browser().getBrowserName());
+				"URL: " + SystemPropertyUtil.getBaseStoreUrl() + "<br>Browser: " + se.browser().getBrowserName());
 		ExtentReporter reporter = new ExtentReporter(test);
 		se.setReporter(reporter);
 	}

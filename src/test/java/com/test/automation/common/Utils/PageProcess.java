@@ -126,7 +126,7 @@ public class PageProcess {
 		}
 
 		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");
-		se.reporter().reportInfo("Accessing Element", "Element: " + key + " || Value: " + value);
+		se.reporter().reportInfo("Accessing Element", "Element: " + key + "<br>Value: " + value);
 
 		switch (element.getTagName()) {
 		case "input":
@@ -141,7 +141,7 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -153,7 +153,7 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -166,7 +166,7 @@ public class PageProcess {
 				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
 						+ "\" in element \"" + key + "\" \n", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -178,7 +178,7 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -190,7 +190,7 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
