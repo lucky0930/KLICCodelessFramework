@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
@@ -34,17 +35,17 @@ public class PageProcess {
 
 		Constructor<?> constructor = null;
 		try {
-			constructor = objClass.getConstructor(SeHelper.class);
+			constructor = objClass.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
 			se.log().error("Exception encountered when accessing page: " + sheetName, e);
 			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
 			e.printStackTrace();
 		}
 		try {
-			Object obj = constructor.newInstance(se);
+			Object obj = constructor.newInstance();
 
 			try {
-				if (key.equals("ControlKeys")) {
+				if (key.contains("ControlKeys")) {
 					ControlKeys(se, value);
 					return null;
 				}
@@ -56,12 +57,12 @@ public class PageProcess {
 				if (checkPageNav(se, key, value)) {
 					return null;
 				}
-				
-				if (checkWindow(se,key,value)) {
+
+				if (checkWindow(se, key, value)) {
 					return null;
 				}
-				
-				if(checkIframe(se, key, value)) {
+
+				if (checkIframe(se, key, value)) {
 					return null;
 				}
 
@@ -69,13 +70,21 @@ public class PageProcess {
 					dynamicXpath(se, value);
 					return null;
 				}
+				try {
+					Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
+					// Method callMethod = obj.getClass().getDeclaredMethod(key);
+					callMethod.setAccessible(true);
 
-				Method callMethod = obj.getClass().getMethod(key, SeHelper.class);
-				// Method callMethod = obj.getClass().getDeclaredMethod(key);
-				callMethod.setAccessible(true);
+					element = (WebElement) callMethod.invoke(obj, se);
+					// element = (WebElement) callMethod.invoke(obj);
 
-				element = (WebElement) callMethod.invoke(obj, se);
-				// element = (WebElement) callMethod.invoke(obj);
+				} catch (NoSuchMethodException e) {
+					se.log().error("NoSuchMethodException encountered when attempting to get element: " + key + " on "
+							+ sheetName, e);
+					System.out.println("***** Recommend reviewing data entry for this test *****");
+					se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+					e.printStackTrace();
+				}
 
 				if (element != null) {
 					if (checkOptional(element, value)) {
@@ -90,38 +99,17 @@ public class PageProcess {
 					se.waits().waitForElementIsClickable(element);
 					FillElement(se, element, key, value);
 				}
-			} catch (NoSuchMethodException e) {
-				se.log().error(
-						"NoSuchMethodException encountered when attempting to get element: " + key + " on " + sheetName,
-						e);
-				se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-				e.printStackTrace();
 			} catch (SecurityException e) {
 				se.log().error(
 						"SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
 				se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
 				e.printStackTrace();
 			}
-		} catch (InstantiationException e) {
-			se.log().error("InstantiationException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
+		} catch (Exception e) {
+			se.log().error(
+					e.toString() + " encountered when new instance of page: " + sheetName + " attempted to be created.",
+					e);
 			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			se.log().error("IllegalAccessException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			se.log().error("IllegalArgumentException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			se.log().error("InvocationTargetException encountered when new instance of page: " + sheetName
-					+ " attempted to be created.", e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
-			e.getCause().printStackTrace();
 			e.printStackTrace();
 		}
 		return element;
@@ -138,7 +126,7 @@ public class PageProcess {
 		}
 
 		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");
-		se.reporter().reportInfo("Accessing Element", "Element: " + key + " || Value: " + value);
+		se.reporter().reportInfo("Accessing Element", "Element: " + key + "<br>Value: " + value);
 
 		switch (element.getTagName()) {
 		case "input":
@@ -152,7 +140,8 @@ public class PageProcess {
 				}
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				System.out.println("***** Recommend reviewing column head data entry *****");
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -163,7 +152,8 @@ public class PageProcess {
 				// element.click();
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				System.out.println("***** Recommend reviewing column head data entry *****");
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -175,13 +165,8 @@ public class PageProcess {
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
 						+ "\" in element \"" + key + "\" \n", e);
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
-						key, se);
-				e.printStackTrace();
-			} catch (Exception e) {
-				se.log().error("Exception encountered when trying to locate value \"" + value + "\" in element \"" + key
-						+ "\" \n", e);
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				System.out.println("***** Recommend reviewing column head data entry *****");
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -192,7 +177,8 @@ public class PageProcess {
 				// element.click();
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				System.out.println("***** Recommend reviewing column head data entry *****");
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -203,7 +189,8 @@ public class PageProcess {
 				// element.click();
 			} catch (NoSuchElementException e) {
 				se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+				System.out.println("***** Recommend reviewing column head data entry *****");
+				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
 						key, se);
 				e.printStackTrace();
 			}
@@ -218,9 +205,8 @@ public class PageProcess {
 		if (value.contains("Click")) {
 			se.element().Click(element);
 			// element.click();
-		} else if (value.contains("Keys.")) {
-			value = value.replace("Keys.", "");
-			element.sendKeys(Keys.valueOf(value.toUpperCase()));
+		} else if (value.contains("Keys")) {
+			ControlKeys(se, value);
 		} else {
 			se.log().debug("No tag and value is identified!");
 		}
@@ -228,19 +214,34 @@ public class PageProcess {
 
 	private static void ControlKeys(SeHelper se, String key) {
 		Actions action = new Actions(se.driver());
-		if (key.contains(",")) {
-			String[] keys = key.split(",");
-			for (String value : keys) {
-				value = value.toUpperCase();
-				if (value.equals("SHIFT") || value.equals("ALT"))
-					action.keyDown(value);
-				else
-					action.sendKeys(value);
+		key = key.toUpperCase();
+		
+		String[] keys = key.split("[.,]");
+		for (String value : keys) {
+			value = value.trim();
+			if (value.equals("KEYS"))
+				continue;
+			else if (value.equals("ENTER"))
+				value = "RETURN";
+			else if (value.contentEquals("CLICK")) {
+				try {
+				throw new NoSuchMethodException();
+				}
+				catch (NoSuchMethodException e){
+					se.log().error("IGNORED: \"Click\" should be given to an element - ControlKeys handles keyboard interactions only", e);
+					System.out.println("***** Recommend reviewing data entry *****");
+				}
+				continue;
 			}
-			action.sendKeys(Keys.NULL);
-		} else {
-			action.sendKeys(key.toUpperCase());
+			
+			if (value.equals("SHIFT") || value.equals("ALT"))
+			{
+				action.keyUp(Keys.valueOf(value)).keyDown(Keys.valueOf(value)).perform();
+			}
+			else
+				action.sendKeys(Keys.valueOf(value)).perform();
 		}
+		action.sendKeys(Keys.NULL).perform();
 	}
 
 	private static boolean checkAlert(SeHelper se, String key, String value) {
@@ -285,22 +286,21 @@ public class PageProcess {
 
 	private static boolean checkWindow(SeHelper se, String key, String value) {
 		if (key.equals("Window")) {
-				se.browser().switchToWindow(Integer.parseInt(value));
-				return true;
+			se.browser().switchToWindow(Integer.parseInt(value));
+			return true;
 		}
 
 		return false;
 	}
-	
+
 	private static boolean checkIframe(SeHelper se, String key, String value) {
-		if(key.equals("Iframe")){
+		if (key.equals("Iframe")) {
 			se.browser().switchToIFrame(Integer.parseInt(value));
 			return true;
 		}
-		 return false;
-		
-	}
+		return false;
 
+	}
 
 	private static void dynamicXpath(SeHelper se, String value) {
 		// *[contains(text(), '{}')]

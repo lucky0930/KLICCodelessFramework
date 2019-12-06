@@ -26,10 +26,10 @@ public class SystemPropertyUtil {
 	private final static int windowHeightDefault = 1080;
 	private final static String testDataDirectoryDefault = "target/test-classes";
 	private final static String httpCredentialsDefault = "true";
-	//private final static String browsersDefault = "Chrome";
+	// private final static String browsersDefault = "Chrome";
 	private final static String browsersDefault = config.getConfigProp("Browser");
-	
-	//file paths
+
+	// file paths
 	private final static String testDataPath = config.getConfigProp("TestDataPath");
 	private final static String extentReportPath = config.getConfigProp("ExtentReportPath");
 	private final static String recentReportPath = config.getConfigProp("RecentReportPath");
@@ -40,9 +40,13 @@ public class SystemPropertyUtil {
 	private final static String edgeDriverPath = config.getConfigProp("EdgeDriverPath");
 	private final static String ieDriverPath = config.getConfigProp("ieDriverPath");
 	
-	//extra
-	private final static String continueIfException = config.getConfigProp("ContinueIfException");	
-	
+	//waits
+	private final static String implicitWaitTime = config.getConfigProp("ImplicitWaitTime");
+	private final static String explicitWaitTime = config.getConfigProp("ExplicitWaitTime");
+
+	// extra
+	private final static String continueIfException = config.getConfigProp("ContinueIfException");
+
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
 			? Integer.parseInt(System.getProperty(windowWidthKey))
 			: windowWidthDefault;
@@ -104,9 +108,17 @@ public class SystemPropertyUtil {
 	public static String getRootPath() throws IOException {
 		return new File(".").getCanonicalPath();
 	}
-	
+
 	public static String getContinueIfException() {
 		return continueIfException;
+	}
+	
+	public static int getImplicitWaitTime() {
+		return Integer.parseInt(implicitWaitTime);
+	}
+
+	public static int getExplicitWaitTime() {
+		return Integer.parseInt(explicitWaitTime);
 	}
 
 	public static String getTestDataSheetPath() {
@@ -118,7 +130,7 @@ public class SystemPropertyUtil {
 			return null;
 		}
 	}
-	
+
 	public static String getLogFilePath() {
 		try {
 			return getRootPath() + logFilePath;
@@ -138,7 +150,7 @@ public class SystemPropertyUtil {
 			return null;
 		}
 	}
-	
+
 	public static String getRecentReportPath() {
 		try {
 			return getRootPath() + recentReportPath;
@@ -148,7 +160,7 @@ public class SystemPropertyUtil {
 			return null;
 		}
 	}
-	
+
 	public static String getScreenshotPath() {
 		try {
 			return getRootPath() + screenshotPath;
@@ -158,7 +170,7 @@ public class SystemPropertyUtil {
 			return null;
 		}
 	}
-	
+
 	public static String getChromeDriverPath() {
 		try {
 			return getRootPath() + chromeDriverPath;
@@ -168,7 +180,7 @@ public class SystemPropertyUtil {
 			return null;
 		}
 	}
-	
+
 	public static String getGeckoDriverPath() {
 		try {
 			return getRootPath() + geckoDriverPath;
@@ -178,7 +190,7 @@ public class SystemPropertyUtil {
 			return null;
 		}
 	}
-	
+
 	public static String getEdgeDriverPath() {
 		try {
 			return getRootPath() + edgeDriverPath;
@@ -188,7 +200,7 @@ public class SystemPropertyUtil {
 			return null;
 		}
 	}
-	
+
 	public static String getIEDriverPath() {
 		try {
 			return getRootPath() + ieDriverPath;

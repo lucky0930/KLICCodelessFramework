@@ -1,5 +1,7 @@
 package com.test.automation.common.Utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -7,24 +9,34 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.Test;
 
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
 import com.test.automation.common.framework.Browser.Browsers;
 import com.test.automation.common.framework.ExtentReporter;
+import com.test.automation.common.framework.Util;
 
 public class TestUtil {
 
 	String TESTDATA_SHEET_PATH = SystemPropertyUtil.getTestDataSheetPath();
 
-	private static ExtentReporter reporter = new ExtentReporter();
 	ExcelReader excelReader = new ExcelReader();
+	SeHelper se = new SeHelper();
+	private ExtentReports report;
 	Method method;
-	ITestResult result;
-	String className;
 	
+	public TestUtil(ExtentReports report, Method method) {
+		this.report = report;
+		this.method = method;
+	}
+
+	/*
 	public void ExecuteTest(String TestCaseNumber) {
 
 		List<String> sheetCollection = excelReader.sheetCollection;
@@ -47,20 +59,19 @@ public class TestUtil {
 			});
 		}
 	}
+	*/
 
-	public void ExecuteTest(String TestCaseNumber, SeHelper se) {
-
-		initialize(se);
+	public void ExecuteTest(String TestCaseNumber) {
+		
+		initialize();
+		
 		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
 
-		//LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
-		//		TESTDATA_SHEET_PATH);
-		
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = null;
 
-        synchronized (TestCaseNumber) {
-            tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
-        }
+		synchronized (TestCaseNumber) {
+			tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+		}
 
 		List<String> sheetCollection1 = new ArrayList<String>();
 		List<String> actualSheetCollection = new ArrayList<String>();
@@ -76,17 +87,14 @@ public class TestUtil {
 		});
 
 		for (int i = 0; i < tableData.size(); i++) {
-			
-			if(se.keepRunning()) {
+
+			if (se.keepRunning()) {
 				LinkedHashMap<String, String> actualData = tableData.get(actualSheetCollection.get(i));
 				ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
-			}
-			else {
+			} else {
 				break;
 			}
 		}
-
-		endTest(se);
 	}
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData) {
@@ -95,11 +103,11 @@ public class TestUtil {
 		se.reporter().reportInfo("Accessing Page", "Page Name: " + sheetName);
 
 		actualData.entrySet().forEach(entry -> {
-			
+
 			if (!se.keepRunning()) {
 				return;
 			}
-			
+
 			System.out.println(entry.getKey() + " => " + entry.getValue());
 
 			if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
@@ -111,36 +119,32 @@ public class TestUtil {
 		});
 	}
 
-	public void initialize(SeHelper se) {
-		se.setReporter(reporter);
+	public void initialize() {
+
 		se.startSession(Browsers.valueOf(SystemPropertyUtil.getBrowsers()));
-		se.driver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		Test test = method.getAnnotation(Test.class);
+		se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
 		Browsers myBrowser = se.currentBrowser();
 		se.log().trace("Test Method: " + method.getName());
-		se.log().trace("Description: " + test.description());
 		se.log().trace("Browser: " + myBrowser.toString());
 		se.util().sleep(1000);
-		reporter.startTest(className, method.getName(), se);
+		ExtentTest test = report.startTest("VM_Tests" + " :: " + method.getName(), method.getName());
+		test.assignAuthor("VAM QA");
+		test.assignCategory(method.getName());
+		test.log(LogStatus.INFO, "Started Execution",
+				"URL: " + SystemPropertyUtil.getBaseStoreUrl() + "<br>Browser: " + se.browser().getBrowserName());
+		ExtentReporter reporter = new ExtentReporter(test);
+		se.setReporter(reporter);
 	}
 
-	public void testDetails(ITestResult r, Method m, String className) {
-		this.result = r;
-		this.method = m;
-		this.className = className;
-	}
-
-	public void endTest(SeHelper se) {
+	public void endTest(ITestResult result) {
+		
 		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
-		se.reporter().endResult(result.isSuccess(), se);
-		se.reporter().endTest();
+		se.reporter().endResult(se, result.isSuccess());
+		report.endTest(se.reporter().getTest());
+		report.getReportId();
 		se.log().printLogBuilder();
 		se.log().testSeperator();
 		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
 		se.browser().quit();
-	}
-
-	public void closeExtent() {
-		reporter.closeExtent();
 	}
 }

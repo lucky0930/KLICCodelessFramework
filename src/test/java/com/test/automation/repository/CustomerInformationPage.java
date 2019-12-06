@@ -1,28 +1,22 @@
 package com.test.automation.repository;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
+import com.test.automation.common.Page;
 import com.test.automation.common.SeHelper;
 
-public class CustomerInformationPage {
-	
-	public CustomerInformationPage(SeHelper se) {
-		PageFactory.initElements(se.driver(), this);
-	}
-	
-	@FindBy(xpath = "//li[@ng-click=\"setCustomerAccountDetailsTab('submissions')\"]")
-	static WebElement Submissions;
+public class CustomerInformationPage extends Page {
+	public static By Submissions = By.xpath("//li[@ng-click=\"setCustomerAccountDetailsTab('submissions')\"]");
 
 	public static WebElement Submissions(SeHelper se) {
-		return Submissions;
+
+		return se.element().getElement(Submissions, true);
 	}
-	
-	@FindBy(xpath = "//a[@ng-click=\"CreateNewSubmission()\"]")
-	static WebElement AddNewSubmission;
+	public static By AddNewSubmission = By.xpath("//a[@ng-click=\"CreateNewSubmission()\"]");
 
 	public static WebElement AddNewSubmission(SeHelper se) {
-		return AddNewSubmission;
+
+		return se.element().getElement(AddNewSubmission, true);
 	}
 }

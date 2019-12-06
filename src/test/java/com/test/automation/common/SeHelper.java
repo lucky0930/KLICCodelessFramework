@@ -302,6 +302,7 @@ public class SeHelper {
 				break;
 			case geckodrivers:
 				
+//				System.setProperty("webdriver.gecko.driver", "C:\\Users\\saipriyal\\git\\VMSeleniumFramework\\tools\\geckodriver.exe");
 //				capabilities = DesiredCapabilities.firefox();
 //				capabilities.setCapability("marionette", true);
 				
@@ -403,7 +404,7 @@ public class SeHelper {
 		}
 		return driver;
 	}
-	
+
 	private URL getSeGridUrl() {
 		URL seGrid = null;
 		try {
@@ -428,7 +429,7 @@ public class SeHelper {
 			capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 		}
 	}
-	
+
 	// toString returns the "currentBrowser" so the reports look all pretty like.
 	@Override
 	public String toString() {

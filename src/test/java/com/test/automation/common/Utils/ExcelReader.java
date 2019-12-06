@@ -52,6 +52,8 @@ public class ExcelReader {
 			
 		}
 
+		// If you want to run in parallel, comment out SortByFlow(tableData) and uncomment return tableData.
+		//return tableData;
 		return SortByFlow(tableData);
 	}
 
