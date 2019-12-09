@@ -199,6 +199,7 @@ public class PageProcess {
 			ActionBasedOnValue(se, element, value);
 
 		}
+		se.reporter().reportPass("Accessing Element", "Element: " + key + "<br>Value: " + value);
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {

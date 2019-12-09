@@ -1,3 +1,4 @@
+
 package com.test.automation.common.Utils;
 
 import java.io.File;
@@ -147,4 +148,5 @@ public class TestUtil {
 		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
 		se.browser().quit();
 	}
+
 }
