@@ -15,47 +15,60 @@ import com.test.automation.common.SystemPropertyUtil;
 public class ExtentReporter {
 
 	private ExtentTest test;
+	private Boolean testResult = true;
 
 	public ExtentReporter(ExtentTest test) {
+		
 		this.test = test;
 	}
 
 	public void reportInfo(String step, String details) {
-		test.log(LogStatus.INFO, step, details);
+		
+		test.log(LogStatus.INFO, step, details); 
 	}
 
 	public void reportPass(String step, String details) {
+		
 		test.log(LogStatus.PASS, step, details);
 	}
 
 	public void reportFail(String step, String details) {
+		
 		test.log(LogStatus.FAIL, step, details);
+		testResult = false;
 	}
 
 	public void reportFailCapture(String step, String details, String captureName, SeHelper se) {
+		
 		try {
 			test.log(LogStatus.FAIL, step, details
 					+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
+			testResult = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void reportError(String step, String details) {
+		
 		test.log(LogStatus.ERROR, step, details);
+		testResult = false;
 	}
 
 	public void reportErrorCapture(String step, String details, String captureName, SeHelper se) {
+		
 		try {
 			test.log(LogStatus.ERROR, step, details
 					+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
+			testResult = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void endResult(SeHelper se, Boolean result) {		
-		if (result) {
+	public void reportResult(SeHelper se) {		
+		
+		if (testResult) {
 			try {
 				test.log(LogStatus.PASS, "Test Passed", ""
 						+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + "TC_PASS", se)));
@@ -73,6 +86,12 @@ public class ExtentReporter {
 	}
 	
 	public ExtentTest getTest() {
+		
 		return test;
+	}
+	
+	public Boolean getResult() {
+		
+		return testResult;
 	}
 }

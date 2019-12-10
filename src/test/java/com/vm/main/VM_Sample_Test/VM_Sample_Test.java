@@ -35,7 +35,7 @@ import com.test.automation.common.framework.ExtentReporter;
 
 public class VM_Sample_Test extends BaseTest {
 
-	Map<String, TestUtil> tests = new ConcurrentHashMap<>();
+	ArrayList<TestUtil> testsArray = new ArrayList<>();
 
 	private String reportPath;
 	private ExtentReports report;
@@ -52,41 +52,44 @@ public class VM_Sample_Test extends BaseTest {
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void beforeMethod(Method method) {
 
-		TestUtil testUtil = new TestUtil(report, method);
-		tests.put(method.getName(), testUtil);
+		// add test cases to list to execute
+		testsArray.add(new TestUtil(report, method, "101"));
+		testsArray.add(new TestUtil(report, method, "102"));
+		testsArray.add(new TestUtil(report, method, "105"));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_One(Method method) {
+	public void VM_Test_Method() {
 
-		tests.get(method.getName()).ExecuteTest("101");
-	}
+		// start threads
+		for (TestUtil test : testsArray) {
+			test.start();
+		}
 
-	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_Two(Method method) {
-
-		tests.get(method.getName()).ExecuteTest("102");
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_Three(Method method) {
-
-		tests.get(method.getName()).ExecuteTest("103");
+		// need to wait for threads to finish before proceeding		
+		while (!testsArray.isEmpty()) {
+			
+			for (TestUtil test : testsArray) {
+				
+				if (test.isAlive() == false) {
+					test.endTest();
+					testsArray.remove(test);
+					break;
+				}
+			}
+		}
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	protected void afterMethod(Method method, ITestResult result) {
+	protected void afterMethod() {
 
-		TestUtil testUtil = tests.get(method.getName());
-		testUtil.endTest(result);
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void afterSuite() {
 
+		// Close ExtentReport
 		report.flush();
 		report.close();
 
