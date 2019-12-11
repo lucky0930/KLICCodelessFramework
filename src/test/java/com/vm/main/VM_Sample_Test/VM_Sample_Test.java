@@ -27,6 +27,7 @@ import com.relevantcodes.extentreports.LogStatus;
 import com.test.automation.common.BaseTest;
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
+import com.test.automation.common.Utils.ExcelReader;
 import com.test.automation.common.Utils.TestPageFactory;
 import com.test.automation.common.Utils.TestUtil;
 import com.test.automation.common.framework.Util;
@@ -36,6 +37,9 @@ import com.test.automation.common.framework.ExtentReporter;
 public class VM_Sample_Test extends BaseTest {
 
 	Map<String, TestUtil> tests = new ConcurrentHashMap<>();
+	
+	List<String> lstOfTestCasesToExecute = new ArrayList<String>();
+	
 
 	private String reportPath;
 	private ExtentReports report;
@@ -47,6 +51,15 @@ public class VM_Sample_Test extends BaseTest {
 				+ Util.getCurrentTime();
 
 		report = new ExtentReports(reportPath + "\\ReportSummary.html");
+		
+		lstOfTestCasesToExecute = GetTestRunnerCases();
+		
+	}
+
+	private List<String> GetTestRunnerCases() {
+		TestUtil testUtil = new TestUtil();
+		return testUtil.ExecuteTestRunner();		
+		
 	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
@@ -58,24 +71,29 @@ public class VM_Sample_Test extends BaseTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_One(Method method) {
-
-		tests.get(method.getName()).ExecuteTest("101");
+	public void VM_Test(Method method) {
+		
+		for(int i =0; i< lstOfTestCasesToExecute.size(); i++)
+        {
+            tests.get(method.getName()).ExecuteTest(lstOfTestCasesToExecute.get(i));
+        }
+				
+		//tests.get(method.getName()).ExecuteTest("101");
 	}
 
-	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_Two(Method method) {
-
-		tests.get(method.getName()).ExecuteTest("102");
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_Three(Method method) {
-
-		tests.get(method.getName()).ExecuteTest("103");
-	}
+//	@SuppressWarnings("unchecked")
+//	@Test(description = "VM Automation Framework", timeOut = 500000000)
+//	public void VM_Test_Two(Method method) {
+//
+//		tests.get(method.getName()).ExecuteTest("102");
+//	}
+//
+//	@SuppressWarnings("unchecked")
+//	@Test(description = "VM Automation Framework", timeOut = 500000000)
+//	public void VM_Test_Three(Method method) {
+//
+//		tests.get(method.getName()).ExecuteTest("103");
+//	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod(Method method, ITestResult result) {

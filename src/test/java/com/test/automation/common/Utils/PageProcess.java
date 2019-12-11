@@ -16,8 +16,87 @@ import org.openqa.selenium.Keys;
 import com.test.automation.common.SeHelper;
 import com.test.automation.customs.Assertions;
 import com.test.automation.customs.CustomHandler;
+import com.test.automation.repository.CommonRepo;
 
 public class PageProcess {
+	
+	public static WebElement findElement(SeHelper se, String sheetName, String key, String value, String xPathExpression) {
+		Class<?> objClass = null;
+		WebElement element = null;
+
+		
+		try {
+
+
+			try {
+				if (key.contains("ControlKeys")) {
+					ControlKeys(se, value);
+					return null;
+				}
+
+				if (checkAlert(se, key, value)) {
+					return null;
+				}
+
+				if (checkPageNav(se, key, value)) {
+					return null;
+				}
+
+				if (checkWindow(se, key, value)) {
+					return null;
+				}
+
+				if (checkIframe(se, key, value)) {
+					return null;
+				}
+
+				if (value.contains("$")) {
+					dynamicXpath(se, value);
+					return null;
+				}
+				try {
+					
+					//element = (WebElement) callMethod.invoke(obj, se);
+					// element = (WebElement) callMethod.invoke(obj);
+					element = CommonRepo.ElementObject(se, xPathExpression);
+
+				} catch (Exception e) {
+					se.log().error("NoSuchMethodException encountered when attempting to get element: " + key + " on "
+							+ sheetName, e);
+					System.out.println("***** Recommend reviewing data entry for this test *****");
+					se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+					e.printStackTrace();
+				}
+
+				if (element != null) {
+					if (checkOptional(element, value)) {
+						return null;
+					}
+					if (value.contains(">")) {
+						Assertions asrt = new Assertions(se);
+						asrt.verify(element, value);
+						return element;
+					}
+					se.waits().waitForPageLoad();
+					se.waits().waitForElementIsClickable(element);
+					FillElement(se, element, key, value);
+				}
+			} catch (SecurityException e) {
+				se.log().error(
+						"SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
+				se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			se.log().error(
+					e.toString() + " encountered when new instance of page: " + sheetName + " attempted to be created.",
+					e);
+			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+			e.printStackTrace();
+		}
+		return element;
+	}
+
 
 	public static WebElement findElement(SeHelper se, String sheetName, String key, String value) {
 
@@ -349,5 +428,6 @@ public class PageProcess {
 		} else
 			return false;
 	}
+
 
 }

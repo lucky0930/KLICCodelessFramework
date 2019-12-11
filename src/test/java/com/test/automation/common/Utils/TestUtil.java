@@ -31,53 +31,67 @@ public class TestUtil {
 	SeHelper se = new SeHelper();
 	private ExtentReports report;
 	Method method;
-	
+
 	public TestUtil(ExtentReports report, Method method) {
 		this.report = report;
 		this.method = method;
 	}
 
 	/*
-	public void ExecuteTest(String TestCaseNumber) {
+	 * public void ExecuteTest(String TestCaseNumber) {
+	 * 
+	 * List<String> sheetCollection = excelReader.sheetCollection;
+	 * 
+	 * LinkedHashMap<String, LinkedHashMap<String, String>> tableData =
+	 * excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+	 * 
+	 * for (int i = 0; i < tableData.size(); i++) { String sheetName =
+	 * sheetCollection.get(i); LinkedHashMap<String, String> actualData =
+	 * tableData.get(sheetCollection.get(i));
+	 * 
+	 * actualData.entrySet().forEach(entry -> { System.out.println(entry.getKey() +
+	 * " => " + entry.getValue());
+	 * 
+	 * if (entry.getKey().equalsIgnoreCase("TestCaseNumber") ||
+	 * entry.getKey().equalsIgnoreCase("Flow")) {
+	 * 
+	 * } else {
+	 * 
+	 * } }); } }
+	 */
 
-		List<String> sheetCollection = excelReader.sheetCollection;
-
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = excelReader.GetTestData(TestCaseNumber,
-				TESTDATA_SHEET_PATH);
-
-		for (int i = 0; i < tableData.size(); i++) {
-			String sheetName = sheetCollection.get(i);
-			LinkedHashMap<String, String> actualData = tableData.get(sheetCollection.get(i));
-
-			actualData.entrySet().forEach(entry -> {
-				System.out.println(entry.getKey() + " => " + entry.getValue());
-
-				if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
-
-				} else {
-
-				}
-			});
-		}
+	public TestUtil() {
+		// TODO Auto-generated constructor stub
 	}
-	*/
 
 	public void ExecuteTest(String TestCaseNumber) {
-		
+
 		initialize();
-		
+
 		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
 
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = null;
+		LinkedHashMap<String, LinkedHashMap<String, String>> mydata = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		LinkedHashMap<String, LinkedHashMap<String, String>> xpathData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+
+		mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+		
+//		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = defaultData;
+//		
+//		defaultData.clear();
+		xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH);
+		
+		synchronized ("Xpath") {
+			//xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH);
+		}
 
 		synchronized (TestCaseNumber) {
-			tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+			//tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
 		}
 
 		List<String> sheetCollection1 = new ArrayList<String>();
 		List<String> actualSheetCollection = new ArrayList<String>();
 
-		tableData.entrySet().forEach(entry -> {
+		mydata.entrySet().forEach(entry -> {
 			String sheetName = entry.getKey();
 
 			actualSheetCollection.add(entry.getKey());
@@ -87,15 +101,42 @@ public class TestUtil {
 			sheetCollection1.add(sheetName);
 		});
 
-		for (int i = 0; i < tableData.size(); i++) {
+		for (int i = 0; i < mydata.size(); i++) {
 
 			if (se.keepRunning()) {
-				LinkedHashMap<String, String> actualData = tableData.get(actualSheetCollection.get(i));
-				ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
+				LinkedHashMap<String, String> actualData = mydata.get(actualSheetCollection.get(i));
+				LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
+				// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
+				ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData);
 			} else {
 				break;
 			}
 		}
+	}
+
+	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
+			LinkedHashMap<String, String> actualxPathData) {
+		se.log().logSeStep("Accessing page: " + sheetName);
+		se.reporter().reportInfo("Accessing Page", "Page Name: " + sheetName);
+
+		actualData.entrySet().forEach(entry -> {
+
+			if (!se.keepRunning()) {
+				return;
+			}
+
+			System.out.println(entry.getKey() + " => " + entry.getValue());
+
+			if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
+
+			} else {
+				if (entry.getValue() != null)
+					System.out.println(actualxPathData.get(entry.getKey()));
+				PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
+						actualxPathData.get(entry.getKey()));
+			}
+		});
+
 	}
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData) {
@@ -138,7 +179,7 @@ public class TestUtil {
 	}
 
 	public void endTest(ITestResult result) {
-		
+
 		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
 		se.reporter().endResult(se, result.isSuccess());
 		report.endTest(se.reporter().getTest());
@@ -147,6 +188,11 @@ public class TestUtil {
 		se.log().testSeperator();
 		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
 		se.browser().quit();
+	}
+
+	public List<String> ExecuteTestRunner() {
+		List<String> lstOfTC = excelReader.GetTestRunnerData("C:\\Users\\VMQApractice\\Desktop\\VAMQAPractice\\VM_Framework_Base\\VM_Framework_Base\\resources\\test_data\\TestRunner.xlsx");
+		return lstOfTC;
 	}
 
 }

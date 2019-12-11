@@ -18,12 +18,13 @@ import org.apache.poi.ss.util.NumberToTextConverter;
 public class ExcelReader {
 
 	private org.apache.poi.ss.usermodel.Workbook workbook;
-	LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+
 	protected List<String> sheetCollection = new ArrayList<String>();
 	int indexflow;
 
 	protected LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(String testCaseNumber,
 			String TESTDATA_SHEET_PATH) {
+		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
 		workbook = openworkbook(TESTDATA_SHEET_PATH);
 
@@ -33,28 +34,37 @@ public class ExcelReader {
 			indexflow = 0;
 			Sheet sheet = workbook.getSheetAt(i);
 			String sheeTname = sheet.getSheetName();
+			int StartrowNum = 1;
+			if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
+				StartrowNum = StartrowNum + 1;
+			}
 
-			for (int row = 1; row <= sheet.getLastRowNum(); row++) {
+			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
 				String TCNumber = CheckNumeric(sheet.getRow(row).getCell(0));
 				String flow = CheckNumeric(sheet.getRow(row).getCell(1));
 
 				if (TCNumber != null) {
 					if (TCNumber.equals(testCaseNumber)) {
 
-						GetTestData(sheet, row);
+						GetTestData(tableData, sheet, row);
 
 						sheetCollection.add(sheeTname);
 						indexflow++;
 					}
-					
+
 				}
 			}
-			
+
 		}
 
-		// If you want to run in parallel, comment out SortByFlow(tableData) and uncomment return tableData.
-		//return tableData;
-		return SortByFlow(tableData);
+		if (testCaseNumber.equalsIgnoreCase("Xpath"))
+			return tableData;
+		else
+			return SortByFlow(tableData);
+
+		// If you want to run in parallel, comment out SortByFlow(tableData) and
+		// uncomment return tableData.
+
 	}
 
 	private LinkedHashMap<String, LinkedHashMap<String, String>> SortByFlow(
@@ -80,7 +90,8 @@ public class ExcelReader {
 		return tableDataSorted;
 	}
 
-	private LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(Sheet sheet, int rowNum) {
+	private LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(
+			LinkedHashMap<String, LinkedHashMap<String, String>> tableData, Sheet sheet, int rowNum) {
 
 		LinkedHashMap<String, String> data = new LinkedHashMap<String, String>();
 		for (int k = 0; k < sheet.getRow(0).getLastCellNum(); k++) {
@@ -91,10 +102,11 @@ public class ExcelReader {
 
 		}
 
-		return UpdateTableData(sheet.getSheetName(), data);
+		return UpdateTableData(tableData, sheet.getSheetName(), data);
 	}
 
-	private LinkedHashMap<String, LinkedHashMap<String, String>> UpdateTableData(String sheetName,
+	private LinkedHashMap<String, LinkedHashMap<String, String>> UpdateTableData(
+			LinkedHashMap<String, LinkedHashMap<String, String>> tableData, String sheetName,
 			LinkedHashMap<String, String> data2) {
 		LinkedHashMap<String, LinkedHashMap<String, String>> myData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		if (!tableData.containsValue(data2)) {
@@ -142,6 +154,64 @@ public class ExcelReader {
 	public List<String> GetSheetCollection() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<String> GetTestRunnerData(String TESTDATA_SHEET_PATH) {
+		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		List<String> lstOfTestCaseNumber = new ArrayList<String>();
+
+		workbook = openworkbook(TESTDATA_SHEET_PATH);
+		Sheet sheet = workbook.getSheetAt(0);
+		String sheeTname = sheet.getSheetName();
+
+		String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(2));
+
+		if (typeOfExecution.contains("Groups")) {
+			String[] split = typeOfExecution.split("=");
+			String typeOfGroup = split[1].trim();
+
+			for (int row = 0; row <= sheet.getLastRowNum(); row++) {
+				String GroupName = CheckNumeric(sheet.getRow(row).getCell(1));
+				if (GroupName.contains(typeOfGroup)) {
+					String TCNumber = CheckNumeric(sheet.getRow(row).getCell(0));
+					if (!TCNumber.isEmpty())
+						lstOfTestCaseNumber.add(TCNumber);
+				}
+			}
+		} else if (typeOfExecution.contains("TestCaseNumber")) {
+
+		}
+
+//		int numberOfSheets = workbook.getNumberOfSheets();
+//
+//		for (int i = 0; i < numberOfSheets; i++) {
+//			indexflow = 0;
+//			Sheet sheet = workbook.getSheetAt(i);
+//			String sheeTname = sheet.getSheetName();
+//			int StartrowNum = 1;
+//			if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
+//				StartrowNum = StartrowNum + 1;
+//			}
+//
+//			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
+//				String TCNumber = CheckNumeric(sheet.getRow(row).getCell(0));
+//				String flow = CheckNumeric(sheet.getRow(row).getCell(1));
+//
+//				if (TCNumber != null) {
+//					if (TCNumber.equals(testCaseNumber)) {
+//
+//						GetTestData(tableData, sheet, row);
+//
+//						sheetCollection.add(sheeTname);
+//						indexflow++;
+//					}
+//
+//				}
+//			}
+//
+//		}
+
+		return lstOfTestCaseNumber;
 	}
 
 }
