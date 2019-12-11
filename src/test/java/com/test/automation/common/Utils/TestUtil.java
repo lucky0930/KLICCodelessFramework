@@ -26,6 +26,7 @@ import com.test.automation.common.framework.Util;
 public class TestUtil {
 
 	String TESTDATA_SHEET_PATH = SystemPropertyUtil.getTestDataSheetPath();
+	String TEST_RUNNER_PATH = SystemPropertyUtil.getTestRunnerPath();
 
 	ExcelReader excelReader = new ExcelReader();
 	SeHelper se = new SeHelper();
@@ -191,7 +192,7 @@ public class TestUtil {
 	}
 
 	public List<String> ExecuteTestRunner() {
-		List<String> lstOfTC = excelReader.GetTestRunnerData("C:\\Users\\VMQApractice\\Desktop\\VAMQAPractice\\VM_Framework_Base\\VM_Framework_Base\\resources\\test_data\\TestRunner.xlsx");
+		List<String> lstOfTC = excelReader.GetTestRunnerData(TEST_RUNNER_PATH);
 		return lstOfTC;
 	}
 

@@ -31,6 +31,7 @@ public class SystemPropertyUtil {
 
 	// file paths
 	private final static String testDataPath = config.getConfigProp("TestDataPath");
+	private final static String testRunnerPath = config.getConfigProp("TestRunnerPath");
 	private final static String extentReportPath = config.getConfigProp("ExtentReportPath");
 	private final static String recentReportPath = config.getConfigProp("RecentReportPath");
 	private final static String logFilePath = config.getConfigProp("LogFilePath");
@@ -124,6 +125,16 @@ public class SystemPropertyUtil {
 	public static String getTestDataSheetPath() {
 		try {
 			return getRootPath() + testDataPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String getTestRunnerPath() {
+		try {
+			return getRootPath() + testRunnerPath;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
