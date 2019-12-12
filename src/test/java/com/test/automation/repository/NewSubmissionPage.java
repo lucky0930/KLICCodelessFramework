@@ -88,7 +88,7 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(SSN, true);
 	}
 
-	public static By FEIN = By.xpath("//*[@ng-blur=\"validatefeinNumber()\"]");
+	public static By FEIN = By.xpath("//*[@id='IdfeinNumber']");
 
 	public static WebElement FEIN(SeHelper se) {
 		se.waits().waitForElement(FEIN);

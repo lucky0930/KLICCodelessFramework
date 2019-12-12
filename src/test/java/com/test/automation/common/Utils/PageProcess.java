@@ -240,15 +240,31 @@ public class PageProcess {
 		case "select":
 			try {
 				Select dropDownValue = new Select(element);
-				dropDownValue.selectByValue(value);
-			} catch (NoSuchElementException e) {
-				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
-						+ "\" in element \"" + key + "\" \n", e);
-				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
-						key, se);
-				e.printStackTrace();
+				dropDownValue.selectByVisibleText(value);	
 			}
+			catch (NoSuchElementException e2) {
+				
+				try {
+					Select dropDownValue1 = new Select(element);
+					dropDownValue1.selectByValue(value);
+				}
+					catch (NoSuchElementException e1) {
+						
+						
+						try {
+							Select dropDownValue2 = new Select(element);
+
+							dropDownValue2.selectByIndex(Integer.valueOf(value));
+						}
+						catch (NoSuchElementException e) {
+							se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
+									+ "\" in element \"" + key + "\" \n", e);
+							System.out.println("***** Recommend reviewing column head data entry *****");
+							se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + " || Value: " + value,
+									key, se);
+							e.printStackTrace();
+						}
+					 }}
 			break;
 		case "a":
 			try {
