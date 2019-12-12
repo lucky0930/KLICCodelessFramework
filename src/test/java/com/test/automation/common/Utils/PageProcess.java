@@ -27,7 +27,9 @@ public class PageProcess {
 		
 		try {
 
-
+	           if (value == null | value.contentEquals("")) {
+	                return null;
+	            }
 			try {
 				if (key.contains("ControlKeys")) {
 					ControlKeys(se, value);

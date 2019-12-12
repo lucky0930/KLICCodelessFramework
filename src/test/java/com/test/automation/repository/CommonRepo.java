@@ -24,6 +24,12 @@ public class CommonRepo extends Page {
 		if (element == null) {
 			se.waits().waitForElement(By.xpath(xPathExpression));
 		}
+		
+		
+		if(!element.isDisplayed()) {
+			se.waits().waitForElementIsDisplayed(By.xpath(xPathExpression));
+		}
+		
 		return getElement(se, xPathExpression);
 		// return se.element().getElement(By.xpath(xPathExpression));
 	}
