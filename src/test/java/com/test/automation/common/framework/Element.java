@@ -60,12 +60,16 @@ public class Element {
 			String errorName = "NoSuchElementException Exception in getElement:";
 			se.log().logSeStep(errorName + e.getMessage());
 			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			se.reporter().reportErrorCapture("Error accessing element in getElement.",
+					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
 			continueIfException(e);
 			return null;
 		} catch (Exception e) {
 			String errorName = "Un-handled Exception in getElement:";
 			se.log().logSeStep(errorName + e.getMessage());
 			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			se.reporter().reportErrorCapture("Error accessing element in getElement.",
+					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
 			return null;
 		}
 	}
@@ -78,12 +82,16 @@ public class Element {
 			String errorName = "NoSuchElementException Exception in getElement:";
 			se.log().logSeStep(errorName + e.getMessage());
 			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			se.reporter().reportErrorCapture("Error accessing element in getElement.",
+					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
 			continueIfException(e);
 			return null;
 		} catch (Exception e) {
 			String errorName = "Un-handled Exception in getElement:";
 			se.log().logSeStep(errorName + e.getMessage());
 			se.log().logTcError(errorName, se.browser().takeScreenShot());
+			se.reporter().reportErrorCapture("Error accessing element in getElement.",
+					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
 			return null;
 		}
 	}

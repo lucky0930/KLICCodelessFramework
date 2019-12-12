@@ -23,7 +23,7 @@ import com.test.automation.common.framework.Browser.Browsers;
 import com.test.automation.common.framework.ExtentReporter;
 import com.test.automation.common.framework.Util;
 
-public class TestUtil {
+public class TestUtil extends Thread {
 
 	String TESTDATA_SHEET_PATH = SystemPropertyUtil.getTestDataSheetPath();
 	String TEST_RUNNER_PATH = SystemPropertyUtil.getTestRunnerPath();
@@ -32,10 +32,12 @@ public class TestUtil {
 	SeHelper se = new SeHelper();
 	private ExtentReports report;
 	Method method;
+	String TestCaseNumber;
 
-	public TestUtil(ExtentReports report, Method method) {
+	public TestUtil(ExtentReports report, Method method, String TestCaseNumber) {
 		this.report = report;
 		this.method = method;
+		this.TestCaseNumber = TestCaseNumber;
 	}
 
 	/*
@@ -64,8 +66,13 @@ public class TestUtil {
 	public TestUtil() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public void run() {
+		
+		ExecuteTest();
+	}
 
-	public void ExecuteTest(String TestCaseNumber) {
+	public void ExecuteTest() {
 
 		initialize();
 
@@ -117,8 +124,9 @@ public class TestUtil {
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
 			LinkedHashMap<String, String> actualxPathData) {
-		se.log().logSeStep("Accessing page: " + sheetName);
-		se.reporter().reportInfo("Accessing Page", "Page Name: " + sheetName);
+		
+		se.log().logSeStep("Opening page: " + sheetName);
+		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
 
 		actualData.entrySet().forEach(entry -> {
 
@@ -168,9 +176,10 @@ public class TestUtil {
 		se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
 		Browsers myBrowser = se.currentBrowser();
 		se.log().trace("Test Method: " + method.getName());
+		se.log().trace("Test Case Number: " + TestCaseNumber);
 		se.log().trace("Browser: " + myBrowser.toString());
 		se.util().sleep(1000);
-		ExtentTest test = report.startTest("VM_Tests" + " :: " + method.getName(), method.getName());
+		ExtentTest test = report.startTest("Test Case Number: " + TestCaseNumber);
 		test.assignAuthor("VAM QA");
 		test.assignCategory(method.getName());
 		test.log(LogStatus.INFO, "Started Execution",
@@ -179,15 +188,15 @@ public class TestUtil {
 		se.setReporter(reporter);
 	}
 
-	public void endTest(ITestResult result) {
+	public void endTest() {
 
-		se.log().trace("End of " + method.getName() + " Result: " + result.isSuccess() + "\n");
-		se.reporter().endResult(se, result.isSuccess());
+		se.log().trace("End of " + method.getName() + " Result: " + se.reporter().getResult() + "\n");
+		se.reporter().reportResult(se);
 		report.endTest(se.reporter().getTest());
 		report.getReportId();
 		se.log().printLogBuilder();
 		se.log().testSeperator();
-		se.log().couchDb(result.isSuccess(), String.valueOf(result.isSuccess()));
+		se.log().couchDb(se.reporter().getResult(), String.valueOf(se.reporter().getResult()));
 		se.browser().quit();
 	}
 
