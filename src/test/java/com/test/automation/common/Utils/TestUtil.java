@@ -145,6 +145,7 @@ public class TestUtil extends Thread {
 						actualxPathData.get(entry.getKey()));
 			}
 		});
+		se.waits().waitForPageLoad();
 
 	}
 
