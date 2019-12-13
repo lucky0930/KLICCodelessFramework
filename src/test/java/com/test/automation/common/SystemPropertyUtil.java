@@ -41,11 +41,12 @@ public class SystemPropertyUtil {
 	private final static String edgeDriverPath = config.getConfigProp("EdgeDriverPath");
 	private final static String ieDriverPath = config.getConfigProp("ieDriverPath");
 	
-	//waits
+	// waits
 	private final static String implicitWaitTime = config.getConfigProp("ImplicitWaitTime");
 	private final static String explicitWaitTime = config.getConfigProp("ExplicitWaitTime");
 
-	// extra
+	// extra options
+	private final static String runInParallel = config.getConfigProp("RunInParallel");
 	private final static String continueIfException = config.getConfigProp("ContinueIfException");
 
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
@@ -111,7 +112,11 @@ public class SystemPropertyUtil {
 	}
 
 	public static String getContinueIfException() {
-		return continueIfException;
+		return continueIfException.trim();
+	}
+	
+	public static String runInParallel() {
+		return runInParallel.trim();
 	}
 	
 	public static int getImplicitWaitTime() {

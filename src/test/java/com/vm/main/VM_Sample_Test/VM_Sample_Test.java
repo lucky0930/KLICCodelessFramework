@@ -75,21 +75,30 @@ public class VM_Sample_Test extends BaseTest {
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test() {
 		
-		// start threads
-		for (TestUtil test : testsArray) {
-			test.start();
-		}
-
-		// need to wait for threads to finish before proceeding		
-		while (!testsArray.isEmpty()) {
-
+		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) {
+			// start threads
 			for (TestUtil test : testsArray) {
+				test.start();
+			}
 
-				if (test.isAlive() == false) {
-					test.endTest();
-					testsArray.remove(test);
-					break;
+			// need to wait for threads to finish before proceeding		
+			while (!testsArray.isEmpty()) {
+
+				for (TestUtil test : testsArray) {
+
+					if (test.isAlive() == false) {
+						test.endTest();
+						testsArray.remove(test);
+						break;
+					}
 				}
+			}
+		} else {
+			
+			// running the tests without parallel execution
+			for (TestUtil test : testsArray) {
+				test.ExecuteTest();
+				test.endTest();
 			}
 		}
 	}
