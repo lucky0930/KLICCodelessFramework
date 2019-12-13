@@ -54,6 +54,8 @@ public class Element {
 	 * @return
 	 */
 	public WebElement getElement(final By locator) {
+		
+		
 			return se.driver().findElement(locator);
 	}
 	

@@ -19,7 +19,16 @@ public class CommonRepo extends Page {
 
 	public static WebElement ElementObject(SeHelper se, String xPathExpression) 
 	{
+		long startWait = System.nanoTime();
+		
+		
 		WebElement element = getElement(se, xPathExpression);
+		
+		long stopWait = System.nanoTime();
+		
+		long implicitWait = ((stopWait - startWait) / 100000000);
+		
+		System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + "\n");
 
 		if (element == null) {
 			se.waits().waitForElement(By.xpath(xPathExpression));
