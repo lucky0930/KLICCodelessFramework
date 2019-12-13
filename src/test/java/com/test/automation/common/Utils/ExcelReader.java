@@ -14,8 +14,11 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.jboss.netty.handler.codec.http.HttpHeaders.Values;
 
 public class ExcelReader {
+
+	private static final boolean String = false;
 
 	private org.apache.poi.ss.usermodel.Workbook workbook;
 
@@ -157,7 +160,6 @@ public class ExcelReader {
 	}
 
 	public List<String> GetTestRunnerData(String TESTDATA_SHEET_PATH) {
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		List<String> lstOfTestCaseNumber = new ArrayList<String>();
 
 		workbook = openworkbook(TESTDATA_SHEET_PATH);
@@ -170,47 +172,37 @@ public class ExcelReader {
 			String[] split = typeOfExecution.split("=");
 			String typeOfGroup = split[1].trim();
 
+			String[] values = typeOfGroup.split(",");
+			List<String> lstGroups = new ArrayList<String>();
+
+			for (int i = 0; i < values.length; i++) {
+				lstGroups.add(values[i]);
+			}
+
 			for (int row = 0; row <= sheet.getLastRowNum(); row++) {
 				String GroupName = CheckNumeric(sheet.getRow(row).getCell(1));
-				if (GroupName.contains(typeOfGroup)) {
+				if (lstGroups.contains(GroupName)) {
 					String TCNumber = CheckNumeric(sheet.getRow(row).getCell(0));
 					if (!TCNumber.isEmpty())
 						lstOfTestCaseNumber.add(TCNumber);
 				}
 			}
 		} else if (typeOfExecution.contains("TestCaseNumber")) {
+			String[] split = typeOfExecution.split("=");
+			String typeOfGroup = split[1].trim();
+
+			String[] values = typeOfGroup.split(",");
+			if (values[0].contains("All")) {
+				for (int row = 1; row <= sheet.getLastRowNum(); row++) {
+					lstOfTestCaseNumber.add(CheckNumeric(sheet.getRow(row).getCell(0)));
+				}
+			} else {
+				for (int i = 0; i < values.length; i++) {
+					lstOfTestCaseNumber.add(values[i]);
+				}
+			}
 
 		}
-
-//		int numberOfSheets = workbook.getNumberOfSheets();
-//
-//		for (int i = 0; i < numberOfSheets; i++) {
-//			indexflow = 0;
-//			Sheet sheet = workbook.getSheetAt(i);
-//			String sheeTname = sheet.getSheetName();
-//			int StartrowNum = 1;
-//			if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
-//				StartrowNum = StartrowNum + 1;
-//			}
-//
-//			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
-//				String TCNumber = CheckNumeric(sheet.getRow(row).getCell(0));
-//				String flow = CheckNumeric(sheet.getRow(row).getCell(1));
-//
-//				if (TCNumber != null) {
-//					if (TCNumber.equals(testCaseNumber)) {
-//
-//						GetTestData(tableData, sheet, row);
-//
-//						sheetCollection.add(sheeTname);
-//						indexflow++;
-//					}
-//
-//				}
-//			}
-//
-//		}
-
 		return lstOfTestCaseNumber;
 	}
 
