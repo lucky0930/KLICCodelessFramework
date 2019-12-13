@@ -14,7 +14,7 @@ import com.test.automation.common.SeHelper;
 
 			return se.element().getElement(CustomerAccountName, true);
 		}
-		public static By Search = By.xpath("//button[@ng-click=\"customerSearch();\"]");
+		public static By Search = By.xpath("//*[@id=\"div1\"]/div/button");
 
 		public static WebElement Search(SeHelper se) {
 

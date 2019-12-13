@@ -162,7 +162,7 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(cancel);
 	}
 
-	public static By SelectUser = By.xpath("//input[@name=\"Duplicate\"]");
+	public static By SelectUser = By.xpath("//input[@value=2]");
 
 	public static WebElement SelectUser(SeHelper se) {
 		se.waits().waitForElementIsDisplayed(SelectUser);
