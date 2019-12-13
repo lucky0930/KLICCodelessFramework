@@ -55,6 +55,7 @@ public class VM_Sample_Test extends BaseTest {
 	}
 
 	private List<String> GetTestRunnerCases() {
+		
 		TestUtil testUtil = new TestUtil();
 		return testUtil.ExecuteTestRunner();		
 		

@@ -26,42 +26,53 @@ public class ExtentReporter {
 		
 		test.log(LogStatus.INFO, step, details);
 	}
-
-	public void reportPass(String step, String details) {
+	
+	public void reportStepPass(String step, String details) {
 		
 		test.log(LogStatus.PASS, step, details);
 	}
-
-	public void reportFail(String step, String details) {
+	
+	public void reportStepFail(String step, String details) {
 		
-		test.log(LogStatus.FAIL, step, details);
+		test.log(LogStatus.FAIL, step + " failed.", details);
 		testResult = false;
 	}
 
-	public void reportFailCapture(String step, String details, String captureName, SeHelper se) {
+	public void reportVerifyPass(String assertion, String actual, String expected) {
+		
+		test.log(LogStatus.PASS, assertion + " passed.", "Actual: " + actual + "<br>Expected: " + expected);
+	}
+
+	public void reportVerifyFail(String assertion, String actual, String expected) {
+		
+		test.log(LogStatus.FAIL, assertion + " failed.", "Actual: " + actual + "<br>Expected: " + expected);
+		testResult = false;
+	}
+
+	public void reportFailCapture(String assertion, String actual, String expected, SeHelper se) {
 		
 		try {
-			test.log(LogStatus.FAIL, step, details
-					+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
+			test.log(LogStatus.FAIL, assertion + " failed.", "Actual: " + actual + "<br>Expected: " + expected
+					+ test.addScreenCapture(Util.captureScreenshot(assertion + "_failure", se)));
 			testResult = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void reportError(String step, String details) {
+	public void reportError(String step, Exception e) {
 		
-		test.log(LogStatus.ERROR, step, details);
+		test.log(LogStatus.ERROR, "Exception encountered for: " + step, e.getClass().getSimpleName());
 		testResult = false;
 	}
-
-	public void reportErrorCapture(String step, String details, String captureName, SeHelper se) {
+	
+	public void reportErrorCapture(String step, Exception e, SeHelper se) {
 		
 		try {
-			test.log(LogStatus.ERROR, step, details
-					+ test.addScreenCapture(Util.captureScreenshot(Util.getCurrentDate() + "_" + captureName, se)));
+			test.log(LogStatus.ERROR, "Exception encountered for: " + step, e.getClass().getSimpleName()
+					+ test.addScreenCapture(Util.captureScreenshot(step + "_" + e.getClass().getSimpleName(), se)));
 			testResult = false;
-		} catch (IOException e) {
+		} catch (IOException e1) {
 			e.printStackTrace();
 		}
 	}
