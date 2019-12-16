@@ -43,7 +43,7 @@ public class VM_Sample_Test extends BaseTest {
 	private String reportPath;
 	private ExtentReports report;
 
-	@BeforeSuite(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
+	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
 
 		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
@@ -62,7 +62,7 @@ public class VM_Sample_Test extends BaseTest {
 
 	}
 
-	@BeforeMethod(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
+	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void beforeMethod(Method method) {
 
 		// add test cases to testsArray to execute
@@ -73,15 +73,16 @@ public class VM_Sample_Test extends BaseTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework"/* , timeOut = 500000000 */)
+	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test() {
 
 		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) {
 
-			List<TestUtil> testsParallel = testsArray;
+			List<TestUtil> testsParallel = new ArrayList<TestUtil>();
 
 			// start threads
-			for (TestUtil test : testsParallel) {
+			for (TestUtil test : testsArray) {
+				testsParallel.add(test);
 				test.start();
 			}
 
@@ -109,12 +110,12 @@ public class VM_Sample_Test extends BaseTest {
 		}
 	}
 
-	@AfterMethod(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
+	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod() {
 
 	}
 
-	@AfterSuite(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
+	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void afterSuite() {
 
 		// Close extent tests
