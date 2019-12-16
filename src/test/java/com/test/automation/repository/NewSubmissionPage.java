@@ -182,6 +182,12 @@ public class NewSubmissionPage extends Page {
 		se.waits().waitForElement(SelectAndProceed1);
 		return se.element().getElement(SelectAndProceed1, true);
 	}
+	public static By SelectUser2 = By.xpath("//*[@name=\"Duplicate\"]");
+
+	public static WebElement SelectUser2(SeHelper se) {
+		se.waits().waitForElement(SelectUser2);
+		return se.element().getElement(SelectUser2, true);
+	}
 
 	public static By VerifyCustomerAccountName1 = By.xpath("//*[@id='IdCustomerAccountName']");
 
