@@ -42,6 +42,8 @@ public class VM_Sample_Test extends BaseTest {
 
 	private String reportPath;
 	private ExtentReports report;
+	private int numberOfBrowsers;
+	private int numberOfTests;
 
 	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
@@ -52,7 +54,8 @@ public class VM_Sample_Test extends BaseTest {
 		report = new ExtentReports(reportPath + "\\ReportSummary.html");
 
 		lstOfTestCasesToExecute = GetTestRunnerCases();
-
+		numberOfBrowsers = SystemPropertyUtil.getNumberOfBrowsers();
+		numberOfTests = lstOfTestCasesToExecute.size();
 	}
 
 	private List<String> GetTestRunnerCases() {
@@ -76,32 +79,46 @@ public class VM_Sample_Test extends BaseTest {
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test() {
 
-		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) {
-
-			List<TestUtil> testsParallel = new ArrayList<TestUtil>();
-
-			// start threads
-			for (TestUtil test : testsArray) {
-				testsParallel.add(test);
-				test.start();
-			}
-
-			// need to wait for threads to finish before proceeding
-			while (!testsParallel.isEmpty()) {
-
-				for (TestUtil test : testsParallel) {
-
-					if (test.isAlive() == false) {
-						test.endTest();
-						testsParallel.remove(test);
+		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) { // running tests with parallel execution
+			
+			int count = 0;
+			
+			while (count < numberOfTests) {
+				
+				List<TestUtil> testsParallel = new ArrayList<TestUtil>();
+				
+				// only execute the specified number of tests at a time
+				for (int i = 0; i < numberOfBrowsers; i++) {
+					
+					testsParallel.add(testsArray.get(count));
+					count++;
+					
+					if (count == numberOfTests) {
 						break;
 					}
 				}
+
+				// start threads
+				for (TestUtil test : testsParallel) {
+					test.start();
+				}
+
+				// need to wait for threads to finish before proceeding
+				while (!testsParallel.isEmpty()) {
+
+					for (TestUtil test : testsParallel) {
+
+						if (test.isAlive() == false) {
+							test.endTest();
+							testsParallel.remove(test);
+							break;
+						}
+					}
+				}
 			}
+			
+		} else { // running the tests without parallel execution
 
-		} else {
-
-			// running the tests without parallel execution
 			for (TestUtil test : testsArray) {
 
 				test.ExecuteTest();

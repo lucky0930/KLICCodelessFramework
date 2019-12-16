@@ -47,6 +47,7 @@ public class SystemPropertyUtil {
 
 	// extra options
 	private final static String runInParallel = config.getConfigProp("RunInParallel");
+	private final static String numberOfBrowsers = config.getConfigProp("NumberOfBrowsers");
 	private final static String continueIfException = config.getConfigProp("ContinueIfException");
 
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
@@ -125,6 +126,10 @@ public class SystemPropertyUtil {
 
 	public static int getExplicitWaitTime() {
 		return Integer.parseInt(explicitWaitTime);
+	}
+	
+	public static int getNumberOfBrowsers() {
+		return Integer.parseInt(numberOfBrowsers);
 	}
 
 	public static String getTestDataSheetPath() {
