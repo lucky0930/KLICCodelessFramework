@@ -26,9 +26,9 @@ public class CommonRepo extends Page {
 		
 		long stopWait = System.nanoTime();
 		
-		long implicitWait = ((stopWait - startWait) / 100000000);
+		long implicitWait = ((stopWait - startWait) / 1000000);
 		
-		System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + "\n");
+		System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
 		if (element == null) {
 			se.waits().waitForElement(By.xpath(xPathExpression));
