@@ -34,4 +34,8 @@ public class PullFromConfig {
 	public String getConfigProp(String property) {
 		return this.prop.getProperty(property);
 	}
+	
+	private void modifyConfigProp(String property, String value) {
+		this.prop.put(property, value);
+	}
 }
