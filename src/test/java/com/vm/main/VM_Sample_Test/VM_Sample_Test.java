@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.ExtentTestInterruptedException;
 import com.relevantcodes.extentreports.LogStatus;
 
 import com.test.automation.common.BaseTest;
@@ -38,32 +39,32 @@ public class VM_Sample_Test extends BaseTest {
 
 	List<TestUtil> testsArray = new ArrayList<TestUtil>();
 	List<String> lstOfTestCasesToExecute = new ArrayList<String>();
-	
+
 	private String reportPath;
 	private ExtentReports report;
 
-	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
+	@BeforeSuite(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
 	public void beforeSuite() throws IOException {
 
 		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
 				+ Util.getCurrentTime();
 
 		report = new ExtentReports(reportPath + "\\ReportSummary.html");
-		
+
 		lstOfTestCasesToExecute = GetTestRunnerCases();
-		
+
 	}
 
 	private List<String> GetTestRunnerCases() {
-		
+
 		TestUtil testUtil = new TestUtil();
-		return testUtil.ExecuteTestRunner();		
-		
+		return testUtil.ExecuteTestRunner();
+
 	}
 
-	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
+	@BeforeMethod(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
 	protected void beforeMethod(Method method) {
-		
+
 		// add test cases to testsArray to execute
 		for (String testCaseNumber : lstOfTestCasesToExecute) {
 			TestUtil testUtil = new TestUtil(report, method, testCaseNumber);
@@ -72,44 +73,61 @@ public class VM_Sample_Test extends BaseTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Test(description = "VM Automation Framework", timeOut = 500000000)
+	@Test(description = "VM Automation Framework"/* , timeOut = 500000000 */)
 	public void VM_Test() {
-		
+
 		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) {
+
+			List<TestUtil> testsParallel = testsArray;
+
 			// start threads
-			for (TestUtil test : testsArray) {
+			for (TestUtil test : testsParallel) {
 				test.start();
 			}
 
-			// need to wait for threads to finish before proceeding		
-			while (!testsArray.isEmpty()) {
+			// need to wait for threads to finish before proceeding
+			while (!testsParallel.isEmpty()) {
 
-				for (TestUtil test : testsArray) {
+				for (TestUtil test : testsParallel) {
 
 					if (test.isAlive() == false) {
 						test.endTest();
-						testsArray.remove(test);
+						testsParallel.remove(test);
 						break;
 					}
 				}
 			}
+
 		} else {
-			
+
 			// running the tests without parallel execution
 			for (TestUtil test : testsArray) {
+
 				test.ExecuteTest();
 				test.endTest();
 			}
 		}
 	}
 
-	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
+	@AfterMethod(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
 	protected void afterMethod() {
 
 	}
 
-	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
+	@AfterSuite(alwaysRun = true, groups = { "test" }/* , timeOut = 1800000000 */)
 	public void afterSuite() {
+
+		// Close extent tests
+		for (TestUtil test : testsArray) {
+			
+			// If the test did not get to run, report it
+			if (test.getExtent().getRunStatus() == LogStatus.UNKNOWN) {
+				
+				test.getExtent().log(LogStatus.SKIP, "This test was skipped due to an error in a previous test.");
+			}
+			
+			test.endExtentTest();
+		}
 
 		// Close extent report
 		report.flush();
