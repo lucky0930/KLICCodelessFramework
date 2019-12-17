@@ -219,7 +219,8 @@ public class ExcelReader {
 
 		return titles;
 	}
-		
+
+/*
 	public List<String> ColumnValues(Sheet sheet, int columnIndex) {
 
 		List<String> columnValues = new ArrayList<String>();
@@ -229,6 +230,7 @@ public class ExcelReader {
 
 		return columnValues;
 	}
+*/
 
 	public List<String> sortByPriority(List<String> unsortedTests, Sheet sheet) {
 		List<String> priorityColumn = GetColumn("Priority", sheet);
@@ -236,11 +238,15 @@ public class ExcelReader {
 		Integer[] priorityArray = insertionSort(stringListToIntegerArray(priorityColumn));
 		List<String> sortedList = new ArrayList<String>();
 		
+		
 		for (Integer test : priorityArray) {
-			sortedList.add(testCaseColumn.get(priorityColumn.indexOf(test.toString())));
-			priorityColumn.set(priorityColumn.indexOf(test.toString()), "-1");
+			String testCase = testCaseColumn.get(priorityColumn.indexOf(test.toString()));
+			if(unsortedTests.contains(testCase)) {
+				sortedList.add(testCase);
+				priorityColumn.set(priorityColumn.indexOf(test.toString()), "-1");
+			}
 		}
-
+		
 		return sortedList;
 	}
 
@@ -249,7 +255,11 @@ public class ExcelReader {
 		List<String> column = new ArrayList<String>();
 
 		for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-			if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_STRING)
+			if (sheet.getRow(i).getCell(index) == null)
+			{
+				column.add("-1");
+			}
+			else if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_STRING)
 				column.add(sheet.getRow(i).getCell(index).getStringCellValue());
 			else if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_NUMERIC)
 			{
@@ -273,6 +283,18 @@ public class ExcelReader {
 
 	public Integer[] insertionSort(Integer[] unsortedArray)
 	{
+		Integer max = 0;
+		for(Integer element : unsortedArray) {
+			if(element != -1 && element > max) {
+				max = element;
+			}
+		}
+		for(Integer element : unsortedArray)
+		{
+			if(element == -1)
+				element = max+1;
+		}
+		
 		Integer[] sortArray = unsortedArray;
 		
         int n = sortArray.length; 
