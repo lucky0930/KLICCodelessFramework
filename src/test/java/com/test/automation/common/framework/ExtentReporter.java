@@ -34,7 +34,7 @@ public class ExtentReporter {
 	
 	public void reportStepFail(String step, String details) {
 		
-		test.log(LogStatus.FAIL, step + " failed.", details);
+		test.log(LogStatus.FAIL, step, details);
 		testResult = false;
 	}
 

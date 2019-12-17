@@ -14,6 +14,8 @@ import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.Keys;
 
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
+import com.test.automation.common.framework.Util;
 import com.test.automation.customs.Assertions;
 import com.test.automation.customs.CustomHandler;
 import com.test.automation.repository.CommonRepo;
@@ -62,10 +64,18 @@ public class PageProcess {
 					// element = (WebElement) callMethod.invoke(obj);
 					element = CommonRepo.ElementObject(se, xPathExpression);
 
+				} catch (NoSuchElementException e) {
+					
+					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+					se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
+					new Util().sleep(500);
+					continueIfException(se, sheetName, key, e);
+					
 				} catch (Exception e) {
+					
 					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
 					System.out.println("***** Recommend reviewing data entry for this test *****");
-					se.reporter().reportErrorCapture(sheetName, e, se);
+					se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 					e.printStackTrace();
 				}
 
@@ -83,12 +93,12 @@ public class PageProcess {
 				}
 			} catch (SecurityException e) {
 				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
-				se.reporter().reportErrorCapture(sheetName, e, se);
+				se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			se.log().error(e.getClass().getSimpleName() + " encountered on page: " + sheetName, e);
-			se.reporter().reportErrorCapture(sheetName, e, se);
+			se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+			se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 			e.printStackTrace();
 		}
 		return element;
@@ -432,5 +442,25 @@ public class PageProcess {
 			return false;
 	}
 
+	private static void continueIfException(SeHelper se, String sheetName, String key, Exception e) {
+		
+		String continueIfException = SystemPropertyUtil.getContinueIfException().trim();
+		
+		if (continueIfException.equalsIgnoreCase("Yes")) {
+			
+			return; // if yes keep running 
+			
+		} else if (continueIfException.equalsIgnoreCase("No")) {
+			
+			// if no end test
+			se.log().debug("The test ended early because the element: " + key
+					+ " could not be found on page " + sheetName);
+			se.reporter().reportInfo("The test ended early because the element: " + key
+					+ " could not be found.", "Page: " + sheetName);
 
+			se.stopRunning();
+		}
+
+		return;
+	}
 }

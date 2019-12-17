@@ -203,7 +203,7 @@ public class TestUtil extends Thread {
 
 	public void endTest() {
 
-		se.log().trace("End of " + method.getName() + " Result: " + se.reporter().getResult() + "\n");
+		se.log().trace("End of Test Case #" + TestCaseNumber + " Result: " + se.reporter().getResult() + "\n");
 		se.reporter().reportResult(se);
 		// report.endTest(se.reporter().getTest());
 		// report.getReportId();
