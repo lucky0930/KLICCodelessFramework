@@ -787,12 +787,13 @@ public class Element {
 	public boolean Click(WebElement Element) {
 		
 		
-		
-		if (Element != null && Element.isDisplayed() && Element.isEnabled()) {
+
+		if (Element != null) {
 			try {
+				if(!Element.isDisplayed() || !Element.isEnabled()) {
 				se.waits().waitForElementIsDisplayed(Element);
 				se.waits().waitForElementIsClickable(Element);
-				
+				}
 				// se.log().logSeStep("Click Element : " + Element.toString());
 				Element.click();
 				return true;
