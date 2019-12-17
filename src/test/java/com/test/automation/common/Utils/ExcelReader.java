@@ -237,6 +237,9 @@ public class ExcelReader {
 		List<String> testCaseColumn = GetColumn("TestCaseNumber", sheet);
 		Integer[] priorityArray = insertionSort(stringListToIntegerArray(priorityColumn));
 		List<String> sortedList = new ArrayList<String>();
+		for (int index = 0; index < priorityColumn.size(); index++)
+			if (priorityColumn.get(index).equals("-1"))
+				priorityColumn.set(index, priorityArray[priorityArray.length-1].toString());
 		
 		
 		for (Integer test : priorityArray) {
@@ -256,9 +259,7 @@ public class ExcelReader {
 
 		for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 			if (sheet.getRow(i).getCell(index) == null)
-			{
 				column.add("-1");
-			}
 			else if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_STRING)
 				column.add(sheet.getRow(i).getCell(index).getStringCellValue());
 			else if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_NUMERIC)
@@ -289,16 +290,17 @@ public class ExcelReader {
 				max = element;
 			}
 		}
-		for(Integer element : unsortedArray)
+		
+		for(int i =0; i < unsortedArray.length; i++)
 		{
-			if(element == -1)
-				element = max+1;
+			if(unsortedArray[i] == -1)
+				unsortedArray[i] = max+1;
 		}
 		
 		Integer[] sortArray = unsortedArray;
 		
-        int n = sortArray.length; 
-        for (int i = 1; i < n; ++i) { 
+        int length = sortArray.length; 
+        for (int i = 1; i < length; i++) { 
             int key = sortArray[i]; 
             int j = i - 1; 
             
@@ -308,6 +310,12 @@ public class ExcelReader {
             } 
             sortArray[j + 1] = key; 
         }
+		System.out.print("Sorted List: ");
+        for (Integer element : sortArray)
+		System.out.print(element + ", ");
+		System.out.println("");
+
+
         return sortArray;
     } 
 
