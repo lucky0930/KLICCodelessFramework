@@ -138,31 +138,34 @@ public class TestUtil extends Thread {
 		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
 		
 		se.waits().waitForPageLoad();
+		
 		try {
 			actualData.entrySet().forEach(entry -> {
+				
+					if (!se.keepRunning()) {
+						return;
+					}
 
-				if (!se.keepRunning()) {
-					return;
-				}
+					System.out.println(entry.getKey() + " => " + entry.getValue());
+					
+					if (entry.getKey() == null || entry.getValue() == null) {
+					
+						//skip
+						
+					} else if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
+						
+						//skip
 
-				System.out.println(entry.getKey() + " => " + entry.getValue());
-
-				if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
-
-				} else {
-					if (entry.getValue() != null)
-						System.out.println(actualxPathData.get(entry.getKey()));
-					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
-							actualxPathData.get(entry.getKey()));
-				}
+					} else {
+						if (entry.getValue() != null)
+							System.out.println(actualxPathData.get(entry.getKey()));
+						PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
+								actualxPathData.get(entry.getKey()));
+					}
 			});
 			se.waits().waitForPageLoad();
-			
-			
 		} catch (NullPointerException e) {
 
-			se.log().error(e.getClass().getSimpleName() + " encountered on page: " + sheetName, e);
-			se.reporter().reportErrorCapture(sheetName, e, se);
 		}
 	}
 
