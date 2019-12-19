@@ -30,36 +30,36 @@ public class ExcelReader {
 	protected LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(String testCaseNumber,
 			String TESTDATA_SHEET_PATH, SeHelper se) {
 
-			LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
-			try {
-				
-				workbook = openworkbook(TESTDATA_SHEET_PATH);
-				
-			} catch (Exception e) {
-				
-				System.out.println("***** Unable to read the Excel sheet Data *****");
-				se.log().error(e.getClass().getSimpleName() + " encountered while trying to read Excel sheet data.", e);
-				se.reporter().reportError("Reading Excel data.", e);
-				return null;
+		try {
+
+			workbook = openworkbook(TESTDATA_SHEET_PATH);
+
+		} catch (Exception e) {
+
+			System.out.println("***** Unable to read the Excel sheet Data *****");
+			se.log().error(e.getClass().getSimpleName() + " encountered while trying to read Excel sheet data.", e);
+			se.reporter().reportError("Reading Excel data.", e);
+			return null;
+		}
+
+		int numberOfSheets = workbook.getNumberOfSheets();
+
+		for (int i = 0; i < numberOfSheets; i++) {
+			indexflow = 0;
+			Sheet sheet = workbook.getSheetAt(i);
+			String sheetName = sheet.getSheetName();
+			int StartrowNum = 1;
+			if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
+				StartrowNum = StartrowNum + 1;
 			}
-		
-			int numberOfSheets = workbook.getNumberOfSheets();
 
-			for (int i = 0; i < numberOfSheets; i++) {
-				indexflow = 0;
-				Sheet sheet = workbook.getSheetAt(i);
-				String sheetName = sheet.getSheetName();
-				int StartrowNum = 1;
-				if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
-					StartrowNum = StartrowNum + 1;
-				}
-
-				for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
-					Row sheetRow = sheet.getRow(row);
-					if (sheetRow != null) {
-						String TCNumber = CheckNumeric(sheetRow.getCell(0));
-						String flow = CheckNumeric(sheet.getRow(row).getCell(1));
+			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
+				Row sheetRow = sheet.getRow(row);
+				if (sheetRow != null) {
+					String TCNumber = CheckNumeric(sheetRow.getCell(0));
+					String flow = CheckNumeric(sheet.getRow(row).getCell(1));
 
 					if (TCNumber != null) {
 						if (TCNumber.equals(testCaseNumber)) {
@@ -71,15 +71,15 @@ public class ExcelReader {
 						}
 					}
 
-					}
 				}
-
 			}
 
-			if (testCaseNumber.equalsIgnoreCase("Xpath"))
-				return tableData;
-			else
-				return SortByFlow(tableData);
+		}
+
+		if (testCaseNumber.equalsIgnoreCase("Xpath"))
+			return tableData;
+		else
+			return SortByFlow(tableData);
 	}
 
 	private LinkedHashMap<String, LinkedHashMap<String, String>> SortByFlow(
@@ -158,7 +158,7 @@ public class ExcelReader {
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
 		}
-		
+
 		return workbook;
 
 	}
@@ -172,21 +172,21 @@ public class ExcelReader {
 		List<String> lstOfTestCaseNumber = new ArrayList<String>();
 
 		try {
-			
+
 			workbook = openworkbook(TESTDATA_SHEET_PATH);
-			
+
 		} catch (Exception e) {
-			
+
 			System.out.println("Unable to read Test Runner file.");
 			return null;
 		}
-		
-		Sheet sheet = workbook.getSheetAt(0);
+
+		Sheet sheet = workbook.getSheet("Test Cases");
 		List<String> columnList = ColumnTitles(sheet);
 
 		// String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(2));
 
-		String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(columnList.indexOf("Execution")));
+		String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(columnList.indexOf("Execute")));
 
 		if (typeOfExecution.contains("Groups")) {
 			String[] split = typeOfExecution.split("=");
@@ -200,13 +200,26 @@ public class ExcelReader {
 			}
 
 			for (int row = 0; row <= sheet.getLastRowNum(); row++) {
-				String GroupName = CheckNumeric(sheet.getRow(row).getCell(columnList.indexOf("Group")));
-				if (lstGroups.contains(GroupName)) {
-					String TCNumber = CheckNumeric(sheet.getRow(row).getCell(columnList.indexOf("TestCaseNumber")));
-					if (!TCNumber.isEmpty())
-						lstOfTestCaseNumber.add(TCNumber);
+				String GroupName = CheckNumeric(sheet.getRow(row).getCell(columnList.indexOf("Groups")));
+				String GroupNameValues[] = GroupName.split(",");
+				List<String> groupNames = new ArrayList<String>();
+				
+				for(int i = 0; i < GroupNameValues.length; i++) {
+					groupNames.add(GroupNameValues[i]);
+				}
+				
+				for(String name : groupNames) {
+					if (lstGroups.contains(name)) {
+						String TCNumber = CheckNumeric(sheet.getRow(row).getCell(columnList.indexOf("TestCaseNumber")));
+						if (!TCNumber.isEmpty()) {
+							if (!lstOfTestCaseNumber.contains(TCNumber)) {
+								lstOfTestCaseNumber.add(TCNumber);
+							}
+						}
+					}
 				}
 			}
+			
 		} else if (typeOfExecution.contains("TestCaseNumber")) {
 			String[] split = typeOfExecution.split("=");
 			String typeOfGroup = split[1].trim();
