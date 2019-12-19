@@ -24,17 +24,26 @@ public class ExcelReader {
 	private static final boolean String = false;
 
 	private org.apache.poi.ss.usermodel.Workbook workbook;
-	SeHelper se;
 	protected List<String> sheetCollection = new ArrayList<String>();
 	int indexflow;
 
 	protected LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(String testCaseNumber,
-			String TESTDATA_SHEET_PATH) {
-		try {
+			String TESTDATA_SHEET_PATH, SeHelper se) {
+
 			LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
-			workbook = openworkbook(TESTDATA_SHEET_PATH);
-
+			try {
+				
+				workbook = openworkbook(TESTDATA_SHEET_PATH);
+				
+			} catch (Exception e) {
+				
+				System.out.println("***** Unable to read the Excel sheet Data *****");
+				se.log().error(e.getClass().getSimpleName() + " encountered while trying to read Excel sheet data.", e);
+				se.reporter().reportError("Reading Excel data.", e);
+				return null;
+			}
+		
 			int numberOfSheets = workbook.getNumberOfSheets();
 
 			for (int i = 0; i < numberOfSheets; i++) {
@@ -71,17 +80,6 @@ public class ExcelReader {
 				return tableData;
 			else
 				return SortByFlow(tableData);
-		} catch (Exception e) {
-			System.out.println("***** Unable to read the Excel sheet Data *****" + e.getMessage());
-//			se.log().error("Unable to read the Excel sheet Data", e);
-//			
-//			se.reporter().reportError("Unable to read the Excel sheet Data", e);
-			return null;
-		}
-
-		// If you want to run in parallel, comment out SortByFlow(tableData) and
-		// uncomment return tableData.
-
 	}
 
 	private LinkedHashMap<String, LinkedHashMap<String, String>> SortByFlow(
@@ -148,22 +146,19 @@ public class ExcelReader {
 		return cellValue;
 	}
 
-	private org.apache.poi.ss.usermodel.Workbook openworkbook(String filepath2) {
+	private org.apache.poi.ss.usermodel.Workbook openworkbook(String filepath2) throws IOException {
 		FileInputStream file = null;
-		try {
-			file = new FileInputStream(filepath2);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+
+		file = new FileInputStream(filepath2);
+
 		try {
 			workbook = WorkbookFactory.create(file);
 		} catch (EncryptedDocumentException e) {
 			e.printStackTrace();
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+		
 		return workbook;
 
 	}
@@ -176,7 +171,16 @@ public class ExcelReader {
 	public List<String> GetTestRunnerData(String TESTDATA_SHEET_PATH) {
 		List<String> lstOfTestCaseNumber = new ArrayList<String>();
 
-		workbook = openworkbook(TESTDATA_SHEET_PATH);
+		try {
+			
+			workbook = openworkbook(TESTDATA_SHEET_PATH);
+			
+		} catch (Exception e) {
+			
+			System.out.println("Unable to read Test Runner file.");
+			return null;
+		}
+		
 		Sheet sheet = workbook.getSheetAt(0);
 		List<String> columnList = ColumnTitles(sheet);
 

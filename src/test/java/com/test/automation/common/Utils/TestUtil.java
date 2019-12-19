@@ -90,12 +90,28 @@ public class TestUtil extends Thread {
 		LinkedHashMap<String, LinkedHashMap<String, String>> mydata = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		LinkedHashMap<String, LinkedHashMap<String, String>> xpathData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
-		mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+		try {
+			
+			mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se);
+			xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH, se);
+			
+		} catch (Exception e) {
+
+			System.out.println("***** Unable to read the Excel sheet Data *****");
+			se.log().error(e.getClass().getSimpleName() + " encountered while trying to read Excel sheet data.", e);
+			se.reporter().reportError("Reading Excel data.", e);
+			return;
+		}
+		
+		if (mydata == null || xpathData == null) {
+			
+			return;
+		}
 
 //		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = defaultData;
 //		
 //		defaultData.clear();
-		xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH);
+
 
 		synchronized ("Xpath") {
 			// xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH);
@@ -108,26 +124,34 @@ public class TestUtil extends Thread {
 		List<String> sheetCollection1 = new ArrayList<String>();
 		List<String> actualSheetCollection = new ArrayList<String>();
 
-		mydata.entrySet().forEach(entry -> {
-			String sheetName = entry.getKey();
+		try {
+			mydata.entrySet().forEach(entry -> {
+				String sheetName = entry.getKey();
 
-			actualSheetCollection.add(entry.getKey());
-			if (sheetName.contains("$")) {
-				sheetName = sheetName.split(Pattern.quote("$"))[0];
+				actualSheetCollection.add(entry.getKey());
+				if (sheetName.contains("$")) {
+					sheetName = sheetName.split(Pattern.quote("$"))[0];
+				}
+				sheetCollection1.add(sheetName);
+			});
+
+			for (int i = 0; i < mydata.size(); i++) {
+
+				if (se.keepRunning()) {
+					LinkedHashMap<String, String> actualData = mydata.get(actualSheetCollection.get(i));
+					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
+					// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
+					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData);
+				} else {
+					break;
+				}
 			}
-			sheetCollection1.add(sheetName);
-		});
-
-		for (int i = 0; i < mydata.size(); i++) {
-
-			if (se.keepRunning()) {
-				LinkedHashMap<String, String> actualData = mydata.get(actualSheetCollection.get(i));
-				LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
-				// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
-				ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData);
-			} else {
-				break;
-			}
+			
+		} catch (Exception e) {
+			
+			se.log().error(e.getClass().getSimpleName() + " encountered during ExecuteTest.", e);
+			se.reporter().reportError("ExecuteTest", e);
+			return;
 		}
 	}
 
@@ -136,32 +160,33 @@ public class TestUtil extends Thread {
 
 		se.log().logSeStep("Opening page: " + sheetName);
 		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
-		
+
 		se.waits().waitForPageLoad();
-		
+
 		try {
 			actualData.entrySet().forEach(entry -> {
-				
-					if (!se.keepRunning()) {
-						return;
-					}
 
-					System.out.println(entry.getKey() + " => " + entry.getValue());
-					
-					if (entry.getKey() == null || entry.getValue() == null) {
-					
-						//skip
-						
-					} else if (entry.getKey().equalsIgnoreCase("TestCaseNumber") || entry.getKey().equalsIgnoreCase("Flow")) {
-						
-						//skip
+				if (!se.keepRunning()) {
+					return;
+				}
 
-					} else {
-						if (entry.getValue() != null)
-							System.out.println(actualxPathData.get(entry.getKey()));
-						PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
-								actualxPathData.get(entry.getKey()));
-					}
+				System.out.println(entry.getKey() + " => " + entry.getValue());
+
+				if (entry.getKey() == null || entry.getValue() == null) {
+
+					// skip
+
+				} else if (entry.getKey().equalsIgnoreCase("TestCaseNumber")
+						|| entry.getKey().equalsIgnoreCase("Flow")) {
+
+					// skip
+
+				} else {
+					if (entry.getValue() != null)
+						System.out.println(actualxPathData.get(entry.getKey()));
+					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
+							actualxPathData.get(entry.getKey()));
+				}
 			});
 			se.waits().waitForPageLoad();
 		} catch (NullPointerException e) {
