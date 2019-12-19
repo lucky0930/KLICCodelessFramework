@@ -18,12 +18,24 @@ import org.apache.poi.ss.util.NumberToTextConverter;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Values;
 
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
 
 public class ExcelReader {
+	
+	ExcelReader() {
+		try {
+		excelConfig(SystemPropertyUtil.getTestRunnerPath());
+		} catch (Exception e) {
+
+			System.out.println("***** Unable to read the Excel sheet Data in initialize *****");
+			return;
+		}
+		
+	}
 
 	private static final boolean String = false;
 
-	private org.apache.poi.ss.usermodel.Workbook workbook;
+	private static org.apache.poi.ss.usermodel.Workbook workbook;
 	protected List<String> sheetCollection = new ArrayList<String>();
 	int indexflow;
 
@@ -152,7 +164,7 @@ public class ExcelReader {
 		return cellValue;
 	}
 
-	private org.apache.poi.ss.usermodel.Workbook openworkbook(String filepath2) throws IOException {
+	private static org.apache.poi.ss.usermodel.Workbook openworkbook(String filepath2) throws IOException {
 		FileInputStream file = null;
 
 		file = new FileInputStream(filepath2);
@@ -190,11 +202,15 @@ public class ExcelReader {
 		Sheet sheet = workbook.getSheet("Test Cases");
 		List<String> columnList = ColumnTitles(sheet);
 
-		// String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(2));
-
 		String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(columnList.indexOf("Execute")));
-
-		if (typeOfExecution.contains("Groups")) {
+		
+		if (typeOfExecution.contains("All")) {
+			int column = columnList.indexOf("TestCaseNumber");
+			for (int row = 1; row <= sheet.getLastRowNum(); row++) {
+				lstOfTestCaseNumber.add(CheckNumeric(sheet.getRow(row).getCell(column)));
+			}
+		}
+		else if (typeOfExecution.contains("Groups")) {
 			String[] split = typeOfExecution.split("=");
 			String typeOfGroup = split[1].trim();
 
@@ -231,22 +247,65 @@ public class ExcelReader {
 			String typeOfGroup = split[1].trim();
 
 			String[] values = typeOfGroup.split(",");
-			if (values[0].contains("All")) {
-				int column = columnList.indexOf("TestCaseNumber");
-				for (int row = 1; row <= sheet.getLastRowNum(); row++) {
-					lstOfTestCaseNumber.add(CheckNumeric(sheet.getRow(row).getCell(column)));
-				}
-			} else {
-				for (int i = 0; i < values.length; i++) {
-					lstOfTestCaseNumber.add(values[i]);
-				}
-			}
+
+			for (int i = 0; i < values.length; i++) {
+				lstOfTestCaseNumber.add(values[i]);
+			}	
 		}
 
 		return sortByPriority(lstOfTestCaseNumber, sheet);
 	}
 
-	public List<String> ColumnTitles(Sheet sheet) {
+	public static void excelConfig(String TESTDATA_SHEET_PATH) {
+		
+		try {
+
+			workbook = openworkbook(TESTDATA_SHEET_PATH);
+
+		} catch (Exception e) {
+
+			System.out.println("Unable to read Test Runner file.");
+			return;
+		}
+		
+		Sheet paramSheet = workbook.getSheet("Config");
+		int prop = ColumnTitles(paramSheet).indexOf("Properties");
+		int val = ColumnTitles(paramSheet).indexOf("Values");
+		for (int i = 1; i < paramSheet.getLastRowNum(); i++) {
+			String newValue = null;
+			try {
+				newValue = paramSheet.getRow(i).getCell(val).getStringCellValue();
+			}
+			catch (IllegalStateException e) {
+				int temp = (int) paramSheet.getRow(i).getCell(val).getNumericCellValue();
+				newValue = java.lang.String.valueOf(temp);
+			}
+			UpdateSystemProperty(paramSheet.getRow(i).getCell(prop).getStringCellValue(), newValue);
+		}
+	}
+	
+	private static void UpdateSystemProperty(String property, String newValue) {
+		switch (property.replaceAll(" ", "")) {
+		
+		  case "Browser":
+			  SystemPropertyUtil.updateBrowser(newValue);
+			  break;
+		  case "RunInParallel":
+			  SystemPropertyUtil.updateParallel(newValue);
+			  break;
+		  case "NumberOfBrowsers":
+			  SystemPropertyUtil.updateNumberOfBrowsers(newValue);
+			  break;
+		  case "BaseUrl":
+		  case "BaseURL":
+			  SystemPropertyUtil.updateBaseUrl(newValue);
+			  break;
+		  default:
+			  System.out.println("IGNORED: Invalid property name - " + property);
+		}
+	}
+	
+	public static List<String> ColumnTitles(Sheet sheet) {
 
 		List<String> titles = new ArrayList<String>();
 
@@ -256,17 +315,6 @@ public class ExcelReader {
 
 		return titles;
 	}
-
-	/*
-	 * public List<String> ColumnValues(Sheet sheet, int columnIndex) {
-	 * 
-	 * List<String> columnValues = new ArrayList<String>(); for (int i = 1; i <
-	 * sheet.getLastRowNum(); i++) {
-	 * columnValues.add(sheet.getRow(i).getCell(columnIndex).getStringCellValue());
-	 * }
-	 * 
-	 * return columnValues; }
-	 */
 
 	public List<String> sortByPriority(List<String> unsortedTests, Sheet sheet) {
 		List<String> priorityColumn = GetColumn("Priority", sheet);

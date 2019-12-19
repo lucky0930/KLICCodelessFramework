@@ -84,8 +84,8 @@ public class TestUtil extends Thread {
 	public void ExecuteTest() {
 
 		initialize();
-
-		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
+		
+		se.browser().get(SystemPropertyUtil.getBaseUrl());
 
 		LinkedHashMap<String, LinkedHashMap<String, String>> mydata = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		LinkedHashMap<String, LinkedHashMap<String, String>> xpathData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
@@ -226,7 +226,7 @@ public class TestUtil extends Thread {
 		se.log().trace("Browser: " + myBrowser.toString());
 		se.util().sleep(1000);
 		test.log(LogStatus.INFO, "Started Execution",
-				"URL: " + SystemPropertyUtil.getBaseStoreUrl() + "<br>Browser: " + se.browser().getBrowserName());
+				"URL: " + SystemPropertyUtil.getBaseUrl() + "<br>Browser: " + se.browser().getBrowserName());
 	}
 
 	public void endTest() {

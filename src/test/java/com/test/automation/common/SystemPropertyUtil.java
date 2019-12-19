@@ -18,7 +18,7 @@ public class SystemPropertyUtil {
 	// "http://138.91.124.246:1050/pages/login.html";
 	private static PullFromConfig config = new PullFromConfig();
 
-	private final static String baseUrlDefault = config.getConfigProp("BaseURL");
+	private static String baseUrlDefault = config.getConfigProp("BaseURL");
 	private final static String localeUrlDefault = "";
 
 	// Default values
@@ -27,7 +27,7 @@ public class SystemPropertyUtil {
 	private final static String testDataDirectoryDefault = "target/test-classes";
 	private final static String httpCredentialsDefault = "true";
 	// private final static String browsersDefault = "Chrome";
-	private final static String browsersDefault = config.getConfigProp("Browser");
+	private static String browsersDefault = config.getConfigProp("Browser");
 
 	// file paths
 	private final static String testDataPath = config.getConfigProp("TestDataPath");
@@ -46,9 +46,9 @@ public class SystemPropertyUtil {
 	private final static String explicitWaitTime = config.getConfigProp("ExplicitWaitTime");
 
 	// extra options
-	private final static String runInParallel = config.getConfigProp("RunInParallel");
-	private final static String numberOfBrowsers = config.getConfigProp("NumberOfBrowsers");
-	private final static String continueIfException = config.getConfigProp("ContinueIfException");
+	private static String runInParallel = config.getConfigProp("RunInParallel");
+	private static String numberOfBrowsers = config.getConfigProp("NumberOfBrowsers");
+	private static String continueIfException = config.getConfigProp("ContinueIfException");
 
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
 			? Integer.parseInt(System.getProperty(windowWidthKey))
@@ -103,10 +103,21 @@ public class SystemPropertyUtil {
 		// translate old style to new SeHelper enums
 		return browsers;
 	}
-
-	public static String getBaseStoreUrl() {
-		return getBaseUrl();
+	
+	public static void updateBrowser(String newBrowser) {
+		if (newBrowser.trim().isEmpty())
+			return;
+		else
+			browsersDefault = newBrowser;
 	}
+	
+	public static void updateBaseUrl(String newURL) {
+		if (newURL.trim().isEmpty())
+			return;
+		else
+			baseUrlDefault = newURL;
+	}
+	
 
 	public static String getRootPath() throws IOException {
 		return new File(".").getCanonicalPath();
@@ -120,6 +131,15 @@ public class SystemPropertyUtil {
 		return runInParallel.trim();
 	}
 	
+	public static void updateParallel(String option) {
+		if (option.trim().isEmpty())
+			return;
+		else if (option.equalsIgnoreCase("Yes") || option.equalsIgnoreCase("No"))
+			runInParallel = option;
+		else
+			System.out.println("IGNORED: Parallel execution only accepts \"Yes\" or \"No\" inputs.");
+	}
+	
 	public static int getImplicitWaitTime() {
 		return Integer.parseInt(implicitWaitTime);
 	}
@@ -130,6 +150,13 @@ public class SystemPropertyUtil {
 	
 	public static int getNumberOfBrowsers() {
 		return Integer.parseInt(numberOfBrowsers);
+	}
+	
+	public static void updateNumberOfBrowsers(String newNum) {
+		if (newNum.trim().isEmpty())
+			return;
+		else
+			numberOfBrowsers = newNum;
 	}
 
 	public static String getTestDataSheetPath() {

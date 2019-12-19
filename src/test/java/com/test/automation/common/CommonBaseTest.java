@@ -48,7 +48,7 @@ public class CommonBaseTest {
 	}
 	
 	public String getEnv() {
-		String Strurl = SystemPropertyUtil.getBaseStoreUrl();
+		String Strurl = SystemPropertyUtil.getBaseUrl();
 		//String[] env = Strurl.split("/");
 		//return env[2];
 		return Strurl;
