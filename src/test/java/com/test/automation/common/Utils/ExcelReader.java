@@ -70,14 +70,20 @@ public class ExcelReader {
 							indexflow++;
 						}
 					}
-
 				}
 			}
-
 		}
 
 		if (testCaseNumber.equalsIgnoreCase("Xpath"))
 			return tableData;
+		
+		else if (tableData.isEmpty()) {
+			
+			System.out.println("***** Test Case #: " + testCaseNumber + " Not Found *****");
+			se.log().debug("Test Case #: " + testCaseNumber + " not found.");
+			se.reporter().reportStepFail("Test Case #: " + testCaseNumber + " not found.", "Check Excel Sheet");
+			return null;
+		}
 		else
 			return SortByFlow(tableData);
 	}
