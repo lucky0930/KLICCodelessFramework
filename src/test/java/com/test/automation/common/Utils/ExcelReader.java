@@ -11,59 +11,73 @@ import java.util.Map.Entry;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Values;
+
+import com.test.automation.common.SeHelper;
 
 public class ExcelReader {
 
 	private static final boolean String = false;
 
 	private org.apache.poi.ss.usermodel.Workbook workbook;
-
+	SeHelper se;
 	protected List<String> sheetCollection = new ArrayList<String>();
 	int indexflow;
 
 	protected LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(String testCaseNumber,
 			String TESTDATA_SHEET_PATH) {
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		try {
+			LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
-		workbook = openworkbook(TESTDATA_SHEET_PATH);
+			workbook = openworkbook(TESTDATA_SHEET_PATH);
 
-		int numberOfSheets = workbook.getNumberOfSheets();
+			int numberOfSheets = workbook.getNumberOfSheets();
 
-		for (int i = 0; i < numberOfSheets; i++) {
-			indexflow = 0;
-			Sheet sheet = workbook.getSheetAt(i);
-			String sheetName = sheet.getSheetName();
-			int StartrowNum = 1;
-			if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
-				StartrowNum = StartrowNum + 1;
-			}
+			for (int i = 0; i < numberOfSheets; i++) {
+				indexflow = 0;
+				Sheet sheet = workbook.getSheetAt(i);
+				String sheetName = sheet.getSheetName();
+				int StartrowNum = 1;
+				if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
+					StartrowNum = StartrowNum + 1;
+				}
 
-			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
-				String TCNumber = CheckNumeric(sheet.getRow(row).getCell(0));
-				String flow = CheckNumeric(sheet.getRow(row).getCell(1));
+				for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
+					Row sheetRow = sheet.getRow(row);
+					if (sheetRow != null) {
+						String TCNumber = CheckNumeric(sheetRow.getCell(0));
+						String flow = CheckNumeric(sheet.getRow(row).getCell(1));
 
-				if (TCNumber != null) {
-					if (TCNumber.equals(testCaseNumber)) {
+					if (TCNumber != null) {
+						if (TCNumber.equals(testCaseNumber)) {
 
-						GetTestData(tableData, sheet, row);
+							GetTestData(tableData, sheet, row);
 
-						sheetCollection.add(sheetName);
-						indexflow++;
+							sheetCollection.add(sheetName);
+							indexflow++;
+						}
 					}
 
+					}
 				}
+
 			}
 
+			if (testCaseNumber.equalsIgnoreCase("Xpath"))
+				return tableData;
+			else
+				return SortByFlow(tableData);
+		} catch (Exception e) {
+			System.out.println("***** Unable to read the Excel sheet Data *****" + e.getMessage());
+//			se.log().error("Unable to read the Excel sheet Data", e);
+//			
+//			se.reporter().reportError("Unable to read the Excel sheet Data", e);
+			return null;
 		}
-
-		if (testCaseNumber.equalsIgnoreCase("Xpath"))
-			return tableData;
-		else
-			return SortByFlow(tableData);
 
 		// If you want to run in parallel, comment out SortByFlow(tableData) and
 		// uncomment return tableData.
@@ -169,7 +183,7 @@ public class ExcelReader {
 		// String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(2));
 
 		String typeOfExecution = CheckNumeric(sheet.getRow(1).getCell(columnList.indexOf("Execution")));
-		
+
 		if (typeOfExecution.contains("Groups")) {
 			String[] split = typeOfExecution.split("=");
 			String typeOfGroup = split[1].trim();
@@ -205,7 +219,7 @@ public class ExcelReader {
 				}
 			}
 		}
-		
+
 		return sortByPriority(lstOfTestCaseNumber, sheet);
 	}
 
@@ -220,17 +234,16 @@ public class ExcelReader {
 		return titles;
 	}
 
-/*
-	public List<String> ColumnValues(Sheet sheet, int columnIndex) {
-
-		List<String> columnValues = new ArrayList<String>();
-		for (int i = 1; i < sheet.getLastRowNum(); i++) {
-			columnValues.add(sheet.getRow(i).getCell(columnIndex).getStringCellValue());
-		}
-
-		return columnValues;
-	}
-*/
+	/*
+	 * public List<String> ColumnValues(Sheet sheet, int columnIndex) {
+	 * 
+	 * List<String> columnValues = new ArrayList<String>(); for (int i = 1; i <
+	 * sheet.getLastRowNum(); i++) {
+	 * columnValues.add(sheet.getRow(i).getCell(columnIndex).getStringCellValue());
+	 * }
+	 * 
+	 * return columnValues; }
+	 */
 
 	public List<String> sortByPriority(List<String> unsortedTests, Sheet sheet) {
 		List<String> priorityColumn = GetColumn("Priority", sheet);
@@ -239,17 +252,16 @@ public class ExcelReader {
 		List<String> sortedList = new ArrayList<String>();
 		for (int index = 0; index < priorityColumn.size(); index++)
 			if (priorityColumn.get(index).equals("-1"))
-				priorityColumn.set(index, priorityArray[priorityArray.length-1].toString());
-		
-		
+				priorityColumn.set(index, priorityArray[priorityArray.length - 1].toString());
+
 		for (Integer test : priorityArray) {
 			String testCase = testCaseColumn.get(priorityColumn.indexOf(test.toString()));
-			if(unsortedTests.contains(testCase)) {
+			if (unsortedTests.contains(testCase)) {
 				sortedList.add(testCase);
 				priorityColumn.set(priorityColumn.indexOf(test.toString()), "-1");
 			}
 		}
-		
+
 		return sortedList;
 	}
 
@@ -262,61 +274,55 @@ public class ExcelReader {
 				column.add("-1");
 			else if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_STRING)
 				column.add(sheet.getRow(i).getCell(index).getStringCellValue());
-			else if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_NUMERIC)
-			{
-				int cellValue = (int)sheet.getRow(i).getCell(index).getNumericCellValue();
+			else if (sheet.getRow(i).getCell(index).getCellType() == Cell.CELL_TYPE_NUMERIC) {
+				int cellValue = (int) sheet.getRow(i).getCell(index).getNumericCellValue();
 				column.add(java.lang.String.valueOf(cellValue));
 			}
 		}
 
 		return column;
 	}
-	
-	public Integer[] stringListToIntegerArray(List<String> list)
-	{
+
+	public Integer[] stringListToIntegerArray(List<String> list) {
 		Integer[] array = new Integer[list.size()];
-		for (int i = 0; i < list.size(); i++)
-		{
+		for (int i = 0; i < list.size(); i++) {
 			array[i] = Integer.valueOf(list.get(i));
 		}
 		return array;
 	}
 
-	public Integer[] insertionSort(Integer[] unsortedArray)
-	{
+	public Integer[] insertionSort(Integer[] unsortedArray) {
 		Integer max = 0;
-		for(Integer element : unsortedArray) {
-			if(element != -1 && element > max) {
+		for (Integer element : unsortedArray) {
+			if (element != -1 && element > max) {
 				max = element;
 			}
 		}
-		
-		for(int i =0; i < unsortedArray.length; i++)
-		{
-			if(unsortedArray[i] == -1)
-				unsortedArray[i] = max+1;
+
+		for (int i = 0; i < unsortedArray.length; i++) {
+			if (unsortedArray[i] == -1)
+				unsortedArray[i] = max + 1;
 		}
-		
+
 		Integer[] sortArray = unsortedArray;
-		
-        int length = sortArray.length; 
-        for (int i = 1; i < length; i++) { 
-            int key = sortArray[i]; 
-            int j = i - 1; 
-            
-            while (j >= 0 && sortArray[j] > key) { 
-                sortArray[j + 1] = sortArray[j]; 
-                j = j - 1; 
-            } 
-            sortArray[j + 1] = key; 
-        }
+
+		int length = sortArray.length;
+		for (int i = 1; i < length; i++) {
+			int key = sortArray[i];
+			int j = i - 1;
+
+			while (j >= 0 && sortArray[j] > key) {
+				sortArray[j + 1] = sortArray[j];
+				j = j - 1;
+			}
+			sortArray[j + 1] = key;
+		}
 		System.out.print("Sorted List: ");
-        for (Integer element : sortArray)
-		System.out.print(element + ", ");
+		for (Integer element : sortArray)
+			System.out.print(element + ", ");
 		System.out.println("");
 
-
-        return sortArray;
-    } 
+		return sortArray;
+	}
 
 }
