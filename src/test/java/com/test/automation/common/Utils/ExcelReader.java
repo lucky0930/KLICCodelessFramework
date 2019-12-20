@@ -329,7 +329,10 @@ public class ExcelReader {
 			String testCase = testCaseColumn.get(priorityColumn.indexOf(test.toString()));
 			if (unsortedTests.contains(testCase)) {
 				sortedList.add(testCase);
-				priorityColumn.set(priorityColumn.indexOf(test.toString()), "-1");
+				priorityColumn.set(testCaseColumn.indexOf(testCase), "-1");
+			}
+			else {
+				priorityColumn.set(testCaseColumn.indexOf(testCase), "-1");
 			}
 		}
 
@@ -388,11 +391,6 @@ public class ExcelReader {
 			}
 			sortArray[j + 1] = key;
 		}
-		System.out.print("Sorted List: ");
-		for (Integer element : sortArray)
-			System.out.print(element + ", ");
-		System.out.println("");
-
 		return sortArray;
 	}
 
