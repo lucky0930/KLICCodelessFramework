@@ -1,16 +1,10 @@
 package com.test.automation.common.framework;
 
-import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-import org.testng.ITestResult;
-
-import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import com.test.automation.common.SeHelper;
-import com.test.automation.common.SystemPropertyUtil;
 
 public class ExtentReporter {
 

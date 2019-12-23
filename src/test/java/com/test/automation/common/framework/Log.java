@@ -15,11 +15,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.Augmenter;
-//import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.apache.commons.io.FileUtils;
-//import org.slf4j.Logger;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import java.awt.AWTException;
@@ -620,11 +618,6 @@ public class Log {
 	public void error(String logString, Exception e) {
 		logger.error(logString, e);
 		logBuilder.append(logString).append("\n");
-	}
-
-	public void testSeperator() {
-		logger.trace("----------------------- END OF TEST -----------------------");
-		logBuilder.append("----------------------- END OF TEST -----------------------").append("\n");
 	}
 
 	public void screenshot(String scresnshotName, String screenshotHref, VERDICT verdict) {

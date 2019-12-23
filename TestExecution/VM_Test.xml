@@ -4,8 +4,8 @@
 	thread-count="1" data-provider-thread-count="1">
   
 	<listeners>
-		<!--  <listener
-			class-name="com.test.automation.common.RetryListener" /> -->
+		<listener
+			class-name="com.test.automation.common.RetryListener" />
 		<listener
 			class-name="com.test.automation.common.TestListener" />
 	</listeners>
@@ -22,8 +22,6 @@
 			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test" />
 			<methods>
 				<include name="VM_Test" />
-				<include name="VM_Test_One" />
-				<include name="VM_Test_Three" />
 			</methods>
 		</classes>
 	</test>

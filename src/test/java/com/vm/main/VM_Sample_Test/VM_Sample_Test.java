@@ -2,40 +2,25 @@ package com.vm.main.VM_Sample_Test;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Parameters;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.io.FileUtils;
-import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
-import com.relevantcodes.extentreports.ExtentTestInterruptedException;
 import com.relevantcodes.extentreports.LogStatus;
 
-import com.test.automation.common.BaseTest;
-import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
 import com.test.automation.common.Utils.ExcelReader;
-import com.test.automation.common.Utils.TestPageFactory;
 import com.test.automation.common.Utils.TestUtil;
 import com.test.automation.common.framework.Util;
-import com.test.automation.common.framework.Browser.Browsers;
-import com.test.automation.common.framework.ExtentReporter;
 
-public class VM_Sample_Test extends BaseTest {
+public class VM_Sample_Test {
 
 	List<TestUtil> testsArray = new ArrayList<TestUtil>();
 	List<String> lstOfTestCasesToExecute = new ArrayList<String>();

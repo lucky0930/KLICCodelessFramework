@@ -1,14 +1,11 @@
 package com.test.automation.repository;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.test.automation.common.Page;
 import com.test.automation.common.SeHelper;
-import com.test.automation.common.framework.Element;
 
-public class CommonRepo extends Page {
+public class CommonRepo {
 
 	public static By username = By.xpath("//*[@id='UserName']");
 

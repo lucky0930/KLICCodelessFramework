@@ -49,29 +49,6 @@ public class TestUtil extends Thread {
 		se.setReporter(reporter);
 	}
 
-	/*
-	 * public void ExecuteTest(String TestCaseNumber) {
-	 * 
-	 * List<String> sheetCollection = excelReader.sheetCollection;
-	 * 
-	 * LinkedHashMap<String, LinkedHashMap<String, String>> tableData =
-	 * excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
-	 * 
-	 * for (int i = 0; i < tableData.size(); i++) { String sheetName =
-	 * sheetCollection.get(i); LinkedHashMap<String, String> actualData =
-	 * tableData.get(sheetCollection.get(i));
-	 * 
-	 * actualData.entrySet().forEach(entry -> { System.out.println(entry.getKey() +
-	 * " => " + entry.getValue());
-	 * 
-	 * if (entry.getKey().equalsIgnoreCase("TestCaseNumber") ||
-	 * entry.getKey().equalsIgnoreCase("Flow")) {
-	 * 
-	 * } else {
-	 * 
-	 * } }); } }
-	 */
-
 	public TestUtil() {
 		// TODO Auto-generated constructor stub
 	}
@@ -233,10 +210,7 @@ public class TestUtil extends Thread {
 
 		se.log().trace("End of Test Case #" + TestCaseNumber + " Result: " + se.reporter().getResult() + "\n");
 		se.reporter().reportResult(se);
-		// report.endTest(se.reporter().getTest());
-		// report.getReportId();
 		se.log().printLogBuilder();
-		se.log().testSeperator();
 		se.log().couchDb(se.reporter().getResult(), String.valueOf(se.reporter().getResult()));
 		se.browser().quit();
 	}

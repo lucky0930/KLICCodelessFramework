@@ -2,13 +2,6 @@ package com.test.automation.common;
 
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
-import org.testng.Reporter;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import static org.testng.internal.Constants.displayStatus;
-import org.apache.commons.lang.ArrayUtils;
 
 public class RetryAnalyzer implements IRetryAnalyzer {
 	 private int retryCount = 0;
