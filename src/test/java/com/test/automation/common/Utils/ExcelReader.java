@@ -22,15 +22,20 @@ import com.test.automation.common.SystemPropertyUtil;
 
 public class ExcelReader {
 	
-	ExcelReader() {
-		try {
-		excelConfig(SystemPropertyUtil.getTestRunnerPath());
-		} catch (Exception e) {
-
-			System.out.println("***** Unable to read the Excel sheet Data in initialize *****");
-			return;
+	public ExcelReader() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public ExcelReader(boolean run) {
+		if (run) {
+			try {
+			excelConfig(SystemPropertyUtil.getTestRunnerPath());
+			} catch (Exception e) {
+	
+				System.out.println("***** Unable to read the Excel sheet Data in initialize *****");
+				return;
+			}
 		}
-		
 	}
 
 	private static final boolean String = false;

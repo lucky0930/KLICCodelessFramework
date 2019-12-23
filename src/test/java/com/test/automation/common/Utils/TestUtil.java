@@ -84,7 +84,7 @@ public class TestUtil extends Thread {
 	public void ExecuteTest() {
 
 		initialize();
-		
+
 		se.browser().get(SystemPropertyUtil.getBaseUrl());
 
 		LinkedHashMap<String, LinkedHashMap<String, String>> mydata = new LinkedHashMap<String, LinkedHashMap<String, String>>();

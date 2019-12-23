@@ -44,10 +44,11 @@ public class VM_Sample_Test extends BaseTest {
 	private ExtentReports report;
 	private int numberOfBrowsers;
 	private int numberOfTests;
+	static ExcelReader excelReader = new ExcelReader(true);
+
 
 	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
-
 		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
 				+ Util.getCurrentTime();
 
