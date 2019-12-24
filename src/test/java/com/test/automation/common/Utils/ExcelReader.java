@@ -276,7 +276,7 @@ public class ExcelReader {
 		Sheet paramSheet = workbook.getSheet("Config");
 		int prop = ColumnTitles(paramSheet).indexOf("Properties");
 		int val = ColumnTitles(paramSheet).indexOf("Values");
-		for (int i = 1; i < paramSheet.getLastRowNum(); i++) {
+		for (int i = 1; i < paramSheet.getLastRowNum() + 1; i++) {
 			String newValue = null;
 			try {
 				newValue = paramSheet.getRow(i).getCell(val).getStringCellValue();

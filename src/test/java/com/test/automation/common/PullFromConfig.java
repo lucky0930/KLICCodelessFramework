@@ -17,8 +17,6 @@ public class PullFromConfig {
                    
 
             prop.load(inputStream);
-            System.out.println(prop.getProperty("BaseURL"));
-            System.out.println(prop.getProperty("Browser"));
 
         } catch (Exception e) {
             System.out.println("Exception: " + e);

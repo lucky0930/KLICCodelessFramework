@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import com.test.automation.common.Utils.ExcelReader;
+
 public class SystemPropertyUtil {
 
 	private final static String windowWidthKey = "window.width";
@@ -76,7 +78,7 @@ public class SystemPropertyUtil {
 			: localeUrlDefault;
 
 	public static String getBaseUrl() {
-		return baseUrl;
+		return baseUrlDefault;
 	}
 
 	public static String getLocale() {
