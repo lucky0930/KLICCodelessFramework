@@ -68,7 +68,7 @@ public class ExcelReader {
 			Sheet sheet = workbook.getSheetAt(i);
 			String sheetName = sheet.getSheetName();
 			int StartrowNum = 1;
-			if (!testCaseNumber.equalsIgnoreCase("Xpath")) {
+			if (!testCaseNumber.equalsIgnoreCase("Locators")) {
 				StartrowNum = StartrowNum + 1;
 			}
 
@@ -91,7 +91,7 @@ public class ExcelReader {
 			}
 		}
 
-		if (testCaseNumber.equalsIgnoreCase("Xpath"))
+		if (testCaseNumber.equalsIgnoreCase("Locators"))
 			return tableData;
 		
 		else if (tableData.isEmpty()) {

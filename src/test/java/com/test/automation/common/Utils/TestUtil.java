@@ -70,7 +70,7 @@ public class TestUtil extends Thread {
 		try {
 			
 			mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se);
-			xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH, se);
+			xpathData = excelReader.GetTestData("Locators", TESTDATA_SHEET_PATH, se);
 			
 		} catch (Exception e) {
 
@@ -90,7 +90,7 @@ public class TestUtil extends Thread {
 //		defaultData.clear();
 
 
-		synchronized ("Xpath") {
+		synchronized ("Locators") {
 			// xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH);
 		}
 
