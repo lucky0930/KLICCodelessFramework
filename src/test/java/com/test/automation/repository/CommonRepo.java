@@ -27,7 +27,7 @@ public class CommonRepo {
 //		}
 		
 
-		if (expression.startsWith("/")) {
+		if (expression.startsWith("/") || expression.startsWith("(/")) {
 
 			WebElement element = getXPathElement(se, expression);
 
