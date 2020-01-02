@@ -20,10 +20,11 @@
 		<!-- </run> -->
 		<!-- </groups> -->
 		<classes>
-			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test" />
+			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test">
 			<methods>
 				<include name="VM_Test" />
 			</methods>
+			</class>
 		</classes>
 	</test>
 </suite>
