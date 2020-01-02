@@ -26,5 +26,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Robert.Burke/git/VMSeleniumFramework/executables/ATUTestRecorder_2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Robert.Burke/git/VMSeleniumFramework/executables/ATUReporter_Selenium_testNG_5.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

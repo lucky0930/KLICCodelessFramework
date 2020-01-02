@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="VMAutomation Suite" parallel="methods"
-	thread-count="10" data-provider-thread-count="1">
+	thread-count="1" data-provider-thread-count="1">
   
 	<listeners>
-		<!--  <listener
-			class-name="com.test.automation.common.RetryListener" /> -->
+		<listener
+			class-name="com.test.automation.common.RetryListener" />
 		<listener
 			class-name="com.test.automation.common.TestListener" />
 	</listeners>
@@ -21,9 +21,7 @@
 		<classes>
 			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test" />
 			<methods>
-				<include name="VM_Test_Two" />
-				<include name="VM_Test_One" />
-				<include name="VM_Test_Three" />
+				<include name="VM_Test" />
 			</methods>
 		</classes>
 	</test>

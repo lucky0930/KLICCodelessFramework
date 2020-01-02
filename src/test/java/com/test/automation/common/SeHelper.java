@@ -6,26 +6,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.*;
 
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
 import com.test.automation.common.framework.*;
 import com.test.automation.common.framework.Browser.Browsers;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 
 public class SeHelper {
 	private WebDriver driver;
@@ -38,7 +31,6 @@ public class SeHelper {
 	private final Settings settings = buildSettings();
 	private final Log log = new Log(settings().value("couchDb.url"),
 			"_" + Util.randomNum(0, 9999) + "_" + Util.getDateStamp(new SimpleDateFormat("yyyyMMddkkmmssSSS")));
-	private final CommonBaseTest commonBaseTest = new CommonBaseTest();
 
 	public static int seMethodCount = 0;
 	private Browser.Browsers currentBrowser;
@@ -228,7 +220,6 @@ public class SeHelper {
 		// String sMethodName = CommonBaseTest.myMethods[seMethodCount];
 		// seMethodCount++;
 
-		String SEnvname = commonBaseTest.getEnv();
 		String sUserName = OSTools.getUsername();
 
 		// getMethod(method);
@@ -348,10 +339,10 @@ public class SeHelper {
 				capabilities.setCapability("version", "44.0");
 				se.util().sleep(15000);
 				seMethodCount++;
-				se.log.logSeStep(" array values " + seMethodCount + " - " + CommonBaseTest.myMethods[6]);
-				String sMethodName = CommonBaseTest.myMethods[seMethodCount];
+				//se.log.logSeStep(" array values " + seMethodCount + " - " + CommonBaseTest.myMethods[6]);
+				//String sMethodName = CommonBaseTest.myMethods[seMethodCount];
 
-				capabilities.setCapability("name", sMethodName + " by " + sUserName + " on " + SEnvname);
+				//capabilities.setCapability("name", sMethodName + " by " + sUserName + " on " + SEnvname);
 
 				try {
 					driver = new RemoteWebDriver(new URL(URL), capabilities);
@@ -380,10 +371,10 @@ public class SeHelper {
 				se.util().sleep(15000);
 
 				seMethodCount++;
-				String sMethodNameIE = CommonBaseTest.myMethods[seMethodCount];
-				se.log.logSeStep(" Method name in WebDriver : " + sMethodNameIE);
+				//String sMethodNameIE = CommonBaseTest.myMethods[seMethodCount];
+				//se.log.logSeStep(" Method name in WebDriver : " + sMethodNameIE);
 
-				capabilities.setCapability("name", sMethodNameIE + " by " + sUserName + " on " + SEnvname);
+				//capabilities.setCapability("name", sMethodNameIE + " by " + sUserName + " on " + SEnvname);
 				try {
 					driver = new RemoteWebDriver(new URL(URL), capabilities);
 					((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());

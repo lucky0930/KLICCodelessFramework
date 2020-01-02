@@ -14,10 +14,96 @@ import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.Keys;
 
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
+import com.test.automation.common.framework.Util;
 import com.test.automation.customs.Assertions;
 import com.test.automation.customs.CustomHandler;
+import com.test.automation.repository.CommonRepo;
 
 public class PageProcess {
+	
+	public static WebElement findElement(SeHelper se, String sheetName, String key, String value, String xPathExpression) {
+		Class<?> objClass = null;
+		WebElement element = null;
+
+		
+		try {
+
+	           if (value == null) {
+	                return null;
+	            }
+			try {
+				if (key.contains("ControlKeys")) {
+					ControlKeys(se, value);
+					return null;
+				}
+
+				if (checkAlert(se, key, value)) {
+					return null;
+				}
+
+				if (checkPageNav(se, key, value)) {
+					return null;
+				}
+
+				if (checkWindow(se, key, value)) {
+					return null;
+				}
+
+				if (checkIframe(se, key, value)) {
+					return null;
+				}
+
+				if (value.contains("$")) {
+					dynamicXpath(se, value);
+					return null;
+				}
+				try {
+					
+					//element = (WebElement) callMethod.invoke(obj, se);
+					// element = (WebElement) callMethod.invoke(obj);
+					element = CommonRepo.ElementObject(se, xPathExpression);
+
+				} catch (NoSuchElementException e) {
+					
+					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+					se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
+					new Util().sleep(500);
+					continueIfException(se, sheetName, key, e);
+					
+				} catch (Exception e) {
+					
+					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+					System.out.println("***** Recommend reviewing data entry for this test *****");
+					se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
+					e.printStackTrace();
+				}
+
+				if (element != null) {
+					if (checkOptional(element, value)) {
+						return null;
+					}
+					if (value.contains(">")) {
+						Assertions asrt = new Assertions(se);
+						asrt.verify(element, value);
+						return element;
+					}
+					
+					FillElement(se, element, key, value);
+				}
+			} catch (SecurityException e) {
+				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+				se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+			se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
+			e.printStackTrace();
+		}
+		return element;
+	}
+
 
 	public static WebElement findElement(SeHelper se, String sheetName, String key, String value) {
 
@@ -28,8 +114,8 @@ public class PageProcess {
 			objClass = Class.forName("com.test.automation.repository." + sheetName);
 
 		} catch (ClassNotFoundException e) {
-			se.log().error("ClassNotFoundException encountered when accessing page: " + sheetName, e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+			se.log().error(e.getClass().getSimpleName() + " encountered on page: " + sheetName, e);
+			se.reporter().reportErrorCapture(sheetName, e, se);
 			e.printStackTrace();
 		}
 
@@ -37,8 +123,8 @@ public class PageProcess {
 		try {
 			constructor = objClass.getConstructor();
 		} catch (NoSuchMethodException | SecurityException e) {
-			se.log().error("Exception encountered when accessing page: " + sheetName, e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+			se.log().error(e.getClass().getSimpleName() + " encountered on page: " + sheetName, e);
+			se.reporter().reportErrorCapture(sheetName, e, se);
 			e.printStackTrace();
 		}
 		try {
@@ -79,10 +165,9 @@ public class PageProcess {
 					// element = (WebElement) callMethod.invoke(obj);
 
 				} catch (NoSuchMethodException e) {
-					se.log().error("NoSuchMethodException encountered when attempting to get element: " + key + " on "
-							+ sheetName, e);
+					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
 					System.out.println("***** Recommend reviewing data entry for this test *****");
-					se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+					se.reporter().reportErrorCapture(sheetName, e, se);
 					e.printStackTrace();
 				}
 
@@ -95,21 +180,18 @@ public class PageProcess {
 						asrt.verify(element, value);
 						return element;
 					}
-					se.waits().waitForPageLoad();
-					se.waits().waitForElementIsClickable(element);
+					//se.waits().waitForPageLoad();
+					//se.waits().waitForElementIsClickable(element);
 					FillElement(se, element, key, value);
 				}
 			} catch (SecurityException e) {
-				se.log().error(
-						"SecurityException encountered when attempting to get element: " + key + " on " + sheetName, e);
-				se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+				se.reporter().reportErrorCapture(sheetName, e, se);
 				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			se.log().error(
-					e.toString() + " encountered when new instance of page: " + sheetName + " attempted to be created.",
-					e);
-			se.reporter().reportErrorCapture("Error accessing page.", "Page Name: " + sheetName, sheetName, se);
+			se.log().error(e.getClass().getSimpleName() + " encountered on page: " + sheetName, e);
+			se.reporter().reportErrorCapture(sheetName, e, se);
 			e.printStackTrace();
 		}
 		return element;
@@ -126,7 +208,7 @@ public class PageProcess {
 		}
 
 		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");
-		se.reporter().reportInfo("Accessing Element", "Element: " + key + "<br>Value: " + value);
+		//se.reporter().reportInfo("Accessing Element", "Element: " + key + "<br>Value: " + value);
 
 		switch (element.getTagName()) {
 		case "input":
@@ -139,10 +221,9 @@ public class PageProcess {
 					element.sendKeys(value);
 				}
 			} catch (NoSuchElementException e) {
-				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
+				se.log().error(e.getClass().getSimpleName() + " encountered when accessing \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
-						key, se);
+				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
 			break;
@@ -151,35 +232,48 @@ public class PageProcess {
 				se.element().Click(element);
 				// element.click();
 			} catch (NoSuchElementException e) {
-				se.log().error("NoSuchElementException encountered when trying to access \"" + key + "\"", e);
+				se.log().error(e.getClass().getSimpleName() + " encountered when accessing \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
-						key, se);
+				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
 			break;
 		case "select":
 			try {
 				Select dropDownValue = new Select(element);
-				dropDownValue.selectByValue(value);
-			} catch (NoSuchElementException e) {
-				se.log().error("NoSuchElementException encountered when trying to locate value \"" + value
-						+ "\" in element \"" + key + "\" \n", e);
-				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
-						key, se);
-				e.printStackTrace();
+				dropDownValue.selectByVisibleText(value);	
 			}
+			catch (NoSuchElementException e2) {
+				
+				try {
+					Select dropDownValue1 = new Select(element);
+					dropDownValue1.selectByValue(value);
+				}
+					catch (NoSuchElementException e1) {
+						
+						
+						try {
+							Select dropDownValue2 = new Select(element);
+
+							dropDownValue2.selectByIndex(Integer.valueOf(value));
+						}
+						catch (NoSuchElementException e) {
+							se.log().error(e.getClass().getSimpleName() + " encountered when getting value \"" + value
+									+ "\" in element \"" + key + "\" \n", e);
+							System.out.println("***** Recommend reviewing column head data entry *****");
+							se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
+							e.printStackTrace();
+						}
+					 }}
 			break;
 		case "a":
 			try {
 				se.element().Click(element);
 				// element.click();
 			} catch (NoSuchElementException e) {
-				se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
+				se.log().error(e.getClass().getSimpleName() + " encountered for element: \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
-						key, se);
+				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
 			break;
@@ -188,10 +282,9 @@ public class PageProcess {
 				se.element().Click(element);
 				// element.click();
 			} catch (NoSuchElementException e) {
-				se.log().error("NoSuchElementException encountered when trying to find \"" + key + "\"", e);
+				se.log().error(e.getClass().getSimpleName() + " encountered for element: \"" + key + "\"", e);
 				System.out.println("***** Recommend reviewing column head data entry *****");
-				se.reporter().reportErrorCapture("Could Not Access Element", "Element: " + key + "<br>Value: " + value,
-						key, se);
+				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
 			break;
@@ -199,7 +292,7 @@ public class PageProcess {
 			ActionBasedOnValue(se, element, value);
 
 		}
-		se.reporter().reportPass("Accessing Element", "Element: " + key + "<br>Value: " + value);
+		se.reporter().reportStepPass("Accessing Element", "Element: " + key + "<br>Value: " + value);
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
@@ -309,7 +402,6 @@ public class PageProcess {
 		String action = split[0].trim();
 		System.out.println(action);
 		String xpath = "(//*[contains(text(), '" + split[1].trim() + "')] | //*[@value='" + split[1].trim() + "'])";
-		System.out.println("DYNAMIC X PATH: " + xpath);
 		By el = By.xpath(xpath);
 		WebElement element = se.element().getElement(el, true);
 
@@ -325,15 +417,15 @@ public class PageProcess {
 			// }
 			else {
 				se.log().debug("Dynamic XPATH invoked with invalid action: " + action);
-				se.reporter().reportError("Dynamic XPATH invoked with invalid action.", "Action: " + action);
+				se.reporter().reportStepFail("Dynamic XPATH invoked with invalid action.", "Action: " + action);
 				return;
 			}
 		} catch (NoSuchElementException e) {
-			se.log().error("NoSuchElementException encountered for dynamic XPATH: " + xpath + "\n", e);
-			se.reporter().reportError("Error encountered with dynamic XPATH: " + xpath, "Action: " + action);
+			se.log().error(e.getClass().getSimpleName() + " encountered for dynamic XPATH: " + xpath + "\n", e);
+			se.reporter().reportErrorCapture("dynamic XPATH - " + xpath, e, se);
 		} catch (Exception e) {
-			se.log().error("Exception encountered with the dynamic XPATH: " + xpath + "\n", e);
-			se.reporter().reportError("Error encountered with dynamic XPATH: " + xpath, "Action: " + action);
+			se.log().error(e.getClass().getSimpleName() + " encountered for dynamic XPATH: " + xpath + "\n", e);
+			se.reporter().reportErrorCapture("dynamic XPATH - " + xpath, e, se);
 		}
 	}
 
@@ -350,4 +442,25 @@ public class PageProcess {
 			return false;
 	}
 
+	private static void continueIfException(SeHelper se, String sheetName, String key, Exception e) {
+		
+		String continueIfException = SystemPropertyUtil.getContinueIfException().trim();
+		
+		if (continueIfException.equalsIgnoreCase("Yes")) {
+			
+			return; // if yes keep running 
+			
+		} else if (continueIfException.equalsIgnoreCase("No")) {
+			
+			// if no end test
+			se.log().debug("The test ended early because the element: " + key
+					+ " could not be found on page " + sheetName);
+			se.reporter().reportInfo("The test ended early because the element: " + key
+					+ " could not be found.", "Page: " + sheetName);
+
+			se.stopRunning();
+		}
+
+		return;
+	}
 }

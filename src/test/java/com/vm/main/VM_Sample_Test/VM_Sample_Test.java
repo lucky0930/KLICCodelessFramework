@@ -2,94 +2,169 @@ package com.vm.main.VM_Sample_Test;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Parameters;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.io.FileUtils;
-import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
-
-import com.test.automation.common.BaseTest;
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
-import com.test.automation.common.Utils.TestPageFactory;
+import com.test.automation.common.Utils.ExcelReader;
 import com.test.automation.common.Utils.TestUtil;
 import com.test.automation.common.framework.Util;
-import com.test.automation.common.framework.Browser.Browsers;
-import com.test.automation.common.framework.ExtentReporter;
 
-public class VM_Sample_Test extends BaseTest {
+import atu.testrecorder.ATUTestRecorder;
+import atu.testrecorder.exceptions.ATUTestRecorderException;
 
-	ArrayList<TestUtil> testsArray = new ArrayList<>();
+public class VM_Sample_Test {
+
+	List<TestUtil> testsArray = new ArrayList<TestUtil>();
+	List<String> lstOfTestCasesToExecute = new ArrayList<String>();
 
 	private String reportPath;
 	private ExtentReports report;
-
+	private int numberOfBrowsers;
+	private int numberOfTests;
+	static ExcelReader excelReader = new ExcelReader(true);
+	static ATUTestRecorder recorder;
+	
 	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
-
 		reportPath = SystemPropertyUtil.getExtentReportPath() + "Run_" + Util.getCurrentDate() + "_"
 				+ Util.getCurrentTime();
 
 		report = new ExtentReports(reportPath + "\\ReportSummary.html");
+
+		lstOfTestCasesToExecute = GetTestRunnerCases();
+		numberOfBrowsers = SystemPropertyUtil.getNumberOfBrowsers();
+		numberOfTests = lstOfTestCasesToExecute.size();
+	}
+
+	private List<String> GetTestRunnerCases() {
+
+		TestUtil testUtil = new TestUtil();
+		return testUtil.ExecuteTestRunner();
+
 	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	protected void beforeMethod(Method method) {
+	protected synchronized void beforeMethod(Method method) throws MalformedURLException {
+		DateFormat dateFormat = new SimpleDateFormat ("yy-mm-dd--HH-mm-ss");
+		Date date = new Date();
+		SeHelper se = new SeHelper();
 
-		// add test cases to list to execute
-		testsArray.add(new TestUtil(report, method, "101"));
-		testsArray.add(new TestUtil(report, method, "102"));
-		testsArray.add(new TestUtil(report, method, "105"));
+		try {
+			recorder = new ATUTestRecorder(System.getProperty("user.dir"), "\\VideoLogs\\" + method.getName() + "-" + dateFormat.format(date),false);
+		}
+		catch (ATUTestRecorderException e)
+		{
+			System.out.println(e.toString());
+			se.log().error("Error creating video file", e);
+		}
+		try {
+			recorder.start();
+		}
+		catch (Exception e) {
+			se.log().error("Error starting video recording", e);
+		}
+		
+		// add test cases to testsArray to execute
+		for (String testCaseNumber : lstOfTestCasesToExecute) {
+			TestUtil testUtil = new TestUtil(report, method, testCaseNumber);
+			testsArray.add(testUtil);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
-	public void VM_Test_Method() {
+	public void VM_Test() {
 
-		// start threads
-		for (TestUtil test : testsArray) {
-			test.start();
-		}
-
-		// need to wait for threads to finish before proceeding		
-		while (!testsArray.isEmpty()) {
+		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) { // running tests with parallel execution
 			
-			for (TestUtil test : testsArray) {
+			int count = 0;
+			
+			while (count < numberOfTests) {
 				
-				if (test.isAlive() == false) {
-					test.endTest();
-					testsArray.remove(test);
-					break;
+				List<TestUtil> testsParallel = new ArrayList<TestUtil>();
+				
+				// only execute the specified number of tests at a time
+				for (int i = 0; i < numberOfBrowsers; i++) {
+					
+					testsParallel.add(testsArray.get(count));
+					count++;
+					
+					if (count == numberOfTests) {
+						break;
+					}
 				}
+
+				// start threads
+				for (TestUtil test : testsParallel) {
+					test.start();
+				}
+
+				// need to wait for threads to finish before proceeding
+				while (!testsParallel.isEmpty()) {
+
+					for (TestUtil test : testsParallel) {
+
+						if (test.isAlive() == false) {
+							test.endTest();
+							testsParallel.remove(test);
+							break;
+						}
+					}
+				}
+			}
+			
+		} else { // running the tests without parallel execution
+
+			for (TestUtil test : testsArray) {
+
+				test.ExecuteTest();
+				test.endTest();
 			}
 		}
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod() {
-
+		try {
+			recorder.stop();
+		}
+		catch (Exception e) {
+			SeHelper se = new SeHelper();
+			se.log().error("Unable to stop screen recording", e);
+		}
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void afterSuite() {
 
-		// Close ExtentReport
+		// Close extent tests
+		for (TestUtil test : testsArray) {
+			
+			// If the test did not get to run, report it
+			if (test.getExtent().getRunStatus() == LogStatus.UNKNOWN) {
+				
+				test.getExtent().log(LogStatus.SKIP, "This test was skipped due to an error in a previous test.");
+			}
+			
+			test.endExtentTest();
+		}
+
+		// Close extent report
 		report.flush();
 		report.close();
 

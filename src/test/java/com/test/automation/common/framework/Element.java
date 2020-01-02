@@ -5,20 +5,13 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import com.relevantcodes.extentreports.ExtentTest;
-import com.relevantcodes.extentreports.LogStatus;
 import com.test.automation.common.SeHelper;
-import com.test.automation.common.SystemPropertyUtil;
-import com.test.automation.common.Utils.TestUtil;
 
 /**
  * Element wrapper class. Contains all things WebElement related. Each method
@@ -54,62 +47,18 @@ public class Element {
 	 * @return
 	 */
 	public WebElement getElement(final By locator) {
-		try {
+		
+		
 			return se.driver().findElement(locator);
-		} catch (NoSuchElementException e) {
-			String errorName = "NoSuchElementException Exception in getElement:";
-			se.log().logSeStep(errorName + e.getMessage());
-			se.log().logTcError(errorName, se.browser().takeScreenShot());
-			se.reporter().reportErrorCapture("Error accessing element in getElement.",
-					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
-			continueIfException(e);
-			return null;
-		} catch (Exception e) {
-			String errorName = "Un-handled Exception in getElement:";
-			se.log().logSeStep(errorName + e.getMessage());
-			se.log().logTcError(errorName, se.browser().takeScreenShot());
-			se.reporter().reportErrorCapture("Error accessing element in getElement.",
-					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
-			return null;
-		}
 	}
 	
 	public WebElement getElement(final By locator, boolean wait) {
-		try {
 			se.waits().waitForElement(locator);
 			return se.driver().findElement(locator);
-		} catch (NoSuchElementException e) {
-			String errorName = "NoSuchElementException Exception in getElement:";
-			se.log().logSeStep(errorName + e.getMessage());
-			se.log().logTcError(errorName, se.browser().takeScreenShot());
-			se.reporter().reportErrorCapture("Error accessing element in getElement.",
-					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
-			continueIfException(e);
-			return null;
-		} catch (Exception e) {
-			String errorName = "Un-handled Exception in getElement:";
-			se.log().logSeStep(errorName + e.getMessage());
-			se.log().logTcError(errorName, se.browser().takeScreenShot());
-			se.reporter().reportErrorCapture("Error accessing element in getElement.",
-					e.getClass().getSimpleName(), e.getClass().getSimpleName(), se);
-			return null;
-		}
 	}
 
 	public static WebElement getElement(WebDriver driver, By locator) {
-		try {
 			return driver.findElement(locator);
-		} catch (NoSuchElementException e) {
-			String errorName = "NoSuchElementException Exception in getElement:";
-			// se.log().logSeStep(errorName + e.getMessage());
-			// se.log().logTcError(errorName, se.browser().takeScreenShot());
-			return null;
-		} catch (Exception e) {
-			String errorName = "Un-handled Exception in getElement:";
-			// se.log().logSeStep(errorName + e.getMessage());
-			// se.log().logTcError(errorName, se.browser().takeScreenShot());
-			return null;
-		}
 	}
 
 	/**
@@ -831,12 +780,13 @@ public class Element {
 	public boolean Click(WebElement Element) {
 		
 		
-		
-		if (Element != null && Element.isDisplayed() && Element.isEnabled()) {
+
+		if (Element != null) {
 			try {
+				if(!Element.isDisplayed() || !Element.isEnabled()) {
 				se.waits().waitForElementIsDisplayed(Element);
 				se.waits().waitForElementIsClickable(Element);
-				
+				}
 				// se.log().logSeStep("Click Element : " + Element.toString());
 				Element.click();
 				return true;
@@ -1011,24 +961,5 @@ public class Element {
 		} catch (Exception e) {
 			return flag;
 		}
-	}
-	
-	private void continueIfException(Exception e) {
-		String continueIfException = SystemPropertyUtil.getContinueIfException().trim();
-		
-		if (continueIfException.equalsIgnoreCase("Yes")) {
-			return;
-		} else if (continueIfException.equalsIgnoreCase("No")) {
-			//end test
-
-			String errorName = "NoSuchElementException Exception in getElement:";
-			se.log().logSeStep(errorName + e.getMessage());
-			se.log().logTcError(errorName, se.browser().takeScreenShot());
-			se.log().debug("The test ended early due to an error.");
-			se.reporter().reportInfo("The test ended early due to an error.", e.getClass().getSimpleName());
-			se.stopRunning();
-		}
-
-		return;
 	}
 }

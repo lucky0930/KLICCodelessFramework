@@ -10,12 +10,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
 
 public class Waits {
 	private SeHelper se;
 
-	private int defaultTimeOut = 20;
-	private int globalSeTimeOut = 20;
+	private int defaultTimeOut = SystemPropertyUtil.getExplicitWaitTime();;
+	private int globalSeTimeOut = SystemPropertyUtil.getExplicitWaitTime();
 
 	private boolean inFrame = false;
 
@@ -81,6 +82,10 @@ public class Waits {
 		return waitForElementIsDisplayed(element, globalSeTimeOut);
 	}
 
+	
+	public boolean waitForElementIsEnabled(WebElement element) {
+		return waitForElementIsEnabled(element,globalSeTimeOut);
+	}
 	/**
 	 * Wait for an element, using specified timeout
 	 *
@@ -111,11 +116,18 @@ public class Waits {
 	}
 	
 	
-	public boolean waitForElementVisible(final By locator) {
+	public boolean waitForElementVisible(final By locator, int timeOutInSeconds) {
 		
 		try {
+			
+			new WebDriverWait(se.driver(), timeOutInSeconds).ignoring(RuntimeException.class)
+			.until(new ExpectedCondition<WebElement>() {
+				public WebElement apply(WebDriver d) {
+					return d.findElement(locator);
+				}
+			});
 			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
-				.invisibilityOfElementLocated(locator));
+				.visibilityOfElementLocated(locator));
 			return true;
 			
 		}catch (TimeoutException e) {
@@ -204,7 +216,7 @@ public class Waits {
 	 * @param timeOutInSeconds
 	 * @return
 	 */
-	public boolean waitForElementIsDisplayed(final WebElement element, int timeOutInSeconds) {
+	private boolean waitForElementIsDisplayed(final WebElement element, int timeOutInSeconds) {
 		try {
 			new WebDriverWait(se.driver(), timeOutInSeconds).ignoring(RuntimeException.class)
 					.until(new ExpectedCondition<Boolean>() {
@@ -225,6 +237,29 @@ public class Waits {
 
 	}
 
+	
+	
+	
+	public boolean waitForElementIsEnabled(final WebElement element, int timeOutInSeconds) {
+		try {
+			new WebDriverWait(se.driver(), timeOutInSeconds).ignoring(RuntimeException.class)
+					.until(new ExpectedCondition<Boolean>() {
+						public Boolean apply(WebDriver d) {
+							return element.isEnabled();
+						}
+					});
+			return true;
+		} catch (TimeoutException e) {
+			se.log().logSeStep("Timed out waiting for element " + element.toString());
+			se.verify().reportError("Timed Out Waiting For Element");
+			return false;
+		} catch (Exception e) {
+			String errorName = "Un-handled Exception in waitForElement: ";
+			se.log().logSeStep(errorName + e + ": " + e.getMessage());
+			return false;
+		}
+
+	}
 	/**
 	 * Returns true if element exists
 	 *

@@ -26,67 +26,155 @@ import com.test.automation.common.framework.Util;
 public class TestUtil extends Thread {
 
 	String TESTDATA_SHEET_PATH = SystemPropertyUtil.getTestDataSheetPath();
+	String TEST_RUNNER_PATH = SystemPropertyUtil.getTestRunnerPath();
 
-	ExcelReader excelReader;
+	ExcelReader excelReader = new ExcelReader();
 	SeHelper se;
 	private ExtentReports report;
 	Method method;
 	String TestCaseNumber;
-	
-	public TestUtil(ExtentReports report, Method method, String testCaseNumber) {
+	ExtentTest test;
+
+	public TestUtil(ExtentReports report, Method method, String TestCaseNumber) {
 		this.report = report;
 		this.method = method;
-		this.TestCaseNumber = testCaseNumber;
-		excelReader = new ExcelReader();
-		se = new SeHelper();
+		this.TestCaseNumber = TestCaseNumber;
+		this.se = new SeHelper();
+
+		this.test = report.startTest("Test Case Number: " + TestCaseNumber);
+		test.assignAuthor("VAM QA");
+		test.assignCategory(method.getName());
+
+		ExtentReporter reporter = new ExtentReporter(test);
+		se.setReporter(reporter);
 	}
 
-	@Override
+	public TestUtil() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void run() {
-		
+
 		ExecuteTest();
 	}
 
 	public void ExecuteTest() {
-		
-		initialize();
-		
-		se.browser().get(SystemPropertyUtil.getBaseStoreUrl());
 
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = null;
+		initialize();
+
+		se.browser().get(SystemPropertyUtil.getBaseUrl());
+
+		LinkedHashMap<String, LinkedHashMap<String, String>> mydata = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		LinkedHashMap<String, LinkedHashMap<String, String>> xpathData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+
+		try {
+			
+			mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se);
+			xpathData = excelReader.GetTestData("Locators", TESTDATA_SHEET_PATH, se);
+			
+		} catch (Exception e) {
+
+			System.out.println("***** Unable to read the Excel sheet Data *****");
+			se.log().error(e.getClass().getSimpleName() + " encountered while trying to read Excel sheet data.", e);
+			se.reporter().reportError("Reading Excel data.", e);
+			return;
+		}
+		
+		if (mydata == null || xpathData == null) {
+			
+			return;
+		}
+
+//		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = defaultData;
+//		
+//		defaultData.clear();
+
+
+		synchronized ("Locators") {
+			// xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH);
+		}
 
 		synchronized (TestCaseNumber) {
-			tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
+			// tableData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH);
 		}
 
 		List<String> sheetCollection1 = new ArrayList<String>();
 		List<String> actualSheetCollection = new ArrayList<String>();
 
-		tableData.entrySet().forEach(entry -> {
-			String sheetName = entry.getKey();
+		try {
+			mydata.entrySet().forEach(entry -> {
+				String sheetName = entry.getKey();
 
-			actualSheetCollection.add(entry.getKey());
-			if (sheetName.contains("$")) {
-				sheetName = sheetName.split(Pattern.quote("$"))[0];
+				actualSheetCollection.add(entry.getKey());
+				if (sheetName.contains("$")) {
+					sheetName = sheetName.split(Pattern.quote("$"))[0];
+				}
+				sheetCollection1.add(sheetName);
+			});
+
+			for (int i = 0; i < mydata.size(); i++) {
+
+				if (se.keepRunning()) {
+					LinkedHashMap<String, String> actualData = mydata.get(actualSheetCollection.get(i));
+					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
+					// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
+					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData);
+				} else {
+					break;
+				}
 			}
-			sheetCollection1.add(sheetName);
-		});
+			
+		} catch (Exception e) {
+			
+			se.log().error(e.getClass().getSimpleName() + " encountered during ExecuteTest.", e);
+			se.reporter().reportError("ExecuteTest", e);
+			return;
+		}
+	}
 
-		for (int i = 0; i < tableData.size(); i++) {
+	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
+			LinkedHashMap<String, String> actualxPathData) {
 
-			if (se.keepRunning()) {
-				LinkedHashMap<String, String> actualData = tableData.get(actualSheetCollection.get(i));
-				ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
-			} else {
-				break;
-			}
+		se.log().logSeStep("Opening page: " + sheetName);
+		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
+
+		se.waits().waitForPageLoad();
+
+		try {
+			actualData.entrySet().forEach(entry -> {
+
+				if (!se.keepRunning()) {
+					return;
+				}
+
+				System.out.println(entry.getKey() + " => " + entry.getValue());
+
+				if (entry.getKey() == null || entry.getValue() == null) {
+
+					// skip
+
+				} else if (entry.getKey().equalsIgnoreCase("TestCaseNumber")
+						|| entry.getKey().equalsIgnoreCase("Flow")) {
+
+					// skip
+
+				} else {
+					if (entry.getValue() != null)
+						System.out.println(actualxPathData.get(entry.getKey()));
+					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
+							actualxPathData.get(entry.getKey()));
+				}
+			});
+			se.waits().waitForPageLoad();
+		} catch (NullPointerException e) {
+
 		}
 	}
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData) {
 
-		se.log().logSeStep("Opening page: " + sheetName);
-		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
+		se.log().logSeStep("Accessing page: " + sheetName);
+		se.reporter().reportInfo("Accessing Page", "Page Name: " + sheetName);
 
 		actualData.entrySet().forEach(entry -> {
 
@@ -114,25 +202,30 @@ public class TestUtil extends Thread {
 		se.log().trace("Test Case Number: " + TestCaseNumber);
 		se.log().trace("Browser: " + myBrowser.toString());
 		se.util().sleep(1000);
-		ExtentTest test = report.startTest("Test Case Number: " + TestCaseNumber);
-		test.assignAuthor("VAM QA");
-		test.assignCategory(method.getName());
 		test.log(LogStatus.INFO, "Started Execution",
-				"URL: " + SystemPropertyUtil.getBaseStoreUrl() + "<br>Browser: " + se.browser().getBrowserName());
-		ExtentReporter reporter = new ExtentReporter(test);
-		se.setReporter(reporter);
+				"URL: " + SystemPropertyUtil.getBaseUrl() + "<br>Browser: " + se.browser().getBrowserName());
 	}
 
 	public void endTest() {
-		
-		se.log().trace("End of " + method.getName() + " Result: " + se.reporter().getResult() + "\n");
+
+		se.log().trace("End of Test Case #" + TestCaseNumber + " Result: " + se.reporter().getResult() + "\n");
 		se.reporter().reportResult(se);
-		report.endTest(se.reporter().getTest());
-		report.getReportId();
 		se.log().printLogBuilder();
-		se.log().testSeperator();
 		se.log().couchDb(se.reporter().getResult(), String.valueOf(se.reporter().getResult()));
 		se.browser().quit();
 	}
 
+	public void endExtentTest() {
+		report.endTest(se.reporter().getTest());
+		report.getReportId();
+	}
+
+	public List<String> ExecuteTestRunner() {
+		List<String> lstOfTC = excelReader.GetTestRunnerData(TEST_RUNNER_PATH);
+		return lstOfTC;
+	}
+
+	public ExtentTest getExtent() {
+		return test;
+	}
 }

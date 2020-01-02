@@ -17,8 +17,6 @@ public class PullFromConfig {
                    
 
             prop.load(inputStream);
-            System.out.println(prop.getProperty("BaseURL"));
-            System.out.println(prop.getProperty("Browser"));
 
         } catch (Exception e) {
             System.out.println("Exception: " + e);
@@ -33,5 +31,9 @@ public class PullFromConfig {
 	
 	public String getConfigProp(String property) {
 		return this.prop.getProperty(property);
+	}
+	
+	private void modifyConfigProp(String property, String value) {
+		this.prop.put(property, value);
 	}
 }
