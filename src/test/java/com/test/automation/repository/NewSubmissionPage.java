@@ -88,7 +88,7 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(SSN, true);
 	}
 
-	public static By FEIN = By.xpath("//*[@ng-blur=\"validatefeinNumber()\"]");
+	public static By FEIN = By.xpath("//*[@id='IdfeinNumber']");
 
 	public static WebElement FEIN(SeHelper se) {
 		se.waits().waitForElement(FEIN);
@@ -162,7 +162,7 @@ public class NewSubmissionPage extends Page {
 		return se.element().getElement(cancel);
 	}
 
-	public static By SelectUser = By.xpath("//input[@name=\"Duplicate\"]");
+	public static By SelectUser = By.xpath("//input[@value=2]");
 
 	public static WebElement SelectUser(SeHelper se) {
 		se.waits().waitForElementIsDisplayed(SelectUser);
@@ -181,6 +181,12 @@ public class NewSubmissionPage extends Page {
 	public static WebElement SelectAndProceed1(SeHelper se) {
 		se.waits().waitForElement(SelectAndProceed1);
 		return se.element().getElement(SelectAndProceed1, true);
+	}
+	public static By SelectUser2 = By.xpath("//*[@name=\"Duplicate\"]");
+
+	public static WebElement SelectUser2(SeHelper se) {
+		se.waits().waitForElement(SelectUser2);
+		return se.element().getElement(SelectUser2, true);
 	}
 
 	public static By VerifyCustomerAccountName1 = By.xpath("//*[@id='IdCustomerAccountName']");
