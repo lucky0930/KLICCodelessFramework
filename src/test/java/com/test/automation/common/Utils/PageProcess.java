@@ -77,6 +77,7 @@ public class PageProcess {
 					System.out.println("***** Recommend reviewing data entry for this test *****");
 					se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 					e.printStackTrace();
+					return null;
 				}
 
 				if (element != null) {
