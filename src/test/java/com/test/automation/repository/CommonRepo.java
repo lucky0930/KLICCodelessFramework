@@ -16,11 +16,9 @@ public class CommonRepo {
 
 	public static WebElement ElementObject(SeHelper se, String expression) {
 		long startWait = System.nanoTime();
+
 		
-		String typeOfExpression = null;
-
-		typeOfExpression = getTypeOfExpression(expression);
-
+		String typeOfExpression = getTypeOfExpression(expression);
 //		
 //		
 //		if(typeOfExpression != null)

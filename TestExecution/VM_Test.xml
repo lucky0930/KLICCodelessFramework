@@ -4,9 +4,8 @@
 	thread-count="1" data-provider-thread-count="1">
   
 	<listeners>
-		<!--  <listener
+		<listener
 			class-name="com.test.automation.common.RetryListener" />
-			-->
 		<listener
 			class-name="com.test.automation.common.TestListener" />
 	</listeners>
@@ -20,11 +19,10 @@
 		<!-- </run> -->
 		<!-- </groups> -->
 		<classes>
-			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test">
+			<class name="com.vm.main.VM_Sample_Test.VM_Sample_Test" />
 			<methods>
 				<include name="VM_Test" />
 			</methods>
-			</class>
 		</classes>
 	</test>
 </suite>

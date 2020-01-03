@@ -583,5 +583,12 @@ public class Util {
 		return convertAbbtoState;
 	}
 	
+	public static void deleteVideoLogs(String folderPath) {
+		File directory = new File(folderPath);
+		File[] files = directory.listFiles();
+		for (File file : files) {
+			file.delete();
+		}
+	}
 
 }

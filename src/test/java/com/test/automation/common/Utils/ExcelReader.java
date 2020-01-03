@@ -305,6 +305,12 @@ public class ExcelReader {
 		  case "BaseURL":
 			  SystemPropertyUtil.updateBaseUrl(newValue);
 			  break;
+		  case "RunHeadless":
+			  SystemPropertyUtil.updateRunHeadless(newValue);
+			  break;
+		  case "RecordScreen":
+			  SystemPropertyUtil.updateRecordScreen(newValue);
+			  break;
 		  default:
 			  System.out.println("IGNORED: Invalid property name - " + property);
 		}

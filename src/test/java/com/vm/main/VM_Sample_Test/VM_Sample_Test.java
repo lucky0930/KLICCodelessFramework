@@ -5,7 +5,11 @@ import org.testng.annotations.BeforeSuite;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.AfterMethod;
@@ -14,11 +18,14 @@ import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.LogStatus;
-
+import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
 import com.test.automation.common.Utils.ExcelReader;
 import com.test.automation.common.Utils.TestUtil;
 import com.test.automation.common.framework.Util;
+
+import atu.testrecorder.ATUTestRecorder;
+import atu.testrecorder.exceptions.ATUTestRecorderException;
 
 public class VM_Sample_Test {
 
@@ -30,6 +37,7 @@ public class VM_Sample_Test {
 	private int numberOfBrowsers;
 	private int numberOfTests;
 	static ExcelReader excelReader = new ExcelReader(true);
+	ATUTestRecorder recorder;
 	
 	@BeforeSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	public void beforeSuite() throws IOException {
@@ -51,8 +59,34 @@ public class VM_Sample_Test {
 	}
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	protected void beforeMethod(Method method) {
+	protected synchronized void beforeMethod(Method method) throws MalformedURLException {
+		DateFormat dateFormat = new SimpleDateFormat ("yy-mm-dd--HH-mm-ss");
+		Date date = new Date();
+		SeHelper se = new SeHelper();
 
+		if (SystemPropertyUtil.recordScreen() && !SystemPropertyUtil.runHeadless())
+		{
+			File VLogs = new File(System.getProperty("user.dir") + "\\VideoLogs");
+			if (!VLogs.exists()) {
+				VLogs.mkdir();
+			}
+			
+			Util.deleteVideoLogs(System.getProperty("user.dir") + "\\VideoLogs");
+			try {
+				recorder = new ATUTestRecorder(System.getProperty("user.dir"), "\\VideoLogs\\" + method.getName() + "-" + dateFormat.format(date),false);
+			}
+			catch (ATUTestRecorderException e)
+			{
+				System.out.println(e.toString());
+				se.log().error("Error creating video file", e);
+			}
+			try {
+				recorder.start();
+			}
+			catch (Exception e) {
+				se.log().error("Error starting video recording", e);
+			}
+		}
 		// add test cases to testsArray to execute
 		for (String testCaseNumber : lstOfTestCasesToExecute) {
 			TestUtil testUtil = new TestUtil(report, method, testCaseNumber);
@@ -114,7 +148,20 @@ public class VM_Sample_Test {
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected void afterMethod() {
-
+		try {
+			recorder.stop();
+		}
+		catch (NullPointerException e) {
+			if (!SystemPropertyUtil.recordScreen() || SystemPropertyUtil.runHeadless()) {}
+			else {
+				SeHelper se = new SeHelper();
+				se.log().error("Screen recording failed to initialize", e);
+			}
+		}
+		catch (Exception e) {
+			SeHelper se = new SeHelper();
+			se.log().error("Unable to stop screen recording", e);
+		}
 	}
 
 	@AfterSuite(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)

@@ -48,6 +48,8 @@ public class SystemPropertyUtil {
 	private final static String explicitWaitTime = config.getConfigProp("ExplicitWaitTime");
 
 	// extra options
+	private static String runHeadless = config.getConfigProp("RunHeadless");
+	private static String recordScreen = config.getConfigProp("RecordScreen");
 	private static String runInParallel = config.getConfigProp("RunInParallel");
 	private static String numberOfBrowsers = config.getConfigProp("NumberOfBrowsers");
 	private static String continueIfException = config.getConfigProp("ContinueIfException");
@@ -140,6 +142,38 @@ public class SystemPropertyUtil {
 			runInParallel = option;
 		else
 			System.out.println("IGNORED: Parallel execution only accepts \"Yes\" or \"No\" inputs.");
+	}
+	
+	public static boolean runHeadless() {
+		if (runHeadless.equalsIgnoreCase("Yes"))
+			return true;
+		else
+			return false;
+	}
+	
+	public static void updateRunHeadless(String option) {
+		if (option.trim().isEmpty())
+			return;
+		else if (option.equalsIgnoreCase("Yes") || option.equalsIgnoreCase("No"))
+			runHeadless = option;
+		else
+			System.out.println("IGNORED: Headless Execution only accepts \"Yes\" or \"No\" inputs.");
+	}
+	
+	public static boolean recordScreen() {
+		if (recordScreen.equalsIgnoreCase("Yes"))
+			return true;
+		else
+			return false;
+	}
+	
+	public static void updateRecordScreen(String option) {
+		if (option.trim().isEmpty())
+			return;
+		else if (option.equalsIgnoreCase("Yes") || option.equalsIgnoreCase("No"))
+			recordScreen = option;
+		else
+			System.out.println("IGNORED: Screen Recording only accepts \"Yes\" or \"No\" inputs.");
 	}
 	
 	public static int getImplicitWaitTime() {
