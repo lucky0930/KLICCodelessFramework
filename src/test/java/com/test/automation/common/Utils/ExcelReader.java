@@ -71,6 +71,10 @@ public class ExcelReader {
 			if (!testCaseNumber.equalsIgnoreCase("Locators")) {
 				StartrowNum = StartrowNum + 1;
 			}
+			if (!testCaseNumber.equalsIgnoreCase("ExplicitWait") && !testCaseNumber.equalsIgnoreCase("Locators")) {
+				
+					StartrowNum = StartrowNum + 1;
+			}
 
 			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
 				Row sheetRow = sheet.getRow(row);
