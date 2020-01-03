@@ -50,6 +50,7 @@ public class SystemPropertyUtil {
 	// extra options
 	private static String runHeadless = config.getConfigProp("RunHeadless");
 	private static String recordScreen = config.getConfigProp("RecordScreen");
+	private static String keepRecordings = config.getConfigProp("KeepRecordings");
 	private static String runInParallel = config.getConfigProp("RunInParallel");
 	private static String numberOfBrowsers = config.getConfigProp("NumberOfBrowsers");
 	private static String continueIfException = config.getConfigProp("ContinueIfException");
@@ -175,6 +176,22 @@ public class SystemPropertyUtil {
 		else
 			System.out.println("IGNORED: Screen Recording only accepts \"Yes\" or \"No\" inputs.");
 	}
+
+	public static boolean keepRecordings() {
+		if (keepRecordings.equalsIgnoreCase("Yes"))
+			return true;
+		else
+			return false;
+	}
+	
+	public static void updateKeepRecordings(String option) {
+		if (option.trim().isEmpty())
+			return;
+		else if (option.equalsIgnoreCase("Yes") || option.equalsIgnoreCase("No"))
+			keepRecordings = option;
+		else
+			System.out.println("IGNORED: Keep Recordings only accepts \"Yes\" or \"No\" inputs.");
+	}
 	
 	public static int getImplicitWaitTime() {
 		return Integer.parseInt(implicitWaitTime);
@@ -193,6 +210,10 @@ public class SystemPropertyUtil {
 			return;
 		else
 			numberOfBrowsers = newNum;
+	}
+	
+	public static PullFromConfig getConfig() {
+		return config;
 	}
 
 	public static String getTestDataSheetPath() {

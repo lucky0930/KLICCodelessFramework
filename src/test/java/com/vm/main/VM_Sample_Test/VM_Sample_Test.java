@@ -70,8 +70,10 @@ public class VM_Sample_Test {
 			if (!VLogs.exists()) {
 				VLogs.mkdir();
 			}
+			if (!SystemPropertyUtil.keepRecordings()) {
+				Util.deleteVideoLogs(System.getProperty("user.dir") + "\\VideoLogs");
+			}
 			
-			Util.deleteVideoLogs(System.getProperty("user.dir") + "\\VideoLogs");
 			try {
 				recorder = new ATUTestRecorder(System.getProperty("user.dir"), "\\VideoLogs\\" + method.getName() + "-" + dateFormat.format(date),false);
 			}
