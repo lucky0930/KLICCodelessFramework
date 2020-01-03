@@ -17,7 +17,7 @@ public class Waits {
 
 	private int defaultTimeOut = SystemPropertyUtil.getExplicitWaitTime();;
 	private int globalSeTimeOut = SystemPropertyUtil.getExplicitWaitTime();
-
+	private boolean sleep = false;
 	private boolean inFrame = false;
 
 	public Waits(SeHelper se) {
@@ -40,12 +40,25 @@ public class Waits {
 	public void resetTimeOut() {
 		globalSeTimeOut = defaultTimeOut;
 	}
+	
 
 	/**
 	 * Gets the current setting for the timeout
 	 *
 	 * @return the current timeout setting
 	 */
+	
+	
+	public void setSleep() {
+		sleep = true;
+	}
+
+	
+	public boolean getSleep() {
+		
+		return sleep;
+	}
+
 	public int getTimeOut() {
 		return globalSeTimeOut;
 	}
@@ -56,6 +69,14 @@ public class Waits {
 	 * @param locator
 	 * @return
 	 */
+	
+	public void Sleep(int ms) {
+		
+		se.util().sleep(ms);
+		
+		sleep = false;
+	}
+	
 	public boolean waitForElement(final By locator) {
 		return waitForElement(locator, globalSeTimeOut);
 	}

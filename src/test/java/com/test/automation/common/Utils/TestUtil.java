@@ -66,12 +66,12 @@ public class TestUtil extends Thread {
 
 		LinkedHashMap<String, LinkedHashMap<String, String>> mydata = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		LinkedHashMap<String, LinkedHashMap<String, String>> xpathData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-
+		LinkedHashMap<String, LinkedHashMap<String, String>> exWait = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		try {
 			
 			mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se);
 			xpathData = excelReader.GetTestData("Locators", TESTDATA_SHEET_PATH, se);
-			
+			exWait = excelReader.GetTestData("ExplicitWait", TESTDATA_SHEET_PATH, se);
 		} catch (Exception e) {
 
 			System.out.println("***** Unable to read the Excel sheet Data *****");
@@ -117,8 +117,9 @@ public class TestUtil extends Thread {
 				if (se.keepRunning()) {
 					LinkedHashMap<String, String> actualData = mydata.get(actualSheetCollection.get(i));
 					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
+					LinkedHashMap<String, String> actualWaitData = exWait.get(actualSheetCollection.get(i));
 					// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
-					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData);
+					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData,actualWaitData);
 				} else {
 					break;
 				}
@@ -133,7 +134,7 @@ public class TestUtil extends Thread {
 	}
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
-			LinkedHashMap<String, String> actualxPathData) {
+			LinkedHashMap<String, String> actualxPathData,LinkedHashMap<String, String> actualWaitData) {
 
 		se.log().logSeStep("Opening page: " + sheetName);
 		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
@@ -161,13 +162,28 @@ public class TestUtil extends Thread {
 				} else {
 					if (entry.getValue() != null)
 						System.out.println(actualxPathData.get(entry.getKey()));
+						
+					if(actualWaitData != null) {
+					if(actualWaitData.get(entry.getKey()) != null) {
+						String wait = actualWaitData.get(entry.getKey());
+						
+						if(wait.contains("sleep")) {
+							wait = wait.substring(6);
+							se.waits().Sleep(Integer.parseInt(wait));
+						}
+						else {
+							se.waits().setTimeOut(Integer.parseInt(wait));
+						}
+						
+					}
+					}
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
 				}
 			});
 			se.waits().waitForPageLoad();
 		} catch (NullPointerException e) {
-
+				e.printStackTrace();
 		}
 	}
 
