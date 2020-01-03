@@ -1,6 +1,5 @@
 package com.test.automation.common.framework;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.Augmenter;
