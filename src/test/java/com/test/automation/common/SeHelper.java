@@ -235,8 +235,15 @@ public class SeHelper {
 //				addChromeExtension(capabilities);
 //				System.out.println(capabilities);
 //				driver = new ChromeDriver(capabilities);
+				capabilities = new DesiredCapabilities();
+				ChromeOptions options = new ChromeOptions();
+				if(SystemPropertyUtil.runHeadless()) {	
+					options.addArguments("--headless");
+				}
+				capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+				options.merge(capabilities);
 				System.setProperty("webdriver.chrome.driver", SystemPropertyUtil.getChromeDriverPath());
-				driver = new ChromeDriver();
+				driver = new ChromeDriver(options);
 				break;
 			case InternetExplorer:
 				capabilities = DesiredCapabilities.internetExplorer();
