@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.*;
@@ -239,6 +240,8 @@ public class SeHelper {
 				ChromeOptions options = new ChromeOptions();
 				if(SystemPropertyUtil.runHeadless()) {	
 					options.addArguments("--headless");
+					options.addArguments("--window-size=1920,1080");
+					options.addArguments("--ignore-certificate-errors");
 				}
 				capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 				options.merge(capabilities);
@@ -304,16 +307,17 @@ public class SeHelper {
 //				capabilities = DesiredCapabilities.firefox();
 //				capabilities.setCapability("marionette", true);
 				
-//				FirefoxOptions options = new FirefoxOptions();
-//				options.setLegacy(true);
-//				 driver = new FirefoxDriver(options);
+				FirefoxOptions optionsFF = new FirefoxOptions();
+				if (SystemPropertyUtil.runHeadless())
+					optionsFF.addArguments("--headless");
+				//driver = new FirefoxDriver(optionsFF);
 			    
 				System.setProperty("webdriver.gecko.driver",  SystemPropertyUtil.getGeckoDriverPath());
 				
 				capabilities = DesiredCapabilities.firefox();
 				capabilities.setCapability("marionette",true);
 				
-				driver = new FirefoxDriver();
+				driver = new FirefoxDriver(optionsFF);
 				
 
 				break;
