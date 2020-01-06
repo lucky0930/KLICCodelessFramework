@@ -42,7 +42,7 @@ public class Assertions {
 		}
 	}
 
-	public boolean verify(WebElement element, String arg) // arg should be in the format: assertion>value
+	public boolean verify(WebElement element, String arg, String key) // arg should be in the format: assertion>value
 	{
 		if (element == null) {
 			return verify(arg);
@@ -77,11 +77,11 @@ public class Assertions {
 		case "IsVisible":
 			result = element.isDisplayed();
 			if (result == Boolean.parseBoolean(expectedValue)) {
-				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is visible");
-				se.reporter().reportVerifyPass(element.getTagName() + " Is Visible", "" + result, expectedValue);
+				se.log().logSeStep("VERIFY " + assertion + ": " + key + " is visible");
+				se.reporter().reportVerifyPass(key + " Is Visible", "" + result, expectedValue);
 			} else {
-				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT visible");
-				se.reporter().reportFailCapture(element.getTagName() + " Is Visible", "" + result, expectedValue, se);
+				se.log().logSeStep("VERIFY FAILED: " + key + " is NOT visible");
+				se.reporter().reportFailCapture(key + " Is Visible", "" + result, expectedValue, se);
 			}
 			return result;
 
@@ -89,11 +89,11 @@ public class Assertions {
 			// actualValue = element.getAttribute("value");
 			result = element.isEnabled();
 			if (result == Boolean.parseBoolean(expectedValue)) {
-				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is enabled");
-				se.reporter().reportVerifyPass(element.getTagName() + " Is Enabled", "" + result, expectedValue);
+				se.log().logSeStep("VERIFY " + assertion + ": " + key + " is enabled");
+				se.reporter().reportVerifyPass(key + " Is Enabled", "" + result, expectedValue);
 			} else {
-				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT enabled");
-				se.reporter().reportFailCapture(element.getTagName() + " Is Enabled", "" + result, expectedValue, se);
+				se.log().logSeStep("VERIFY FAILED: " + key + " is NOT enabled");
+				se.reporter().reportFailCapture(key + " Is Enabled", "" + result, expectedValue, se);
 			}
 			return result;
 
@@ -101,22 +101,22 @@ public class Assertions {
 			// actualValue = element.getAttribute("value");
 			result = element.isSelected();
 			if (result == Boolean.parseBoolean(expectedValue)) {
-				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is selected");
-				se.reporter().reportVerifyPass(element.getTagName() + " Is Selected", "" + result, expectedValue);
+				se.log().logSeStep("VERIFY " + assertion + ": " + key + " is selected");
+				se.reporter().reportVerifyPass(key + " Is Selected", "" + result, expectedValue);
 			} else {
-				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
-				se.reporter().reportFailCapture(element.getTagName() + " Is Enabled", "" + result, expectedValue, se);
+				se.log().logSeStep("VERIFY FAILED: " + key + " is NOT selected");
+				se.reporter().reportFailCapture(key + " Is Enabled", "" + result, expectedValue, se);
 			}
 			return result;
 
 		case "IsSelectedValue":
 			if (element.getAttribute("checked").equals(expectedValue)) {
-				se.log().logSeStep("VERIFY " + assertion + ": " + element.getTagName() + " is selected");
-				se.reporter().reportVerifyPass(element.getTagName() + " Is Selected Value", "" + result, expectedValue);
+				se.log().logSeStep("VERIFY " + assertion + ": " + key + " is selected");
+				se.reporter().reportVerifyPass(key + " Is Selected Value", "" + result, expectedValue);
 				return true;
 			} else {
-				se.log().logSeStep("VERIFY FAILED: " + element.getTagName() + " is NOT selected");
-				se.reporter().reportFailCapture(element.getTagName() + " Is Selected Value", "" + result, expectedValue, se);
+				se.log().logSeStep("VERIFY FAILED: " + key + " is NOT selected");
+				se.reporter().reportFailCapture(key + " Is Selected Value", "" + result, expectedValue, se);
 				return false;
 			}
 
@@ -174,6 +174,13 @@ public class Assertions {
 			}
 
 			break;
+		
+		case "ReadValue":
+			String text = element.getText();
+			System.out.println("Text value found for element " + key + ": " + text);
+			se.log().logSeStep("Text value found for element " + key + ": " + text);
+			se.reporter().reportStepPass("Text value for " + key, "Value: " + text);
+			return true;
 
 		default:
 			se.log().logSeStep("VERIFY FAILED: No valid assertion provided");
@@ -193,10 +200,10 @@ public class Assertions {
 		return result;
 	}
 
-	public boolean[] verify(WebElement[] element, String[] arg) {
+	public boolean[] verify(WebElement[] element, String[] arg, String[] key) {
 		boolean[] result = new boolean[arg.length];
 		for (int i = 0; i < arg.length; i++) {
-			result[i] = verify(element[i], arg[i]);
+			result[i] = verify(element[i], arg[i], key[i]);
 		}
 
 		return result;

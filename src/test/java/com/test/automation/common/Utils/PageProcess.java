@@ -86,7 +86,7 @@ public class PageProcess {
 					}
 					if (value.contains(">")) {
 						Assertions asrt = new Assertions(se);
-						asrt.verify(element, value);
+						asrt.verify(element, value, key);
 						return element;
 					}
 					
@@ -178,7 +178,7 @@ public class PageProcess {
 					}
 					if (value.contains(">")) {
 						Assertions asrt = new Assertions(se);
-						asrt.verify(element, value);
+						asrt.verify(element, value, key);
 						return element;
 					}
 					//se.waits().waitForPageLoad();

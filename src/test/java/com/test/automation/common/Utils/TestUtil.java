@@ -167,8 +167,9 @@ public class TestUtil extends Thread {
 					if(actualWaitData.get(entry.getKey()) != null) {
 						String wait = actualWaitData.get(entry.getKey());
 						
-						if(wait.contains("sleep")) {
-							wait = wait.substring(6);
+						if(wait.contains("sleep") || wait.contains("Sleep")) {
+							//wait = wait.substring(6);
+							wait = wait.split("=")[1].trim();
 							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						else {
@@ -183,7 +184,7 @@ public class TestUtil extends Thread {
 			});
 			se.waits().waitForPageLoad();
 		} catch (NullPointerException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 		}
 	}
 
