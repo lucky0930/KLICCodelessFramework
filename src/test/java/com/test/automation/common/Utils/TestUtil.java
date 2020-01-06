@@ -166,9 +166,10 @@ public class TestUtil extends Thread {
 					if(actualWaitData != null) {
 					if(actualWaitData.get(entry.getKey()) != null) {
 						String wait = actualWaitData.get(entry.getKey());
-						
-						if(wait.contains("sleep") || wait.contains("Sleep")) {
-							//wait = wait.substring(6);
+						String sleep;
+						if(wait.substring(0,5).equalsIgnoreCase("sleep")) {
+							
+							
 							wait = wait.split("=")[1].trim();
 							se.waits().Sleep(Integer.parseInt(wait));
 						}

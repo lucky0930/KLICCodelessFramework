@@ -787,7 +787,18 @@ public class Element {
 				se.waits().waitForElementIsDisplayed(Element);
 				se.waits().waitForElementIsClickable(Element);
 				}
+
 				// se.log().logSeStep("Click Element : " + Element.toString());
+				Element.click();
+				return true;
+			}
+			
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				se.log().logSeStep("Could not click on " + Element.toString() + "Waiting for page load");
+
+				
+				se.util().sleep(5000);
+				se.waits().waitForPageLoad();
 				Element.click();
 				return true;
 			}
@@ -801,8 +812,8 @@ public class Element {
 			catch(Throwable ex) {
 				se.log().logSeStep("Could not click after trying");
 			}
-		} else
-			se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
+		} //else
+			//se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
 		return false;
 	}
 
