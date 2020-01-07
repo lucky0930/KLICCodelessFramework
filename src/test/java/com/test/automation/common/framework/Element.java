@@ -783,9 +783,10 @@ public class Element {
 
 		if (Element != null) {
 			try {
+				se.waits().waitForElementIsClickable(Element);
 				if(!Element.isDisplayed() || !Element.isEnabled()) {
 				se.waits().waitForElementIsDisplayed(Element);
-				se.waits().waitForElementIsClickable(Element);
+				
 				}
 
 				// se.log().logSeStep("Click Element : " + Element.toString());

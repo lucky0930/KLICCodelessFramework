@@ -120,7 +120,7 @@ public class Waits {
 	public boolean waitForElementIsClickable(WebElement element) {
 		
 		try {
-			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
+			new WebDriverWait( se.driver(),globalSeTimeOut).ignoring(org.openqa.selenium.ElementClickInterceptedException.class).until(ExpectedConditions
 					.elementToBeClickable(element));
 			return true;
 			
@@ -141,12 +141,7 @@ public class Waits {
 		
 		try {
 			
-			new WebDriverWait(se.driver(), timeOutInSeconds).ignoring(RuntimeException.class)
-			.until(new ExpectedCondition<WebElement>() {
-				public WebElement apply(WebDriver d) {
-					return d.findElement(locator);
-				}
-			});
+
 			new WebDriverWait( se.driver(),globalSeTimeOut).until(ExpectedConditions
 				.visibilityOfElementLocated(locator));
 			return true;
