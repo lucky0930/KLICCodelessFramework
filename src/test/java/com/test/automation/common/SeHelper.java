@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -321,7 +322,22 @@ public class SeHelper {
 				
 
 				break;
-			case edgedriver:
+			case Edge:
+//				if (SystemPropertyUtil.runHeadless()) {
+//					System.setProperty("webdriver.chrome.driver", SystemPropertyUtil.getHeadlessEdgePath());
+////					EdgeOptions optionsHE = new EdgeOptions();
+//					ChromeOptions optionsHE = new ChromeOptions();
+////					ChromeOptions temp = new ChromeOptions();
+////					capabilities = new DesiredCapabilities();
+////					capabilities.setCapability(ChromeOptions.CAPABILITY, optionsHE);
+////			        temp.setBinary(SystemPropertyUtil.getHeadlessEdgePath());
+//					optionsHE.setBinary(SystemPropertyUtil.getHeadlessEdgePath());
+////			        optionsHE.merge(temp);
+////					optionsHE.merge(capabilities);
+//					optionsHE.addArguments("--headless");
+//					driver = new ChromeDriver(optionsHE);
+//					break;
+//				}
 				System.setProperty("webdriver.edge.driver", SystemPropertyUtil.getEdgeDriverPath());
 				capabilities = DesiredCapabilities.edge();
 				driver = new EdgeDriver();

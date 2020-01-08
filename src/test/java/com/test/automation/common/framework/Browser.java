@@ -27,7 +27,7 @@ public class Browser {
 	 */
 	public static enum Browsers {
 		HtmlUnit, Chrome, InternetExplorer, SauceChrome, SauceIE, GridChrome, GridInternetExplorer, VMChrome, VMIE,
-		edgedriver, geckodrivers
+		Edge, geckodrivers
 	};
 
 	// Wait Conditions
