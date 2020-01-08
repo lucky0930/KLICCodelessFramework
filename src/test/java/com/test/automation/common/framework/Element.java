@@ -783,12 +783,21 @@ public class Element {
 
 		if (Element != null) {
 			try {
+				se.waits().waitForElementIsClickable(Element);
 				if(!Element.isDisplayed() || !Element.isEnabled()) {
 				se.waits().waitForElementIsDisplayed(Element);
-				se.waits().waitForElementIsClickable(Element);
+				
 				}
+
 				// se.log().logSeStep("Click Element : " + Element.toString());
 				Element.click();
+				return true;
+			}
+			
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+                executor.executeScript("arguments[0].click();", Element);
+
 				return true;
 			}
 			
@@ -801,8 +810,8 @@ public class Element {
 			catch(Throwable ex) {
 				se.log().logSeStep("Could not click after trying");
 			}
-		} else
-			se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
+		} //else
+			//se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
 		return false;
 	}
 

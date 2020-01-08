@@ -28,6 +28,7 @@ public class PageProcess {
 
 		
 		try {
+			se.waits().waitForPageLoad();
 
 	           if (value == null) {
 	                return null;
@@ -86,7 +87,7 @@ public class PageProcess {
 					}
 					if (value.contains(">")) {
 						Assertions asrt = new Assertions(se);
-						asrt.verify(element, value);
+						asrt.verify(element, value, key);
 						return element;
 					}
 					
@@ -178,7 +179,7 @@ public class PageProcess {
 					}
 					if (value.contains(">")) {
 						Assertions asrt = new Assertions(se);
-						asrt.verify(element, value);
+						asrt.verify(element, value, key);
 						return element;
 					}
 					//se.waits().waitForPageLoad();
@@ -227,6 +228,11 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
+				se.waits().waitForPageLoad();
+				se.element().Click(element);
+			}
 			break;
 		case "button":
 			try {
@@ -237,6 +243,11 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
+			}
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
+				se.waits().waitForPageLoad();
+				se.element().Click(element);
 			}
 			break;
 		case "select":
@@ -266,6 +277,11 @@ public class PageProcess {
 							e.printStackTrace();
 						}
 					 }}
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
+				se.waits().waitForPageLoad();
+				se.element().Click(element);
+			}
 			break;
 		case "a":
 			try {
@@ -277,6 +293,11 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
+				se.waits().waitForPageLoad();
+				se.element().Click(element);
+			}
 			break;
 		case "label":
 			try {
@@ -287,6 +308,11 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
+			}
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
+				se.waits().waitForPageLoad();
+				se.element().Click(element);
 			}
 			break;
 		default:

@@ -166,24 +166,27 @@ public class TestUtil extends Thread {
 					if(actualWaitData != null) {
 					if(actualWaitData.get(entry.getKey()) != null) {
 						String wait = actualWaitData.get(entry.getKey());
-						
-						if(wait.contains("sleep")) {
-							wait = wait.substring(6);
+						String sleep;
+						if(wait.substring(0,5).equalsIgnoreCase("sleep")) {
+							
+							
+							wait = wait.split("=")[1].trim();
 							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						else {
-							se.waits().setTimeOut(Integer.parseInt(wait));
+							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						
 					}
 					}
+					se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
 				}
 			});
 			se.waits().waitForPageLoad();
 		} catch (NullPointerException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 		}
 	}
 
