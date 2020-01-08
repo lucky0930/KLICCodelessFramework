@@ -54,6 +54,7 @@ public class SystemPropertyUtil {
 	private static String runInParallel = config.getConfigProp("RunInParallel");
 	private static String numberOfBrowsers = config.getConfigProp("NumberOfBrowsers");
 	private static String continueIfException = config.getConfigProp("ContinueIfException");
+	private static String retryCount = config.getConfigProp("RetryCount");
 
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
 			? Integer.parseInt(System.getProperty(windowWidthKey))
@@ -79,6 +80,20 @@ public class SystemPropertyUtil {
 	private final static String localeUrl = System.getProperties().containsKey(localeUrlKey)
 			? System.getProperty(localeUrlKey)
 			: localeUrlDefault;
+			
+	public static int getRetryCount() {
+		
+		try {
+			
+			return Integer.parseInt(retryCount);
+			
+		} catch (Exception e) {
+			
+			System.out.println("Failed to read retry count.");
+		}
+		
+		return 0;
+	}
 
 	public static String getBaseUrl() {
 		return baseUrlDefault;

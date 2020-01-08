@@ -100,6 +100,10 @@ public class VM_Sample_Test {
 	@Test(description = "VM Automation Framework", timeOut = 500000000)
 	public void VM_Test() {
 
+		int retryCount = SystemPropertyUtil.getRetryCount();
+		List<TestUtil> activeTests = new ArrayList<TestUtil>();
+		activeTests.addAll(testsArray);
+		
 		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) { // running tests with parallel execution
 			
 			int count = 0;
@@ -130,8 +134,15 @@ public class VM_Sample_Test {
 					for (TestUtil test : testsParallel) {
 
 						if (test.isAlive() == false) {
-							test.endTest();
-							testsParallel.remove(test);
+					 		test.endTest();
+							testsParallel.remove(test); // remove from parallel tests list if the thread stopped
+							
+							if(test.getExtent().getRunStatus() == LogStatus.PASS) {
+								
+								// if the test passed, remove from active list (to stop from retrying)
+								activeTests.remove(test);
+							}
+							
 							break;
 						}
 					}
@@ -144,7 +155,37 @@ public class VM_Sample_Test {
 
 				test.ExecuteTest();
 				test.endTest();
+				
+				if (test.getExtent().getRunStatus() == LogStatus.PASS) {
+					
+					// if the test passed, remove from active list (to stop from retrying)
+					activeTests.remove(test);
+				}
 			}
+		}
+		
+		// perform test case retries if necessary
+		while (!activeTests.isEmpty() && retryCount > 0) {
+			
+			List<TestUtil> currentRetry = new ArrayList<TestUtil>();
+			currentRetry.addAll(activeTests);
+		
+			for (TestUtil test : currentRetry) {
+				
+				System.out.println("ATTEMPTING TO RETRY FAILED TEST CASE NUMBER: " + test.TestCaseNumber);
+				
+				test.newExtentTest();
+				test.ExecuteTest();
+				test.endTest();
+				
+				if (test.getExtent().getRunStatus() == LogStatus.PASS) {
+					
+					// if the test passed, remove from active list (to stop from retrying)
+					activeTests.remove(test);
+				}
+			}
+			
+			retryCount--;
 		}
 	}
 

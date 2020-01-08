@@ -32,8 +32,9 @@ public class TestUtil extends Thread {
 	SeHelper se;
 	private ExtentReports report;
 	Method method;
-	String TestCaseNumber;
+	public String TestCaseNumber;
 	ExtentTest test;
+	int retryCount = 0;
 
 	public TestUtil(ExtentReports report, Method method, String TestCaseNumber) {
 		this.report = report;
@@ -234,8 +235,24 @@ public class TestUtil extends Thread {
 	}
 
 	public void endExtentTest() {
+		
 		report.endTest(se.reporter().getTest());
 		report.getReportId();
+	}
+	
+	public void newExtentTest() {
+		
+		retryCount++;
+		this.endExtentTest();
+		this.test = report.startTest("Test Case Number: " + TestCaseNumber + "<br>Retry #" + retryCount);
+		
+		test.assignAuthor("VAM QA");
+		test.assignCategory(method.getName());
+
+		ExtentReporter reporter = new ExtentReporter(test);
+		se.setReporter(reporter);
+		
+		se.reporter().reportInfo("This is a retry of a failed test.", "Retry Number: " + retryCount);
 	}
 
 	public List<String> ExecuteTestRunner() {
