@@ -175,11 +175,12 @@ public class TestUtil extends Thread {
 							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						else {
-							se.waits().setTimeOut(Integer.parseInt(wait));
+							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						
 					}
 					}
+					se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
 				}

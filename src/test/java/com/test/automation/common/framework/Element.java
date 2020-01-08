@@ -783,9 +783,10 @@ public class Element {
 
 		if (Element != null) {
 			try {
+				se.waits().waitForElementIsClickable(Element);
 				if(!Element.isDisplayed() || !Element.isEnabled()) {
 				se.waits().waitForElementIsDisplayed(Element);
-				se.waits().waitForElementIsClickable(Element);
+				
 				}
 
 				// se.log().logSeStep("Click Element : " + Element.toString());
@@ -794,12 +795,9 @@ public class Element {
 			}
 			
 			catch(org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Could not click on " + Element.toString() + "Waiting for page load");
+				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+                executor.executeScript("arguments[0].click();", Element);
 
-				
-				se.util().sleep(5000);
-				se.waits().waitForPageLoad();
-				Element.click();
 				return true;
 			}
 			
