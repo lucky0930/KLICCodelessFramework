@@ -180,7 +180,7 @@ public class TestUtil extends Thread {
 						
 					}
 					}
-					se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
+					
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
 				}
