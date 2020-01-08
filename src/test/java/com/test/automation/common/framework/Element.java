@@ -47,9 +47,20 @@ public class Element {
 	 * @return
 	 */
 	public WebElement getElement(final By locator) {
+		WebElement element;
 		
+		long startWait = System.nanoTime();
 		
-			return se.driver().findElement(locator);
+		element = se.driver().findElement(locator);
+		long stopWait = System.nanoTime();
+
+		long implicitWait = ((stopWait - startWait) / 1000000);
+		if(element != null) {
+		
+		System.out.print("\n IMPLICIT WAIT TIME FOR " + element + implicitWait + " MS \n");
+		}
+		
+			return element;
 	}
 	
 	public WebElement getElement(final By locator, boolean wait) {
@@ -783,18 +794,16 @@ public class Element {
 
 		if (Element != null) {
 			try {
-				se.waits().waitForElementIsClickable(Element);
-				if(!Element.isDisplayed() || !Element.isEnabled()) {
-				se.waits().waitForElementIsDisplayed(Element);
 				
-				}
 
-				// se.log().logSeStep("Click Element : " + Element.toString());
+
 				Element.click();
 				return true;
 			}
 			
 			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				
+				System.out.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET");
 				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
                 executor.executeScript("arguments[0].click();", Element);
 

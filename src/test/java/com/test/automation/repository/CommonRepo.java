@@ -15,8 +15,8 @@ public class CommonRepo {
 	}
 
 	public static WebElement ElementObject(SeHelper se, String expression) {
+		
 		long startWait = System.nanoTime();
-
 		
 		String typeOfExpression = getTypeOfExpression(expression);
 //		
@@ -29,20 +29,18 @@ public class CommonRepo {
 
 		if (expression.startsWith("/") || expression.startsWith("(/")) {
 
+			
+			
 			WebElement element = getXPathElement(se, expression);
 
-			long stopWait = System.nanoTime();
 
-			long implicitWait = ((stopWait - startWait) / 1000000);
-
-			System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
 			if (element == null) {
-				se.waits().waitForElement(By.xpath(expression));
+				//se.waits().waitForElement(By.xpath(expression));
 			}
 
 			if (!element.isDisplayed()) {
-				se.waits().waitForElementIsDisplayed(By.xpath(expression));
+				//se.waits().waitForElementIsDisplayed(By.xpath(expression));
 			}
 
 			return getXPathElement(se, expression);
@@ -51,18 +49,14 @@ public class CommonRepo {
 		{
 			WebElement element = getCSSElement(se, expression);
 
-			long stopWait = System.nanoTime();
 
-			long implicitWait = ((stopWait - startWait) / 1000000);
-
-			System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
 			if (element == null) {
-				se.waits().waitForElement(By.cssSelector(expression));
+				//se.waits().waitForElement(By.cssSelector(expression));
 			}
 
 			if (!element.isDisplayed()) {
-				se.waits().waitForElementIsDisplayed(By.cssSelector(expression));
+				//se.waits().waitForElementIsDisplayed(By.cssSelector(expression));
 			}
 
 			return getCSSElement(se, expression);
@@ -89,18 +83,13 @@ public class CommonRepo {
 				
 				 element = getCSSElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
-
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
 				if (element == null) {
-					se.waits().waitForElement(By.cssSelector(newExpression));
+					//se.waits().waitForElement(By.cssSelector(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.cssSelector(newExpression));
+					//se.waits().waitForElementIsDisplayed(By.cssSelector(newExpression));
 				}
 
 				return getCSSElement(se, newExpression);
@@ -109,18 +98,14 @@ public class CommonRepo {
 			case "Xpath":
 				 element = getXPathElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
 				if (element == null) {
-					se.waits().waitForElement(By.xpath(newExpression));
+					//se.waits().waitForElement(By.xpath(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.xpath(newExpression));
+					//se.waits().waitForElementIsDisplayed(By.xpath(newExpression));
 				}
 
 				return getXPathElement(se, newExpression);
@@ -131,72 +116,55 @@ public class CommonRepo {
 				
 				 element = getIdElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
 				if (element == null) {
-					se.waits().waitForElement(By.id(newExpression));
+					//se.waits().waitForElement(By.id(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.id(newExpression));
+					//se.waits().waitForElementIsDisplayed(By.id(newExpression));
 				}
 
 				return getIdElement(se, newExpression);
 			case "name":	
 				 element = getNameElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
-
-				if (element == null) {
-					se.waits().waitForElement(By.name(newExpression));
+				 if (element == null) {
+					//se.waits().waitForElement(By.name(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.name(newExpression));
+					//se.waits().waitForElementIsDisplayed(By.name(newExpression));
 				}
 
 				return getNameElement(se, newExpression);
 			case "Linktext":	
 				 element = getLinkTextElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
 
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
 				if (element == null) {
-					se.waits().waitForElement(By.linkText(newExpression));
+					//se.waits().waitForElement(By.linkText(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.linkText(newExpression));
+					//se.waits().waitForElementIsDisplayed(By.linkText(newExpression));
 				}
 
 				return getLinkTextElement(se, newExpression);
 			case "PartialLinktext":	
 				 element = getPartialLinkTextElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
-
-				if (element == null) {
-					se.waits().waitForElement(By.partialLinkText(newExpression));
+				 if (element == null) {
+					//se.waits().waitForElement(By.partialLinkText(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.partialLinkText(newExpression));
+					//se.waits().waitForElementIsDisplayed(By.partialLinkText(newExpression));
 				}
 
 				return getPartialLinkTextElement(se, newExpression);
@@ -206,37 +174,25 @@ public class CommonRepo {
 			case "TagName":	
 				 element = getTagNameElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
-
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
-
-				if (element == null) {
-					se.waits().waitForElement(By.tagName(newExpression));
+				 	if (element == null) {
+					//se.waits().waitForElement(By.tagName(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.tagName(newExpression));
-				}
+					//se.waits().waitForElementIsDisplayed(By.tagName(newExpression));
+				}//
 
 				return getTagNameElement(se, newExpression);
 				
 			case "Classname":	
 				 element = getClassnameElement(se, newExpression);
 
-				 stopWait = System.nanoTime();
-
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
-
 				if (element == null) {
-					se.waits().waitForElement(By.className(newExpression));
+					//se.waits().waitForElement(By.className(newExpression));
 				}
 
 				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.className(newExpression));
+					//se.waits().waitForElementIsDisplayed(By.className(newExpression));
 				}
 
 				return getClassnameElement(se, newExpression);

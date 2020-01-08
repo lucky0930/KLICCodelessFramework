@@ -53,6 +53,15 @@ public class ExtentReporter {
 			e.printStackTrace();
 		}
 	}
+	
+	public void screenCapture( SeHelper se) {
+		try {
+			test.log(LogStatus.INFO, "" + Util.captureScreenshot("USER_SCREENCAP" + Util.getCurrentDate(), se));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void reportError(String step, Exception e) {
 		

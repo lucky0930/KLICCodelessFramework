@@ -3,6 +3,7 @@ package com.test.automation.common.Utils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -63,6 +64,7 @@ public class PageProcess {
 					
 					//element = (WebElement) callMethod.invoke(obj, se);
 					// element = (WebElement) callMethod.invoke(obj);
+					
 					element = CommonRepo.ElementObject(se, xPathExpression);
 
 				} catch (NoSuchElementException e) {
@@ -206,7 +208,7 @@ public class PageProcess {
 		}
 
 		if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1)) {
-			value = new CustomHandler().handle(value);
+			value = new CustomHandler().handle(value,se);
 		}
 
 		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");
@@ -228,11 +230,7 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
-			catch(org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+
 			break;
 		case "button":
 			try {
@@ -244,11 +242,7 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
-			catch(org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+
 			break;
 		case "select":
 			try {
@@ -277,11 +271,7 @@ public class PageProcess {
 							e.printStackTrace();
 						}
 					 }}
-			catch(org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+
 			break;
 		case "a":
 			try {
@@ -293,11 +283,7 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
-			catch(org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+
 			break;
 		case "label":
 			try {
@@ -309,11 +295,7 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
 			}
-			catch(org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+
 			break;
 		default:
 			ActionBasedOnValue(se, element, value);
