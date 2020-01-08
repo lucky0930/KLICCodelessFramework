@@ -60,7 +60,7 @@ public class VM_Sample_Test {
 
 	@BeforeMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
 	protected synchronized void beforeMethod(Method method) throws MalformedURLException {
-		DateFormat dateFormat = new SimpleDateFormat ("yy-MM-dd--HH-mm-ss");
+		DateFormat dateFormat = new SimpleDateFormat ("yy-mm-dd--HH-mm-ss");
 		Date date = new Date();
 		SeHelper se = new SeHelper();
 

@@ -41,7 +41,6 @@ public class SystemPropertyUtil {
 	private final static String chromeDriverPath = config.getConfigProp("ChromeDriverPath");
 	private final static String geckoDriverPath = config.getConfigProp("GeckoDriverPath");
 	private final static String edgeDriverPath = config.getConfigProp("EdgeDriverPath");
-	private final static String headlessEdgeDriverPath = config.getConfigProp("HeadlessEdgeDriverPath");
 	private final static String ieDriverPath = config.getConfigProp("ieDriverPath");
 	
 	// waits
@@ -300,16 +299,6 @@ public class SystemPropertyUtil {
 	public static String getEdgeDriverPath() {
 		try {
 			return getRootPath() + edgeDriverPath;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public static String getHeadlessEdgePath() {
-		try {
-			return getRootPath() + headlessEdgeDriverPath;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
