@@ -783,32 +783,37 @@ public class Element {
 
 		if (Element != null) {
 			try {
-				se.waits().waitForElementIsClickable(Element);
-				if(!Element.isDisplayed() || !Element.isEnabled()) {
-				se.waits().waitForElementIsDisplayed(Element);
 				
-				}
 
 				// se.log().logSeStep("Click Element : " + Element.toString());
 				Element.click();
 				return true;
 			}
 			
-			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+//			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+//				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+//                executor.executeScript("arguments[0].click();", Element);
+//
+//				return true;
+//			}
+			
+			catch (InvalidElementStateException e) {
 				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
                 executor.executeScript("arguments[0].click();", Element);
-
+				//se.log().logSeStep("Could not click on " + Element.toString() + "Trying again");
+				//se.util().sleep(5000);
+				//Element.click();
 				return true;
 			}
 			
-			catch (InvalidElementStateException e) {
-				se.log().logSeStep("Could not click on " + Element.toString() + "Trying again");
-				se.util().sleep(5000);
+			catch(Throwable ex) {
+				se.waits().waitForElementIsClickable(Element);
+				if(!Element.isDisplayed() || !Element.isEnabled()) {
+				se.waits().waitForElementIsDisplayed(Element);
+				
+				}
 				Element.click();
 				return true;
-			}
-			catch(Throwable ex) {
-				se.log().logSeStep("Could not click after trying");
 			}
 		} //else
 			//se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
