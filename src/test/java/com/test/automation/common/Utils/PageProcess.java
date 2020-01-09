@@ -1,24 +1,23 @@
 package com.test.automation.common.Utils;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotInteractableException;
-import org.openqa.selenium.Keys;
 
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
 import com.test.automation.common.framework.Util;
 import com.test.automation.customs.Assertions;
 import com.test.automation.customs.CustomHandler;
+import com.test.automation.customs.Keyboard;
 import com.test.automation.repository.CommonRepo;
 
 public class PageProcess {
@@ -317,16 +316,12 @@ public class PageProcess {
 
 	private static void ControlKeys(SeHelper se, String key) {
 		Actions action = new Actions(se.driver());
-		key = key.toUpperCase();
-		
 		String[] keys = key.split("[.,]");
 		for (String value : keys) {
 			value = value.trim();
-			if (value.equals("KEYS"))
+			if (value.equalsIgnoreCase("KEYS"))
 				continue;
-			else if (value.equals("ENTER"))
-				value = "RETURN";
-			else if (value.contentEquals("CLICK")) {
+			else if (value.equalsIgnoreCase("CLICK")) {
 				try {
 				throw new NoSuchMethodException();
 				}
@@ -337,14 +332,65 @@ public class PageProcess {
 				continue;
 			}
 			
-			if (value.equals("SHIFT") || value.equals("ALT"))
+			if (value.contains("+"))
 			{
-				action.keyUp(Keys.valueOf(value)).keyDown(Keys.valueOf(value)).perform();
+				String[] combo = value.split("\\+");
+				Keyboard type = null;
+				try {
+					type = new Keyboard();
+				} catch (AWTException e) {
+					e.printStackTrace();
+				}
+				type.keyCombo(combo);	
 			}
-			else
-				action.sendKeys(Keys.valueOf(value)).perform();
 		}
-		action.sendKeys(Keys.NULL).perform();
+			/*	String[] combo = value.split("\\+");
+				//Keys[] chordKeyArray = new Keys[combo.length];
+				//String[] chordArray = new String[combo.length];
+				String keysToSend = new String();
+				//int index = -1;
+				for (String input : combo) {
+					//++index;
+					input = input.trim();
+					System.out.println(input);
+					if (input.length() == 1) {
+						keysToSend.concat(input);
+						////chordArray[index] = input;
+						//action.sendKeys(input).perform();
+					} else {
+						keysToSend.concat(Keys.chord(Keys.valueOf(input.toUpperCase())));
+						////chordKeyArray[index] = Keys.valueOf(input.toUpperCase());
+//						try {
+//							action.keyDown(Keys.valueOf(input.toUpperCase())).build();
+//						} catch (IllegalArgumentException e) {
+//							action.sendKeys(Keys.valueOf(input.toUpperCase())).perform();
+//						}
+					}
+				}
+				WebElement actionD = se.driver().findElement(By.cssSelector("body"));
+				System.out.println("SENDING KEYS");
+				actionD.sendKeys(Keys.chord(Keys.CONTROL, "t"));
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				actionD.sendKeys(Keys.chord(Keys.CONTROL, Keys.TAB));
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				actionD.sendKeys(Keys.chord(Keys.CONTROL, Keys.SHIFT, Keys.TAB));
+				//action.sendKeys(keysToSend).perform();
+				//action.sendKeys(Keys.NULL).perform();
+			}
+			//else
+				//action.sendKeys(value).perform();
+		}
+		action.sendKeys(Keys.NULL).perform();*/
 	}
 
 	private static boolean checkAlert(SeHelper se, String key, String value) {
