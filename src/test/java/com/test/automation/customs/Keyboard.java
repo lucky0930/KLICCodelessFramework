@@ -132,22 +132,24 @@ public class Keyboard {
     }
     
     public void keyCombo(String[] comboKeys) {
-    	for (String input : comboKeys)
-    	if (input.length() <= 1) {
-    		addToKeyCombo(type(input.toCharArray()[0]));
-    	} else { 
-	    	switch (input.toUpperCase()) {
-	    	case "CONTROL": addToKeyCombo(VK_CONTROL); break;
-	    	case "ALT": addToKeyCombo(VK_ALT); break;
-	    	case "SHIFT": addToKeyCombo(VK_SHIFT); break;
-	    	case "WINDOWS": addToKeyCombo(VK_WINDOWS); break;
-	    	case "TAB": addToKeyCombo(VK_TAB); break;
-	    	case "ENTER": addToKeyCombo(VK_ENTER); break;
-	    	case "ESCAPE":
-	    	case "ESC": addToKeyCombo(VK_ESCAPE); break;
-	    	case "PRINTSCREEN": addToKeyCombo(VK_PRINTSCREEN); break;
+    	for (String input : comboKeys) {
+	    	if (input.length() <= 1) {
+	    		addToKeyCombo(type(input.toCharArray()[0]));
+	    	} else { 
+		    	switch (input.toUpperCase()) {
+		    	case "CONTROL": addToKeyCombo(VK_CONTROL); break;
+		    	case "ALT": addToKeyCombo(VK_ALT); break;
+		    	case "SHIFT": addToKeyCombo(VK_SHIFT); break;
+		    	case "WINDOWS": addToKeyCombo(VK_WINDOWS); break;
+		    	case "TAB": addToKeyCombo(VK_TAB); break;
+		    	case "ENTER": addToKeyCombo(VK_ENTER); break;
+		    	case "ESCAPE":
+		    	case "ESC": addToKeyCombo(VK_ESCAPE); break;
+		    	case "PRINTSCREEN": addToKeyCombo(VK_PRINTSCREEN); break;
+		    	}		    	
 	    	}
     	}
+    	System.out.println("WARNING: Simulated keyboard cannot perform browser layer or higher commands (\"ctrl+t\", \"alt+tab\", etc.)");
     }
     
     private void addToKeyCombo(int keyCode) {

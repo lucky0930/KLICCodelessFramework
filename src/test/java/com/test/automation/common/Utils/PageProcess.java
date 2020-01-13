@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
@@ -334,6 +335,7 @@ public class PageProcess {
 			
 			if (value.contains("+"))
 			{
+				//((JavascriptExecutor) se.driver()).executeScript("window.open('data;','_blank');");
 				String[] combo = value.split("\\+");
 				Keyboard type = null;
 				try {
@@ -344,53 +346,6 @@ public class PageProcess {
 				type.keyCombo(combo);	
 			}
 		}
-			/*	String[] combo = value.split("\\+");
-				//Keys[] chordKeyArray = new Keys[combo.length];
-				//String[] chordArray = new String[combo.length];
-				String keysToSend = new String();
-				//int index = -1;
-				for (String input : combo) {
-					//++index;
-					input = input.trim();
-					System.out.println(input);
-					if (input.length() == 1) {
-						keysToSend.concat(input);
-						////chordArray[index] = input;
-						//action.sendKeys(input).perform();
-					} else {
-						keysToSend.concat(Keys.chord(Keys.valueOf(input.toUpperCase())));
-						////chordKeyArray[index] = Keys.valueOf(input.toUpperCase());
-//						try {
-//							action.keyDown(Keys.valueOf(input.toUpperCase())).build();
-//						} catch (IllegalArgumentException e) {
-//							action.sendKeys(Keys.valueOf(input.toUpperCase())).perform();
-//						}
-					}
-				}
-				WebElement actionD = se.driver().findElement(By.cssSelector("body"));
-				System.out.println("SENDING KEYS");
-				actionD.sendKeys(Keys.chord(Keys.CONTROL, "t"));
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				actionD.sendKeys(Keys.chord(Keys.CONTROL, Keys.TAB));
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				actionD.sendKeys(Keys.chord(Keys.CONTROL, Keys.SHIFT, Keys.TAB));
-				//action.sendKeys(keysToSend).perform();
-				//action.sendKeys(Keys.NULL).perform();
-			}
-			//else
-				//action.sendKeys(value).perform();
-		}
-		action.sendKeys(Keys.NULL).perform();*/
 	}
 
 	private static boolean checkAlert(SeHelper se, String key, String value) {
