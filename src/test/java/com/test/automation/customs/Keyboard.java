@@ -149,7 +149,8 @@ public class Keyboard {
 		    	}		    	
 	    	}
     	}
-    	System.out.println("WARNING: Simulated keyboard cannot perform browser layer or higher commands (\"ctrl+t\", \"alt+tab\", etc.)");
+    	System.out.println("WARNING: Simulated keyboard cannot perform browser layer or higher commands (\"ctrl+t\", \"ctrl+w\", etc.)\n"
+    			+ "Please use BrowserCommands() for this functionality");
     }
     
     private void addToKeyCombo(int keyCode) {
