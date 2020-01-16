@@ -803,7 +803,6 @@ public class Element {
 			
 			catch(org.openqa.selenium.ElementClickInterceptedException e) {
 				
-				System.out.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET");
 				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
                 executor.executeScript("arguments[0].click();", Element);
 
