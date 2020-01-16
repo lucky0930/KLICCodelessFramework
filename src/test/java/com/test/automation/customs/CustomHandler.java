@@ -1,51 +1,57 @@
 package com.test.automation.customs;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Random;
 
 import com.test.automation.common.SeHelper;
 
 public class CustomHandler {
 	
-	public String handle(String function, SeHelper se)
+	private static SeHelper se;
+	
+	public  CustomHandler(SeHelper se) {
+		CustomHandler.se = se;
+	}
+	
+	public String handle(String function)
 	{
 		String var = "";
 		
 		var = function.substring((function.indexOf('(') + 1), (function.length() - 1));
 		System.out.println(var);
-		function = function.replace(var, "");
-			
-		System.out.println(function);
-		switch(function)
-		{
-			case "RandomName()":
-				return RandomName(var);
-			    
-			case "RandomNameWithNumbers()":
-				return RandomNameWithNumbers(var);
+		function = function.substring(0,function.indexOf('('));
+		Class[] cArgs = new Class[1];
+		cArgs[0] = String.class;
 				
-			case "RandomNumbers()":
-				return RandomNumbers(var);
-				
-			case "RandomEmail()":
-				String email = RandomNameWithNumbers("");
-				if(var.equals(""))
-					email = email.concat("@" + RandomName("5") + ".com");
-				else
-					email = email.concat("@" + var);
-
-				return email;
-				
-			case "Screenshot()":
-				se.reporter().screenCapture(se);
-
-		    default:
-		    	System.out.println("WARNING: Unhandled custom function");
-				
+		try {
+			Method callMethod = this.getClass().getDeclaredMethod(function, cArgs);
+			callMethod.setAccessible(true);
+//			if (var.contains(",")) {
+//				return (String) callMethod.invoke(null, varArgs);
+//			} else if (var.contentEquals("null")) {
+//				return (String) callMethod.invoke(null);
+//			} else {
+				return (String) callMethod.invoke(null, var);
+//			}
+		} catch (NoSuchMethodException e) {
+			se.log().error("Method: " + function + " does not exist.", e);
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 		return null;
 	}
 
-	private String RandomName(String var)
+	private static String RandomName(String var)
 	{
 		int lowerLimitA = 65; // letter 'A'
 	    int upperLimitZ = 90; // letter 'Z'
@@ -67,7 +73,7 @@ public class CustomHandler {
 	    return generatedSequence;
 	}
 
-	private String RandomNameWithNumbers(String var)
+	private static String RandomNameWithNumbers(String var)
 	{
 		int lowerLimitA = 65; // letter 'A'
 	    int upperLimitZ = 90; // letter 'Z'
@@ -96,7 +102,7 @@ public class CustomHandler {
 	    return generatedSequence;
 	}
 
-	private String RandomNumbers(String var)
+	private static String RandomNumbers(String var)
 	{
 		int targetNumLength = 10;
 	    if(!var.contentEquals("")) {
@@ -112,5 +118,19 @@ public class CustomHandler {
 	    System.out.println(generatedSequence);
 	    return generatedSequence;
 	}
+	
+	private static String RandomEmail(String var) {
+		String email = RandomNameWithNumbers("");
+		if(var.equals(""))
+			email = email.concat("@" + RandomName("5") + ".com");
+		else
+			email = email.concat("@" + var);
 
+		return email;
+	}
+	
+	private static String Screenshot(String var) {
+		se.reporter().screenCapture(se);
+		return null;
+	}
 }
