@@ -2,7 +2,15 @@ package com.test.automation.customs;
 
 import java.util.Random;
 
+import com.test.automation.common.SeHelper;
+
 public class CustomHandler {
+	private static SeHelper se;
+	
+	
+	public CustomHandler(SeHelper se) {
+		CustomHandler.se = se;
+	}
 	
 	public String handle(String function)
 	{
@@ -32,6 +40,10 @@ public class CustomHandler {
 					email = email.concat("@" + var);
 
 				return email;
+				
+			case "screenshot()":
+				return screenshot(var);
+				
 
 		    default:
 		    	System.out.println("WARNING: Unhandled custom function");
@@ -106,6 +118,17 @@ public class CustomHandler {
 
 	    System.out.println(generatedSequence);
 	    return generatedSequence;
+	    
+	    
+	    
+	    
 	}
+	
+	
+	private static String screenshot(String var) {
+		se.reporter().screenCapture(se);
+		return "SC";
+	}
+	
 
 }

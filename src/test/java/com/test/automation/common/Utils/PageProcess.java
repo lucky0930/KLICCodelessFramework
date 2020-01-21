@@ -59,6 +59,10 @@ public class PageProcess {
 					dynamicXpath(se, value);
 					return null;
 				}
+				if(key.equals("Screenshot")){
+					FillElement(se,null,key,value);
+					return null;
+				}
 				try {
 
 					// element = (WebElement) callMethod.invoke(obj, se);
@@ -210,7 +214,10 @@ public class PageProcess {
 		}
 
 		if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1)) {
-			value = new CustomHandler().handle(value);
+			value = new CustomHandler(se).handle(value);
+			if(value.equals("SC")){
+				return;
+			}
 		}
 
 		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");
