@@ -209,6 +209,9 @@ public class PageProcess {
 
 		if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1)) {
 			value = new CustomHandler(se).handle(value);
+			if(value.equals("sc")) {
+				return;
+			}
 		}
 
 		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");

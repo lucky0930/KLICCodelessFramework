@@ -129,8 +129,8 @@ public class CustomHandler {
 		return email;
 	}
 	
-	private static String Screenshot(String var) {
+	private static String screenshot(String var) {
 		se.reporter().screenCapture(se);
-		return null;
+		return "sc";
 	}
 }
