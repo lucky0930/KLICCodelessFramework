@@ -48,6 +48,8 @@ public class ExcelReader {
 			String TESTDATA_SHEET_PATH, SeHelper se) {
 
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		
+		new SQLReader();
 
 		try {
 
