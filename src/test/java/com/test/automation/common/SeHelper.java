@@ -311,9 +311,10 @@ public class SeHelper {
 
 				break;
 			case edgedriver:
-				System.setProperty("webdriver.edge.driver", SystemPropertyUtil.getEdgeDriverPath());
+				//System.setProperty("webdriver.edge.driver", SystemPropertyUtil.getEdgeDriverPath());
 				capabilities = DesiredCapabilities.edge();
 				driver = new EdgeDriver();
+				
 				break;			
 			case GridInternetExplorer:
 			
