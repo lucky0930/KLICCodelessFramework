@@ -140,7 +140,7 @@ public class TestUtil extends Thread {
 		se.log().logSeStep("Opening page: " + sheetName);
 		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
 
-		se.waits().waitForPageLoad();
+		
 
 		try {
 			actualData.entrySet().forEach(entry -> {
