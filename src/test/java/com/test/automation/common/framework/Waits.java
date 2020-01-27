@@ -120,8 +120,11 @@ public class Waits {
 	public boolean waitForElementIsClickable(WebElement element) {
 		
 		try {
-			new WebDriverWait( se.driver(),globalSeTimeOut).ignoring(RuntimeException.class).until(ExpectedConditions
-					.elementToBeClickable(element));
+			new WebDriverWait( se.driver(),30).ignoring(RuntimeException.class).until(new ExpectedCondition<Boolean>() {
+				public Boolean apply(WebDriver d) {
+					return checkClick(element);
+				}
+			});
 			return true;
 			
 		}catch (TimeoutException e) {
@@ -135,6 +138,21 @@ public class Waits {
 		}
 		
 	}
+	
+
+	public boolean checkClick(WebElement element) {
+		try {
+			element.click();
+			return true;
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+		
+	}
+	
+	
 	
 	
 	public boolean waitForElementVisible(final By locator, int timeOutInSeconds) {

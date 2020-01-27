@@ -788,27 +788,28 @@ public class Element {
 		executor.executeScript("document.getElementById('TaxIdSSN').value = '" + dataValue + "';");
 	}
 
-	public boolean Click(WebElement Element) {
-		
-		
 
-		if (Element != null) {
-			try {
-				
-
-
-				Element.click();
-				return true;
-			}
-			
-			catch(InvalidElementStateException e) {
+			public boolean Click(WebElement Element) {
 				
 				
-				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-                executor.executeScript("arguments[0].click();", Element);
 
-				return true;
-			}
+				if (Element != null) {
+					try {
+						
+						
+						
+						se.waits().waitForElementIsClickable(Element);		
+						// se.log().logSeStep("Click Element : " + Element.toString());
+						//Element.click();
+						return true;
+					}
+					
+//					catch(org.openqa.selenium.ElementClickInterceptedException e) {
+//						JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+//		                executor.executeScript("arguments[0].click();", Element);
+		//
+//						return true;
+//					}
 			
 //			catch (InvalidElementStateException e) {
 //				se.log().logSeStep("Could not click on " + Element.toString() + "Trying again");
