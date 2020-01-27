@@ -181,7 +181,7 @@ public class TestUtil extends Thread {
 							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						else {
-							
+							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						
 					}
