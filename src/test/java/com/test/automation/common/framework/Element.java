@@ -801,7 +801,7 @@ public class Element {
 				return true;
 			}
 			
-			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+			catch(InvalidElementStateException e) {
 				
 				
 				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
@@ -810,12 +810,12 @@ public class Element {
 				return true;
 			}
 			
-			catch (InvalidElementStateException e) {
-				se.log().logSeStep("Could not click on " + Element.toString() + "Trying again");
-				se.util().sleep(5000);
-				Element.click();
-				return true;
-			}
+//			catch (InvalidElementStateException e) {
+//				se.log().logSeStep("Could not click on " + Element.toString() + "Trying again");
+//				se.util().sleep(5000);
+//				Element.click();
+//				return true;
+//			}
 			catch(Throwable ex) {
 				se.log().logSeStep("Could not click after trying");
 			}
