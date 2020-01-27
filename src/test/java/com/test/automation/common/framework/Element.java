@@ -819,7 +819,7 @@ public class Element {
 			catch(Throwable ex) {
 				se.log().logSeStep("Could not click after trying");
 			}
-		} //else
+		} //else //
 			//se.log().logSeStep("Could not click on " + Element.toString() + ", element id disable and not clickable");
 		return false;
 	}
