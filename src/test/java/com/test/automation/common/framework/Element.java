@@ -784,9 +784,11 @@ public class Element {
 		if (Element != null) {
 			try {
 				
-
+				
+				
+				se.waits().waitForElementIsClickable(Element);		
 				// se.log().logSeStep("Click Element : " + Element.toString());
-				Element.click();
+				//Element.click();
 				return true;
 			}
 			

@@ -28,7 +28,7 @@ public class PageProcess {
 		WebElement element = null;
 
 		try {
-			se.waits().waitForPageLoad();
+			
 
 			if (value == null) {
 				return null;
@@ -239,11 +239,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+			} 
 			break;
 		case "button":
 			try {
@@ -254,11 +250,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+			} 
 			break;
 		case "select":
 			try {
@@ -283,11 +275,7 @@ public class PageProcess {
 						e.printStackTrace();
 					}
 				}
-			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+			} 
 			break;
 		case "a":
 			try {
@@ -298,11 +286,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+			} 
 			break;
 		case "label":
 			try {
@@ -313,11 +297,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
-				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
-				se.waits().waitForPageLoad();
-				se.element().Click(element);
-			}
+			} 
 			break;
 		default:
 			ActionBasedOnValue(se, element, value);

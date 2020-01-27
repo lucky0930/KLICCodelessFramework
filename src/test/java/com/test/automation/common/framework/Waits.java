@@ -1,5 +1,8 @@
 package com.test.automation.common.framework;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
@@ -7,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.test.automation.common.SeHelper;
@@ -120,8 +125,11 @@ public class Waits {
 	public boolean waitForElementIsClickable(WebElement element) {
 		
 		try {
-			new WebDriverWait( se.driver(),globalSeTimeOut).ignoring(org.openqa.selenium.ElementClickInterceptedException.class).until(ExpectedConditions
-					.elementToBeClickable(element));
+			new WebDriverWait( se.driver(),30).ignoring(RuntimeException.class).until(new ExpectedCondition<Boolean>() {
+				public Boolean apply(WebDriver d) {
+					return checkClick(element);
+				}
+			});
 			return true;
 			
 		}catch (TimeoutException e) {
@@ -134,6 +142,24 @@ public class Waits {
 			return false;
 		}
 		
+	}
+	
+	public boolean waitForElementIsClickableFluent(WebElement element) {
+		
+		try {
+			FluentWait<WebDriver> clickWait = new FluentWait<WebDriver>(se.driver()).
+					withTimeout(Duration.ofSeconds(15))
+					.pollingEvery(Duration.ofSeconds(1))
+					.ignoring(org.openqa.selenium.ElementClickInterceptedException.class);
+			
+			
+			
+		}catch(Exception e) {
+			
+		}
+		
+		
+		return true;
 	}
 	
 	
@@ -176,6 +202,19 @@ public class Waits {
 		}
 		
 	}
+	
+	
+	public boolean checkClick(WebElement element) {
+		try {
+			element.click();
+			return true;
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+		
+	}
 
 	public boolean waitForElement(final By locator, int timeOutInSeconds) {
 		try {
@@ -197,6 +236,8 @@ public class Waits {
 		}
 
 	}
+	
+
 
 	/**
 	 * Wait for an element to be displayed, using specified timeout

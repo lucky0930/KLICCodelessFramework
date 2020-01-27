@@ -37,13 +37,6 @@ public class CommonRepo {
 
 			System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-			if (element == null) {
-				se.waits().waitForElement(By.xpath(expression));
-			}
-
-			if (!element.isDisplayed()) {
-				se.waits().waitForElementIsDisplayed(By.xpath(expression));
-			}
 
 			return getXPathElement(se, expression);
 		}
@@ -57,13 +50,6 @@ public class CommonRepo {
 
 			System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-			if (element == null) {
-				se.waits().waitForElement(By.cssSelector(expression));
-			}
-
-			if (!element.isDisplayed()) {
-				se.waits().waitForElementIsDisplayed(By.cssSelector(expression));
-			}
 
 			return getCSSElement(se, expression);
 		}
@@ -91,17 +77,6 @@ public class CommonRepo {
 
 				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
-
-				if (element == null) {
-					se.waits().waitForElement(By.cssSelector(newExpression));
-				}
-
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.cssSelector(newExpression));
-				}
 
 				return getCSSElement(se, newExpression);
 				
@@ -115,13 +90,6 @@ public class CommonRepo {
 
 				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-				if (element == null) {
-					se.waits().waitForElement(By.xpath(newExpression));
-				}
-
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.xpath(newExpression));
-				}
 
 				return getXPathElement(se, newExpression);
 				
@@ -133,17 +101,9 @@ public class CommonRepo {
 
 				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
 
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-				if (element == null) {
-					se.waits().waitForElement(By.id(newExpression));
-				}
 
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.id(newExpression));
-				}
 
 				return getIdElement(se, newExpression);
 			case "name":	
@@ -151,17 +111,8 @@ public class CommonRepo {
 
 				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
 
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-				if (element == null) {
-					se.waits().waitForElement(By.name(newExpression));
-				}
-
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.name(newExpression));
-				}
 
 				return getNameElement(se, newExpression);
 			case "Linktext":	
@@ -169,17 +120,9 @@ public class CommonRepo {
 
 				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
 
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-				if (element == null) {
-					se.waits().waitForElement(By.linkText(newExpression));
-				}
 
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.linkText(newExpression));
-				}
 
 				return getLinkTextElement(se, newExpression);
 			case "PartialLinktext":	
@@ -187,17 +130,9 @@ public class CommonRepo {
 
 				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
 
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-				if (element == null) {
-					se.waits().waitForElement(By.partialLinkText(newExpression));
-				}
 
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.partialLinkText(newExpression));
-				}
 
 				return getPartialLinkTextElement(se, newExpression);
 				
@@ -212,14 +147,7 @@ public class CommonRepo {
 
 				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
 
-				if (element == null) {
-					se.waits().waitForElement(By.tagName(newExpression));
-				}
-
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.tagName(newExpression));
-				}
-
+		
 				return getTagNameElement(se, newExpression);
 				
 			case "Classname":	
@@ -227,18 +155,7 @@ public class CommonRepo {
 
 				 stopWait = System.nanoTime();
 
-				//long implicitWait = ((stopWait - startWait) / 1000000);
-
-				//System.out.print("\n IMPLICIT WAIT TIME " + implicitWait + " MS \n");
-
-				if (element == null) {
-					se.waits().waitForElement(By.className(newExpression));
-				}
-
-				if (!element.isDisplayed()) {
-					se.waits().waitForElementIsDisplayed(By.className(newExpression));
-				}
-
+		
 				return getClassnameElement(se, newExpression);
 		
 				
@@ -261,7 +178,8 @@ public class CommonRepo {
 
 	
 	private static WebElement getXPathElement(SeHelper se, String xPathExpression) {
-
+			
+		
 		return se.element().getElement(By.xpath(xPathExpression));
 	}
 

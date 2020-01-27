@@ -139,9 +139,10 @@ public class TestUtil extends Thread {
 		se.log().logSeStep("Opening page: " + sheetName);
 		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
 
-		se.waits().waitForPageLoad();
+		
 
 		try {
+			se.waits().waitForPageLoad();
 			actualData.entrySet().forEach(entry -> {
 
 				if (!se.keepRunning()) {
@@ -179,12 +180,12 @@ public class TestUtil extends Thread {
 						
 					}
 					}
-					se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
+					
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
 				}
 			});
-			se.waits().waitForPageLoad();
+			
 		} catch (NullPointerException e) {
 				//e.printStackTrace();
 		}
