@@ -125,7 +125,7 @@ public class Waits {
 	public boolean waitForElementIsClickable(WebElement element) {
 		
 		try {
-			new WebDriverWait( se.driver(),30).ignoring(RuntimeException.class).until(new ExpectedCondition<Boolean>() {
+			new WebDriverWait( se.driver(),10).ignoring(RuntimeException.class).until(new ExpectedCondition<Boolean>() {
 				public Boolean apply(WebDriver d) {
 					return checkClick(element);
 				}
@@ -208,6 +208,17 @@ public class Waits {
 		try {
 			element.click();
 			return true;
+		}
+		catch(org.openqa.selenium.ElementNotInteractableException e) {
+			try {
+				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+                executor.executeScript("arguments[0].click();", element);
+
+				return true;
+			}
+			catch(Exception ex){
+				return false;
+				}
 		}
 		catch(Exception e) {
 			System.out.println(e);
@@ -398,3 +409,4 @@ public class Waits {
 	
 }
 	}
+ 

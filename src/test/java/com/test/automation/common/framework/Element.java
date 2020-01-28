@@ -786,18 +786,18 @@ public class Element {
 				
 				
 				
-				se.waits().waitForElementIsClickable(Element);		
+				return se.waits().waitForElementIsClickable(Element);		
 				// se.log().logSeStep("Click Element : " + Element.toString());
 				//Element.click();
-				return true;
+				
 			}
 			
-//			catch(org.openqa.selenium.ElementClickInterceptedException e) {
-//				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-//                executor.executeScript("arguments[0].click();", Element);
-//
-//				return true;
-//			}
+			catch(org.openqa.selenium.ElementClickInterceptedException e) {
+				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+                executor.executeScript("arguments[0].click();", Element);
+
+				return true;
+			}
 			
 			catch (InvalidElementStateException e) {
 				JavascriptExecutor executor = (JavascriptExecutor)se.driver();
