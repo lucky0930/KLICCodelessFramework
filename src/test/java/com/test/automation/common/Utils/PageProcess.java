@@ -494,7 +494,7 @@ public class PageProcess {
 			// if no end test
 			se.log().debug("The test ended early because the element: " + key
 					+ " could not be found on page " + sheetName);
-			se.reporter().reportInfo("The test ended early because the element: " + key
+			se.reporter().reportStepFail("The test ended early because the element: " + key
 					+ " could not be found.", "Page: " + sheetName);
 
 			se.stopRunning();
