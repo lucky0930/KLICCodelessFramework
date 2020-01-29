@@ -142,15 +142,30 @@ public class Waits {
 
 	public boolean checkClick(WebElement element) {
 		try {
-			element.click();
-			return true;
-		}
-		catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}
+            element.click();
+            return true;
+        }
+        catch(org.openqa.selenium.ElementNotInteractableException e) {
+            try {
+                JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+                executor.executeScript("arguments[0].click();", element);
+
+ 
+
+                return true;
+            }
+            catch(Exception ex){
+                return false;
+                }
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return false;
+        }
+        
+    }
 		
-	}
+	
 	
 	
 	
