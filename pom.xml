@@ -266,6 +266,13 @@
 			<systemPath>${project.basedir}/executables/ATUTestRecorder_2.1.jar</systemPath>
 		</dependency>
 
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc-driver</artifactId>
+			<version>6.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/executables/sqljdbc42.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 

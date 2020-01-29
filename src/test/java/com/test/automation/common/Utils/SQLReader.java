@@ -17,18 +17,22 @@ public class SQLReader {
         String connectionUrl = "jdbc:sqlserver:"+serverIP+";databaseName="+dbName+";user="+dbUser+";password=" + dbPassword;
 
         try (Connection con = DriverManager.getConnection(connectionUrl); Statement stmt = con.createStatement();) {
-            String SQL = "SELECT TOP (1000) [ID], [ObjectName], [ObjectLocator], [WaitTime], " + 
+        	
+        	Class.forName("com.mysql.jdbc.Driver");
+        	
+            String SQL = "SELECT TOP (10) [ID], [ObjectName], [ObjectLocator], [WaitTime], " + 
             		"[ObjectOrder], [PageNameID], [UserID] " + 
             		"FROM [" + dbName + "].[dbo].[ObjectRepository]";
             ResultSet rs = stmt.executeQuery(SQL);
 
             // Iterate through the data in the result set.
             while (rs.next()) {
-            	String desiredDataSet = null;
-                System.out.println(rs.getString(desiredDataSet));
+                System.out.println(rs.getString("ObjectName"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+        	e.printStackTrace();
         }
     }
 }
