@@ -445,4 +445,8 @@ public class SeHelper {
 	public void stopRunning() {
 		this.keepRunning = false;
 	}
+	
+	public void retryRunning() {
+		this.keepRunning = true;
+	}
 }

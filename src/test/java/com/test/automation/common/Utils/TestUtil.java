@@ -221,6 +221,7 @@ public class TestUtil extends Thread {
 
 	public void initialize() {
 
+		se.retryRunning();
 		se.startSession(Browsers.valueOf(SystemPropertyUtil.getBrowsers()));
 		se.driver().manage().timeouts().implicitlyWait(SystemPropertyUtil.getImplicitWaitTime(), TimeUnit.SECONDS);
 		Browsers myBrowser = se.currentBrowser();
