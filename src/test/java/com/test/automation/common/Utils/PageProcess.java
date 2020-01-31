@@ -1,5 +1,6 @@
 package com.test.automation.common.Utils;
 
+import java.awt.AWTException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,19 +23,24 @@ import com.test.automation.customs.CustomHandler;
 import com.test.automation.repository.CommonRepo;
 
 public class PageProcess {
-	
-	public static WebElement findElement(SeHelper se, String sheetName, String key, String value, String xPathExpression) {
+
+	public static WebElement findElement(SeHelper se, String sheetName, String key, String value,
+			String xPathExpression) {
 		Class<?> objClass = null;
 		WebElement element = null;
 
-		
 		try {
-			
 
-	           if (value == null) {
-	                return null;
-	            }
+			if (value == null) {
+				return null;
+			}
 			try {
+
+				if (key.contains("FileUpload")) {
+					FileUpload(se, key, value, xPathExpression);
+					return null;
+				}
+
 				if (key.contains("ControlKeys")) {
 					ControlKeys(se, value);
 					return null;
@@ -60,28 +66,30 @@ public class PageProcess {
 					dynamicXpath(se, value);
 					return null;
 				}
-				if(key.equalsIgnoreCase("Screenshot")){
+				if (key.equalsIgnoreCase("Screenshot")) {
 					FillElement(se, element, key, value);
 					return null;
 				}
-				
+
 				try {
-					
-					//element = (WebElement) callMethod.invoke(obj, se);
+
+					// element = (WebElement) callMethod.invoke(obj, se);
 					// element = (WebElement) callMethod.invoke(obj);
-					
+
 					element = CommonRepo.ElementObject(se, xPathExpression);
 
 				} catch (NoSuchElementException e) {
-					
-					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+
+					se.log().error(
+							e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
 					se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 					new Util().sleep(500);
 					continueIfException(se, sheetName, key, e);
-					
+
 				} catch (Exception e) {
-					
-					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+
+					se.log().error(
+							e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
 					System.out.println("***** Recommend reviewing data entry for this test *****");
 					se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 					e.printStackTrace();
@@ -97,11 +105,12 @@ public class PageProcess {
 						asrt.verify(element, value, key);
 						return element;
 					}
-					
+
 					FillElement(se, element, key, value);
 				}
 			} catch (SecurityException e) {
-				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName,
+						e);
 				se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 				e.printStackTrace();
 			}
@@ -112,7 +121,6 @@ public class PageProcess {
 		}
 		return element;
 	}
-
 
 	public static WebElement findElement(SeHelper se, String sheetName, String key, String value) {
 
@@ -174,7 +182,8 @@ public class PageProcess {
 					// element = (WebElement) callMethod.invoke(obj);
 
 				} catch (NoSuchMethodException e) {
-					se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+					se.log().error(
+							e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
 					System.out.println("***** Recommend reviewing data entry for this test *****");
 					se.reporter().reportErrorCapture(sheetName, e, se);
 					e.printStackTrace();
@@ -189,12 +198,13 @@ public class PageProcess {
 						asrt.verify(element, value, key);
 						return element;
 					}
-					//se.waits().waitForPageLoad();
-					//se.waits().waitForElementIsClickable(element);
+					// se.waits().waitForPageLoad();
+					// se.waits().waitForElementIsClickable(element);
 					FillElement(se, element, key, value);
 				}
 			} catch (SecurityException e) {
-				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName,
+						e);
 				se.reporter().reportErrorCapture(sheetName, e, se);
 				e.printStackTrace();
 			}
@@ -213,15 +223,16 @@ public class PageProcess {
 		}
 
 		if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1)) {
-			
+
 			value = new CustomHandler(se).handle(value);
-			if(value.equals("sc")) {
+			if (value.equals("sc")) {
 				return;
 			}
 		}
 
 		se.log().logSeStep("Accessing element: \"" + key + "\" Using value: \"" + value + "\"");
-		//se.reporter().reportInfo("Accessing Element", "Element: " + key + "<br>Value: " + value);
+		// se.reporter().reportInfo("Accessing Element", "Element: " + key + "<br>Value:
+		// " + value);
 
 		switch (element.getTagName()) {
 		case "input":
@@ -238,8 +249,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			}
-			catch (org.openqa.selenium.ElementClickInterceptedException e) {
+			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
 				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
 				se.waits().waitForPageLoad();
 				se.element().Click(element);
@@ -255,8 +265,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			}
-			catch (org.openqa.selenium.ElementClickInterceptedException e) {
+			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
 				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
 				se.waits().waitForPageLoad();
 				se.element().Click(element);
@@ -266,31 +275,27 @@ public class PageProcess {
 		case "select":
 			try {
 				Select dropDownValue = new Select(element);
-				dropDownValue.selectByVisibleText(value);	
-			}
-			catch (NoSuchElementException e2) {
-				
+				dropDownValue.selectByVisibleText(value);
+			} catch (NoSuchElementException e2) {
+
 				try {
 					Select dropDownValue1 = new Select(element);
 					dropDownValue1.selectByValue(value);
-				}
-					catch (NoSuchElementException e1) {
-						
-						
-						try {
-							Select dropDownValue2 = new Select(element);
+				} catch (NoSuchElementException e1) {
 
-							dropDownValue2.selectByIndex(Integer.valueOf(value));
-						}
-						catch (NoSuchElementException e) {
-							se.log().error(e.getClass().getSimpleName() + " encountered when getting value \"" + value
-									+ "\" in element \"" + key + "\" \n", e);
-							System.out.println("***** Recommend reviewing column head data entry *****");
-							se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
-							e.printStackTrace();
-						}
-					 }}
-			
+					try {
+						Select dropDownValue2 = new Select(element);
+
+						dropDownValue2.selectByIndex(Integer.valueOf(value));
+					} catch (NoSuchElementException e) {
+						se.log().error(e.getClass().getSimpleName() + " encountered when getting value \"" + value
+								+ "\" in element \"" + key + "\" \n", e);
+						System.out.println("***** Recommend reviewing column head data entry *****");
+						se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
+						e.printStackTrace();
+					}
+				}
+			}
 
 			break;
 		case "a":
@@ -302,8 +307,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			}
-			catch (org.openqa.selenium.ElementClickInterceptedException e) {
+			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
 				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
 				se.waits().waitForPageLoad();
 				se.element().Click(element);
@@ -319,8 +323,7 @@ public class PageProcess {
 				System.out.println("***** Recommend reviewing column head data entry *****");
 				se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
 				e.printStackTrace();
-			}
-			catch (org.openqa.selenium.ElementClickInterceptedException e) {
+			} catch (org.openqa.selenium.ElementClickInterceptedException e) {
 				se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
 				se.waits().waitForPageLoad();
 				se.element().Click(element);
@@ -348,7 +351,7 @@ public class PageProcess {
 	private static void ControlKeys(SeHelper se, String key) {
 		Actions action = new Actions(se.driver());
 		key = key.toUpperCase();
-		
+
 		String[] keys = key.split("[.,]");
 		for (String value : keys) {
 			value = value.trim();
@@ -358,23 +361,59 @@ public class PageProcess {
 				value = "RETURN";
 			else if (value.contentEquals("CLICK")) {
 				try {
-				throw new NoSuchMethodException();
-				}
-				catch (NoSuchMethodException e){
-					se.log().error("IGNORED: \"Click\" should be given to an element - ControlKeys handles keyboard interactions only", e);
+					throw new NoSuchMethodException();
+				} catch (NoSuchMethodException e) {
+					se.log().error(
+							"IGNORED: \"Click\" should be given to an element - ControlKeys handles keyboard interactions only",
+							e);
 					System.out.println("***** Recommend reviewing data entry *****");
 				}
 				continue;
 			}
-			
-			if (value.equals("SHIFT") || value.equals("ALT"))
-			{
+
+			if (value.equals("SHIFT") || value.equals("ALT")) {
 				action.keyUp(Keys.valueOf(value)).keyDown(Keys.valueOf(value)).perform();
-			}
-			else
+			} else
 				action.sendKeys(Keys.valueOf(value)).perform();
 		}
 		action.sendKeys(Keys.NULL).perform();
+	}
+
+	private static void FileUpload(SeHelper se, String key, String value, String xPathExpression) {
+
+		try {
+			WebElement element = CommonRepo.ElementObject(se, xPathExpression);
+
+			if (element.getTagName().equalsIgnoreCase("input")) {
+
+				// if it is an input, we can just send the filepath directly
+				element.sendKeys(value);
+				
+			} else {
+
+				// if it is not an input, use the Robot class to type into the file explorer
+				try {
+					
+					se.element().Click(element);
+					Thread.sleep(1000);
+					se.reporter().reportInfo("Uploading File", "File Path:<br>" + value);
+					Keyboard keyboard = new Keyboard();
+					keyboard.type(value.trim());
+					Thread.sleep(1000);
+					keyboard.enter();
+
+				} catch (AWTException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception e) {
+			se.log().error(e.getClass().getSimpleName() + " encountered during FileUpload.", e);
+			se.reporter().reportErrorCapture("Doing FileUpload", e, se);
+			e.printStackTrace();
+		}
 	}
 
 	private static boolean checkAlert(SeHelper se, String key, String value) {
@@ -482,20 +521,20 @@ public class PageProcess {
 	}
 
 	private static void continueIfException(SeHelper se, String sheetName, String key, Exception e) {
-		
+
 		String continueIfException = SystemPropertyUtil.getContinueIfException().trim();
-		
+
 		if (continueIfException.equalsIgnoreCase("Yes")) {
-			
-			return; // if yes keep running 
-			
+
+			return; // if yes keep running
+
 		} else if (continueIfException.equalsIgnoreCase("No")) {
-			
+
 			// if no end test
-			se.log().debug("The test ended early because the element: " + key
-					+ " could not be found on page " + sheetName);
-			se.reporter().reportStepFail("The test ended early because the element: " + key
-					+ " could not be found.", "Page: " + sheetName);
+			se.log().debug(
+					"The test ended early because the element: " + key + " could not be found on page " + sheetName);
+			se.reporter().reportStepFail("The test ended early because the element: " + key + " could not be found.",
+					"Page: " + sheetName);
 
 			se.stopRunning();
 		}
