@@ -639,7 +639,7 @@ Dynamic libraries:
 0x00007ffb3c420000 - 0x00007ffb3c4ab000 	C:\windows\SYSTEM32\apphelp.dll
 
 dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
-symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\Java\jdk-11.0.2\bin;C:\windows\SYSTEM32;C:\windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.17134.950_none_fb3da4273069d3e0;C:\Program Files\Java\jdk-11.0.2\bin\server
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\Java\jdk-13.0.2\bin;C:\windows\SYSTEM32;C:\windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.17134.950_none_fb3da4273069d3e0;C:\Program Files\Java\jdk-13.0.2\bin\server
 
 VM Arguments:
 java_command: jenkins.maven3.agent.Maven35Main C:\Users\VMQApractice\.jenkins\tools\hudson.tasks.Maven_MavenInstallation\TestMaven C:\Users\VMQApractice\.jenkins\war\WEB-INF\lib\remoting-3.33.jar C:\Users\VMQApractice\.jenkins\plugins\maven-plugin\WEB-INF\lib\maven35-interceptor-1.13.jar C:\Users\VMQApractice\.jenkins\plugins\maven-plugin\WEB-INF\lib\maven3-interceptor-commons-1.13.jar 50291
