@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
@@ -31,6 +32,7 @@ public class VM_Sample_Test {
 
 	List<TestUtil> testsArray = new ArrayList<TestUtil>();
 	List<String> lstOfTestCasesToExecute = new ArrayList<String>();
+	List<TestUtil> activeTests = new ArrayList<TestUtil>();
 
 	private String reportPath;
 	private ExtentReports report;
@@ -101,7 +103,6 @@ public class VM_Sample_Test {
 	public void VM_Test() {
 
 		int retryCount = SystemPropertyUtil.getRetryCount();
-		List<TestUtil> activeTests = new ArrayList<TestUtil>();
 		activeTests.addAll(testsArray);
 		
 		if (SystemPropertyUtil.runInParallel().equalsIgnoreCase("Yes")) { // running tests with parallel execution
@@ -190,7 +191,14 @@ public class VM_Sample_Test {
 	}
 
 	@AfterMethod(alwaysRun = true, groups = { "test" }, timeOut = 1800000000)
-	protected void afterMethod() {
+	protected void afterMethod(ITestResult result) {
+		
+		if (!activeTests.isEmpty()) {
+			
+			//if activeTests is not empty, that means that some test(s) have failed
+			result.setStatus(ITestResult.FAILURE);
+		}
+		
 		try {
 			recorder.stop();
 		}
