@@ -1,28 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>VM_Nocode_Framework</groupId>
-	<artifactId>VMFramework</artifactId>
+	<groupId>ValueMomentum</groupId>
+	<artifactId>VM_Framework_Base</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-	<name>VMFramework</name>
-	<!-- FIXME change it to the project's website -->
-	<url>http://www.example.com</url>
+	<name>VM_Automation_Framework</name>
+	<url>http://maven.apache.org</url>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- <maven.compiler.source>1.7</maven.compiler.source> -->
-		<!-- <maven.compiler.target>1.7</maven.compiler.target> -->
-
-		<jdk.version>13</jdk.version>
-		<jsonpath.version>2.4.0</jsonpath.version>
+		<jdk.version>1.8</jdk.version>
+		<jsonpath.version>0.5.5</jsonpath.version>
 		<encoding>UTF-8</encoding>
-		<maven-compiler.version>3.8.1</maven-compiler.version>
-		<maven-surefire.version>2.22.2</maven-surefire.version>
+		<maven-compiler.version>3.1</maven-compiler.version>
+		<maven-surefire.version>2.18.1</maven-surefire.version>
 		<maven-failsafe.version>2.17</maven-failsafe.version>
 		<maven-resources.version>2.6</maven-resources.version>
 		<maven.surefire.junitmode>true</maven.surefire.junitmode>
@@ -39,20 +33,31 @@
 		<testng.reportng.title>HTML Report</testng.reportng.title>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>codelds</id>
+			<name>Code IDs</name>
+			<url>https://code.lds.org/nexus/content/groups/main-repo </url>
+		</repository>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
+
+
+		<!-- <dependency> <groupId>com.microsoft.sqlserver</groupId> <artifactId>sqljdbc4</artifactId> 
+			<version>4.0.2206.100</version> </dependency> -->
+
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
 		</dependency>
-		
-		<dependency>
-		    <groupId>org.json</groupId>
-		    <artifactId>json</artifactId>
-		    <version>20190722</version>
-		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
@@ -87,7 +92,7 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>6.8.3</version>
+			<version>6.8.5</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -111,7 +116,7 @@
 			<version>1.7.28</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
@@ -171,13 +176,15 @@
 			<artifactId>selenium-java</artifactId>
 			<version>3.141.59</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-api</artifactId>
 			<version>3.141.59</version>
 		</dependency>
-		
+		<!-- <dependency> <groupId>org.seleniumhq.selenium</groupId> <artifactId>selenium-remote-driver</artifactId> 
+			<version>3.13.0</version> </dependency> <dependency> <groupId>org.seleniumhq.selenium</groupId> 
+			<artifactId>selenium-server</artifactId> <version>3.13.0</version> </dependency> -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -209,7 +216,12 @@
 			<version>${jsonpath.version}</version>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>1.2.6</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.lightcouch</groupId>
@@ -217,7 +229,12 @@
 			<version>0.1.8</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>1.2.6</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -235,14 +252,36 @@
 
 		<dependency>
 			<groupId>atu.testng.reports.ATUReports</groupId>
+			<artifactId>atu-reports</artifactId>
+			<version>5.1.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/executables/ATUReporter_Selenium_testNG_5.1.1.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>atu.testng.reports.ATUReports</groupId>
 			<artifactId>ATUTestRecorder</artifactId>
 			<version>2.1</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/executables/ATUTestRecorder_2.1.jar</systemPath>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.pdfbox</groupId>
+		    <artifactId>pdfbox</artifactId>
+		    <version>2.0.18</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.pdfbox</groupId>
+		    <artifactId>fontbox</artifactId>
+		    <version>2.0.18</version>
+		</dependency>
+		
 	</dependencies>
 
-		<build>
+
+
+	<build>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -258,6 +297,7 @@
 
 		<pluginManagement>
 			<plugins>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
@@ -324,10 +364,12 @@
 					</configuration>
 				</plugin>
 
+
+
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>Smoke</id>

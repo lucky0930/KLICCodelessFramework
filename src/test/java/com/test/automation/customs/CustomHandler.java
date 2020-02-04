@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.Utils.PDFReader;
 
 public class CustomHandler {
 	
@@ -133,4 +134,17 @@ public class CustomHandler {
 		se.reporter().screenCapture(se);
 		return "sc";
 	}
+	
+	private static boolean ValidatePDF(String var) {
+		
+		String[] args = var.split(",");
+		String fileName = args[0].trim();
+		String targetText = args[1].trim();
+		
+		PDFReader reader = new PDFReader(se);
+		return reader.verifyPDFContent(fileName, targetText);
+	}
+	
+	
+	
 }
