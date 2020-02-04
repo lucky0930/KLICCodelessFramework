@@ -10,7 +10,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
@@ -382,7 +381,6 @@ public class PageProcess {
 
 	
 	private static void FileUpload(SeHelper se, String key, String value, String xPathExpression) {
-		Actions action = new Actions(se.driver());
 
 		try {
 			WebElement element = CommonRepo.ElementObject(se, xPathExpression);
@@ -401,14 +399,13 @@ public class PageProcess {
 					Thread.sleep(1000);
 					se.reporter().reportInfo("Uploading File", "File Path:<br>" + value);
 					
-					action.sendKeys(value.trim());
-//					Keyboard keyboard = new Keyboard();
-//					keyboard.type(value.trim());
+					Keyboard keyboard = new Keyboard();
+					keyboard.type(value.trim());
 					Thread.sleep(1000);
-					action.sendKeys(Keys.ENTER);
+					keyboard.enter();
 
-//				} catch (AWTException e) {
-//					e.printStackTrace();
+				} catch (AWTException e) {
+					e.printStackTrace();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
