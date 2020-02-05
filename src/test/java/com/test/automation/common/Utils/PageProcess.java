@@ -13,6 +13,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 
 import com.test.automation.common.SeHelper;
@@ -240,7 +241,13 @@ public class PageProcess {
 				if (value.equalsIgnoreCase("Click")) {
 					se.element().Click(element);
 					// element.click();
-				} else {
+				} 
+				else if(value.equalsIgnoreCase("jsClick")){
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
+	
+				}
+						else {
 					element.clear();
 					element.sendKeys(value);
 				}
@@ -258,7 +265,15 @@ public class PageProcess {
 			break;
 		case "button":
 			try {
-				se.element().Click(element);
+				if (value.equalsIgnoreCase("Click")) {
+					se.element().Click(element);
+					// element.click();
+				} 
+				else if(value.equalsIgnoreCase("jsClick")){
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
+	
+				}
 				// element.click();
 			} catch (NoSuchElementException e) {
 				se.log().error(e.getClass().getSimpleName() + " encountered when accessing \"" + key + "\"", e);
@@ -300,7 +315,15 @@ public class PageProcess {
 			break;
 		case "a":
 			try {
-				se.element().Click(element);
+				if (value.equalsIgnoreCase("Click")) {
+					se.element().Click(element);
+					// element.click();
+				} 
+				else if(value.equalsIgnoreCase("jsClick")){
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
+	
+				}
 				// element.click();
 			} catch (NoSuchElementException e) {
 				se.log().error(e.getClass().getSimpleName() + " encountered for element: \"" + key + "\"", e);
@@ -316,7 +339,15 @@ public class PageProcess {
 			break;
 		case "label":
 			try {
-				se.element().Click(element);
+				if (value.equalsIgnoreCase("Click")) {
+					se.element().Click(element);
+					// element.click();
+				} 
+				else if(value.equalsIgnoreCase("jsClick")){
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
+	
+				}
 				// element.click();
 			} catch (NoSuchElementException e) {
 				se.log().error(e.getClass().getSimpleName() + " encountered for element: \"" + key + "\"", e);
@@ -334,13 +365,19 @@ public class PageProcess {
 			ActionBasedOnValue(se, element, value);
 
 		}
-		se.reporter().reportStepPass("Accessing Element", "Element: " + key + "<br>Value: " + value);
+		se.reporter().reportStepPass("Accessing Element", "Element: " + key + "<br>Value:" + value);
+	
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
-		if (value.contains("Click")) {
+		if (value.equalsIgnoreCase("Click")) {
 			se.element().Click(element);
 			// element.click();
+		} 
+		else if(value.equalsIgnoreCase("jsClick")){
+			JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+            executor.executeScript("arguments[0].click();", element);
+
 		} else if (value.contains("Keys")) {
 			ControlKeys(se, value);
 		} else {

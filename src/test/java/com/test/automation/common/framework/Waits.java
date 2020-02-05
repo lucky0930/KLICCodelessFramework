@@ -147,8 +147,7 @@ public class Waits {
         }
         catch(org.openqa.selenium.ElementNotInteractableException e) {
             try {
-                JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-                executor.executeScript("arguments[0].click();", element);
+                element.click();
 
  
 
