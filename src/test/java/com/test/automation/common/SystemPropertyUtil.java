@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import com.test.automation.common.Utils.ExcelReader;
+import com.test.automation.common.Utils.PDFReader;
 
 public class SystemPropertyUtil {
 
@@ -55,6 +56,9 @@ public class SystemPropertyUtil {
 	private static String numberOfBrowsers = config.getConfigProp("NumberOfBrowsers");
 	private static String continueIfException = config.getConfigProp("ContinueIfException");
 	private static String retryCount = config.getConfigProp("RetryCount");
+	
+	//persistant objects
+	private static PDFReader pdfReader;
 
 	private final static int windowWidth = System.getProperties().containsKey(windowWidthKey)
 			? Integer.parseInt(System.getProperty(windowWidthKey))
@@ -214,6 +218,14 @@ public class SystemPropertyUtil {
 
 	public static int getExplicitWaitTime() {
 		return Integer.parseInt(explicitWaitTime);
+	}
+	
+	public static PDFReader getPDFReader() {
+		return pdfReader;
+	}
+	
+	public static void setPDFReader(PDFReader newReader) {
+		pdfReader = newReader;
 	}
 	
 	public static int getNumberOfBrowsers() {

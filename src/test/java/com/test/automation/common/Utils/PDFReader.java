@@ -21,31 +21,44 @@ import com.test.automation.common.SeHelper;
 public class PDFReader {
 	
 	WebDriver driver;
+	String filepath = null;
 	
 	public PDFReader(SeHelper se) {
 		driver = se.driver();	
 	}
 	
-	/**
-	 * To verify PDF content in the pdf document
-	 */
-	public void verifyPDFTextInBrowser() {
+	public PDFReader(SeHelper se, String filepath) {
+		this.driver = se.driver();
+		this.filepath = filepath;
+	}
+		
+	 // To verify PDF content in the pdf document
+	
+	public void verifyPDFTextInBrowser(String reqTextInPDF) {
 		
 		driver.get("http://www.princexml.com/samples/");
 		driver.findElement(By.linkText("PDF flyer")).click();
-		Assert.assertTrue(verifyPDFContent(driver.getCurrentUrl(), "Prince Cascading"));
+		Assert.assertTrue(verifyPDFContent(driver.getCurrentUrl(), reqTextInPDF));
 	}
 
-	/**
-	 * To verify pdf in the URL 
-	 */
+/*	
+	// To verify pdf in the URL 
+	
 	public void verifyPDFInURL() {
 		driver.get("http://www.princexml.com/samples/");
 		driver.findElement(By.linkText("PDF flyer")).click();
 		String getURL = driver.getCurrentUrl();
 		Assert.assertTrue(getURL.contains(".pdf"));
 	}
-
+*/
+	
+	public boolean verifyPDFContent(String reqTextInPDF) {
+		if (filepath == null) {
+			verifyPDFTextInBrowser(reqTextInPDF);
+			return true;
+		}
+		return verifyPDFContent(filepath, reqTextInPDF);
+	}
 	
 	public boolean verifyPDFContent(String fileName, String reqTextInPDF) {
 		
@@ -56,9 +69,12 @@ public class PDFReader {
 		try {
 			if (!fileName.contains(".pdf"))
 				fileName = fileName.concat(".pdf");
+			if (fileName.charAt(1) != '\\' || fileName.charAt(1) != '/') {
+				String home = System.getProperty("user.home");
+				fileName = (home + "\\Downloads\\" + fileName);
+			}
 			
-			String home = System.getProperty("user.home");
-			File file = new File(home + "\\Downloads\\" + fileName);
+			File file = new File(fileName);
 			PDDocument document = PDDocument.load(file);
 			PDFTextStripper strip = new PDFTextStripper();
 			strip.setEndPage(2);
@@ -67,7 +83,8 @@ public class PDFReader {
 			document.close();
 
 		} catch (IOException e) {
-			System.err.println("Unable to open PDF Parser. " + e.getMessage());
+			System.err.println("Unable to parse PDF");
+			e.printStackTrace();
 		}
 		
 		//System.out.println("+++++++++++++++++\n" + parsedText + "\n+++++++++++++++++");

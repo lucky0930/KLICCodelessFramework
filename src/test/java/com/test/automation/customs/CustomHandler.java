@@ -135,20 +135,6 @@ public class CustomHandler {
 		return "sc";
 	}
 	
-	private static boolean VerifyPDF(String var) {
-		
-		String[] args = var.split(",");
-		String fileName = args[0].trim();
-		String targetText = args[1].trim();
-		
-		PDFReader reader = new PDFReader(se);
-		boolean flag = reader.verifyPDFContent(fileName, targetText);
-		if (flag)
-			System.out.println("PDF Verified");
-		else
-			System.out.println("Unable to verify PDF");
-		return flag;
-	}
 	
 	
 	

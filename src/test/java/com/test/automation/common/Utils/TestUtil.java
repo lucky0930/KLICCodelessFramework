@@ -170,7 +170,7 @@ public class TestUtil extends Thread {
 						String sleep;
 						
 						if(wait.length() < 6) {
-							se.waits().setTimeOut(Integer.parseInt(wait));
+							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						
 						
@@ -181,7 +181,7 @@ public class TestUtil extends Thread {
 							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						else {
-							se.waits().setTimeOut(Integer.parseInt(wait));
+							se.waits().Sleep(Integer.parseInt(wait));
 						}
 						
 					}
@@ -189,9 +189,6 @@ public class TestUtil extends Thread {
 					
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
-					
-					se.waits().resetTimeOut();
-					
 				}
 			});
 			se.waits().waitForPageLoad();

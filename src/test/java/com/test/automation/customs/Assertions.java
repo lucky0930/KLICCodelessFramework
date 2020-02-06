@@ -1,6 +1,8 @@
 package com.test.automation.customs;
 
 import com.test.automation.common.SeHelper;
+import com.test.automation.common.SystemPropertyUtil;
+import com.test.automation.common.Utils.PDFReader;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -35,6 +37,9 @@ public class Assertions {
 			se.log().logSeStep("VERIFY FAILED - CheckURL: URL does not match expected: " + expectedValue);
 			se.reporter().reportFailCapture(assertion, se.browser().getCurrentUrl(), expectedValue, se);
 			return false;
+		} else if (assertion.contentEquals("PDFText")) {
+			PDFReader reader = SystemPropertyUtil.getPDFReader();
+			return reader.verifyPDFContent(expectedValue);
 		} else {
 			System.out.println("WARNING: verify() calls must include WebElement unless asserting 'CheckURL'");
 			se.log().logSeStep("VERIFY FAILED: No valid assertion provided");

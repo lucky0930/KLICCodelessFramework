@@ -46,6 +46,12 @@ public class PageProcess {
 					ControlKeys(se, value);
 					return null;
 				}
+				
+				if (key.contains("OpenPDF")) {
+					PDFReader reader = new PDFReader(se, value);
+					SystemPropertyUtil.setPDFReader(reader);
+					return null;
+				}
 
 				if (checkAlert(se, key, value)) {
 					return null;
