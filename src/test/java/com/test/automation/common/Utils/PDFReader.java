@@ -69,7 +69,7 @@ public class PDFReader {
 		try {
 			if (!fileName.contains(".pdf"))
 				fileName = fileName.concat(".pdf");
-			if (fileName.charAt(1) != '\\' || fileName.charAt(1) != '/') {
+			if (fileName.charAt(1) != ':') {
 				String home = System.getProperty("user.home");
 				fileName = (home + "\\Downloads\\" + fileName);
 			}
