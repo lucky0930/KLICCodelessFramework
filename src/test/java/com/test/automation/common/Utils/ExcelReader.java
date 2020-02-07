@@ -31,8 +31,8 @@ public class ExcelReader {
 			try {
 			excelConfig(SystemPropertyUtil.getTestRunnerPath());
 			} catch (Exception e) {
-	
-				System.out.println("***** Unable to read the Excel sheet Data in initialize *****");
+				System.out.println("***** Unable to read the Test Runner Excel sheet in initialize *****");
+				System.out.println(SystemPropertyUtil.getTestRunnerPath());
 				return;
 			}
 		}
