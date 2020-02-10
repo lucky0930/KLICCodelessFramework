@@ -70,7 +70,7 @@ public class TestUtil extends Thread {
 		LinkedHashMap<String, LinkedHashMap<String, String>> xpathData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		LinkedHashMap<String, LinkedHashMap<String, String>> exWait = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		try {
-			
+
 			mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se);
 			xpathData = excelReader.GetTestData("Locators", TESTDATA_SHEET_PATH, se);
 			exWait = excelReader.GetTestData("ExplicitWait", TESTDATA_SHEET_PATH, se);
@@ -81,16 +81,15 @@ public class TestUtil extends Thread {
 			se.reporter().reportError("Reading Excel data.", e);
 			return;
 		}
-		
+
 		if (mydata == null || xpathData == null) {
-			
+
 			return;
 		}
 
 //		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = defaultData;
 //		
 //		defaultData.clear();
-
 
 		synchronized ("Locators") {
 			// xpathData = excelReader.GetTestData("Xpath", TESTDATA_SHEET_PATH);
@@ -121,14 +120,14 @@ public class TestUtil extends Thread {
 					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
 					LinkedHashMap<String, String> actualWaitData = exWait.get(actualSheetCollection.get(i));
 					// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
-					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData,actualWaitData);
+					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData, actualWaitData);
 				} else {
 					break;
 				}
 			}
-			
+
 		} catch (Exception e) {
-			
+
 			se.log().error(e.getClass().getSimpleName() + " encountered during ExecuteTest.", e);
 			se.reporter().reportError("ExecuteTest", e);
 			return;
@@ -136,12 +135,10 @@ public class TestUtil extends Thread {
 	}
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
-			LinkedHashMap<String, String> actualxPathData,LinkedHashMap<String, String> actualWaitData) {
+			LinkedHashMap<String, String> actualxPathData, LinkedHashMap<String, String> actualWaitData) {
 
 		se.log().logSeStep("Opening page: " + sheetName);
 		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
-
-		
 
 		try {
 			actualData.entrySet().forEach(entry -> {
@@ -164,37 +161,34 @@ public class TestUtil extends Thread {
 				} else {
 					if (entry.getValue() != null)
 						System.out.println(actualxPathData.get(entry.getKey()));
-						
-					if(actualWaitData != null) {
-					if(actualWaitData.get(entry.getKey()) != null) {
-						String wait = actualWaitData.get(entry.getKey());
-						String sleep;
-						
-						if(wait.length() < 6) {
-							se.waits().Sleep(Integer.parseInt(wait));
+
+					if (actualWaitData != null) {
+						if (actualWaitData.get(entry.getKey()) != null) {
+							String wait = actualWaitData.get(entry.getKey());
+							String sleep;
+
+							if (wait.length() < 6) {
+								se.waits().setTimeOut(Integer.parseInt(wait));
+							}
+
+							else if (wait.substring(0, 5).equalsIgnoreCase("sleep")) {
+
+								wait = wait.split("=")[1].trim();
+								se.waits().Sleep(Integer.parseInt(wait));
+							} else {
+								se.waits().setTimeOut(Integer.parseInt(wait));
+							}
+
 						}
-						
-						
-						else if(wait.substring(0,5).equalsIgnoreCase("sleep")) {
-							
-							
-							wait = wait.split("=")[1].trim();
-							se.waits().Sleep(Integer.parseInt(wait));
-						}
-						else {
-							se.waits().Sleep(Integer.parseInt(wait));
-						}
-						
 					}
-					}
-					
+
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
 				}
 			});
 			se.waits().waitForPageLoad();
 		} catch (NullPointerException e) {
-				//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -245,39 +239,39 @@ public class TestUtil extends Thread {
 	}
 
 	public void endExtentTest() {
-		
+
 		report.endTest(se.reporter().getTest());
 		report.getReportId();
 	}
-	
+
 	public void newExtentTest() {
-		
+
 		retryCount++;
 		this.endExtentTest();
 		this.test = report.startTest("Test Case Number: " + TestCaseNumber + "<br>Retry #" + retryCount);
-		
+
 		test.assignAuthor("VAM QA");
 		test.assignCategory(method.getName());
 
 		ExtentReporter reporter = new ExtentReporter(test);
 		se.setReporter(reporter);
-		
+
 		se.reporter().reportInfo("This is a retry of a failed test.", "Retry Number: " + retryCount);
 	}
 
 	public List<String> ExecuteTestRunner() {
-		
+
 		List<String> lstOfTC = excelReader.GetTestRunnerData(TEST_RUNNER_PATH);
 		return lstOfTC;
 	}
 
 	public ExtentTest getExtent() {
-		
+
 		return test;
 	}
-	
+
 	public void writeSavedData() {
-		
+
 		w.writeSavedData(TestCaseNumber, se.savedData());
 	}
 }

@@ -46,7 +46,7 @@ public class PageProcess {
 					ControlKeys(se, value);
 					return null;
 				}
-				
+
 				if (key.contains("OpenPDF")) {
 					PDFReader reader = new PDFReader(se, value);
 					SystemPropertyUtil.setPDFReader(reader);
@@ -228,10 +228,10 @@ public class PageProcess {
 		if (checkOptional(element, value)) {
 			return;
 		}
-		
-		// checking if the value should be saved 
+
+		// checking if the value should be saved
 		if (key.endsWith("*")) {
-			
+
 			key = key.substring(0, key.length() - 1);
 			saveElement(se, key, value);
 		}
@@ -254,13 +254,11 @@ public class PageProcess {
 				if (value.equalsIgnoreCase("Click")) {
 					se.element().Click(element);
 					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
-	
-				}
-						else {
+				} else if (value.equalsIgnoreCase("jsClick")) {
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
+
+				} else {
 					element.clear();
 					element.sendKeys(value);
 				}
@@ -278,14 +276,13 @@ public class PageProcess {
 			break;
 		case "button":
 			try {
-				if (value.equalsIgnoreCase("Click")) {
-					se.element().Click(element);
+				if (value.equalsIgnoreCase("jsClick")) {
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
-	
+				} else {
+					se.element().Click(element);
+
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -328,14 +325,13 @@ public class PageProcess {
 			break;
 		case "a":
 			try {
-				if (value.equalsIgnoreCase("Click")) {
-					se.element().Click(element);
+				if (value.equalsIgnoreCase("jsClick")) {
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
-	
+				} else {
+					se.element().Click(element);
+
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -352,14 +348,13 @@ public class PageProcess {
 			break;
 		case "label":
 			try {
-				if (value.equalsIgnoreCase("Click")) {
-					se.element().Click(element);
+				if (value.equalsIgnoreCase("jsClick")) {
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
-	
+				} else {
+					se.element().Click(element);
+
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -379,17 +374,16 @@ public class PageProcess {
 
 		}
 		se.reporter().reportStepPass("Accessing Element", "Element: " + key + "<br>Value:" + value);
-	
+
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
 		if (value.equalsIgnoreCase("Click")) {
 			se.element().Click(element);
 			// element.click();
-		} 
-		else if(value.equalsIgnoreCase("jsClick")){
-			JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-            executor.executeScript("arguments[0].click();", element);
+		} else if (value.equalsIgnoreCase("jsClick")) {
+			JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+			executor.executeScript("arguments[0].click();", element);
 
 		} else if (value.contains("Keys")) {
 			ControlKeys(se, value);
@@ -429,7 +423,6 @@ public class PageProcess {
 		action.sendKeys(Keys.NULL).perform();
 	}
 
-	
 	private static void FileUpload(SeHelper se, String key, String value, String xPathExpression) {
 
 		try {
@@ -439,16 +432,16 @@ public class PageProcess {
 
 				// if it is an input, we can just send the filepath directly
 				element.sendKeys(value);
-				
+
 			} else {
 
 				// if it is not an input, use the Robot class to type into the file explorer
 				try {
-					
+
 					se.element().Click(element);
 					Thread.sleep(1000);
 					se.reporter().reportInfo("Uploading File", "File Path:<br>" + value);
-					
+
 					Keyboard keyboard = new Keyboard();
 					keyboard.type(value.trim());
 					Thread.sleep(1000);
@@ -593,9 +586,9 @@ public class PageProcess {
 
 		return;
 	}
-	
+
 	private static void saveElement(SeHelper se, String key, String value) {
-		
+
 		se.savedData().put(key, value);
 	}
 }
