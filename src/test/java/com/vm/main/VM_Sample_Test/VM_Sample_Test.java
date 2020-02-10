@@ -22,6 +22,7 @@ import com.relevantcodes.extentreports.LogStatus;
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
 import com.test.automation.common.Utils.ExcelReader;
+import com.test.automation.common.Utils.ExcelWriter;
 import com.test.automation.common.Utils.TestUtil;
 import com.test.automation.common.framework.Util;
 
@@ -233,6 +234,9 @@ public class VM_Sample_Test {
 		// Close extent report
 		report.flush();
 		report.close();
+		
+		// Write saved data
+		ExcelWriter.saveFile();
 
 		// Copy report file
 		File source = new File(reportPath);

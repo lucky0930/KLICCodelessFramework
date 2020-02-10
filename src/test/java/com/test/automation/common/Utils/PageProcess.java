@@ -228,6 +228,13 @@ public class PageProcess {
 		if (checkOptional(element, value)) {
 			return;
 		}
+		
+		// checking if the value should be saved 
+		if (key.endsWith("*")) {
+			
+			key = key.substring(0, key.length() - 1);
+			saveElement(se, key, value);
+		}
 
 		if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1)) {
 
@@ -585,5 +592,10 @@ public class PageProcess {
 		}
 
 		return;
+	}
+	
+	private static void saveElement(SeHelper se, String key, String value) {
+		
+		se.savedData().put(key, value);
 	}
 }

@@ -43,6 +43,7 @@ public class SystemPropertyUtil {
 	private final static String geckoDriverPath = config.getConfigProp("GeckoDriverPath");
 	private final static String edgeDriverPath = config.getConfigProp("EdgeDriverPath");
 	private final static String ieDriverPath = config.getConfigProp("ieDriverPath");
+	private final static String savedDataPath = config.getConfigProp("SavedDataPath");
 	
 	// waits
 	private final static String implicitWaitTime = config.getConfigProp("ImplicitWaitTime");
@@ -286,6 +287,16 @@ public class SystemPropertyUtil {
 	public static String getRecentReportPath() {
 		try {
 			return getRootPath() + recentReportPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String getSavedDataPath() {
+		try {
+			return getRootPath() + savedDataPath;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

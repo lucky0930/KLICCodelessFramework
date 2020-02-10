@@ -185,6 +185,7 @@ public class Assertions {
 			System.out.println("Text value found for element " + key + ": " + text);
 			se.log().logSeStep("Text value found for element " + key + ": " + text);
 			se.reporter().reportStepPass("Text value for " + key, "Value: " + text);
+			se.savedData().put(key, text);
 			return true;
 
 		default:

@@ -29,6 +29,7 @@ public class TestUtil extends Thread {
 	String TEST_RUNNER_PATH = SystemPropertyUtil.getTestRunnerPath();
 
 	ExcelReader excelReader = new ExcelReader();
+	ExcelWriter w = new ExcelWriter();
 	SeHelper se;
 	private ExtentReports report;
 	Method method;
@@ -239,6 +240,7 @@ public class TestUtil extends Thread {
 		se.reporter().reportResult(se);
 		se.log().printLogBuilder();
 		se.log().couchDb(se.reporter().getResult(), String.valueOf(se.reporter().getResult()));
+		writeSavedData();
 		se.browser().quit();
 	}
 
@@ -264,11 +266,18 @@ public class TestUtil extends Thread {
 	}
 
 	public List<String> ExecuteTestRunner() {
+		
 		List<String> lstOfTC = excelReader.GetTestRunnerData(TEST_RUNNER_PATH);
 		return lstOfTC;
 	}
 
 	public ExtentTest getExtent() {
+		
 		return test;
+	}
+	
+	public void writeSavedData() {
+		
+		w.writeSavedData(TestCaseNumber, se.savedData());
 	}
 }

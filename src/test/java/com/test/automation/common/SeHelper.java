@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.LinkedHashMap;
 
 public class SeHelper {
 	private WebDriver driver;
@@ -36,6 +37,8 @@ public class SeHelper {
 	private Browser.Browsers currentBrowser;
 	
 	private ExtentReporter reporter;
+	
+	private LinkedHashMap<String, String> savedData = new LinkedHashMap<>();
 	
 	private Boolean keepRunning = true; //flag used to stop the test when an exception occurs (configure in properties)
 
@@ -448,5 +451,9 @@ public class SeHelper {
 	
 	public void retryRunning() {
 		this.keepRunning = true;
+	}
+	
+	public LinkedHashMap<String, String> savedData() {
+		return savedData;
 	}
 }
