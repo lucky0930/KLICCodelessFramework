@@ -271,13 +271,13 @@ public class PageProcess {
 			break;
 		case "button":
 			try {
-				if (value.equalsIgnoreCase("Click")) {
-					se.element().Click(element);
-					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
+				if (value.equalsIgnoreCase("jsClick")) {
 					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
 	                executor.executeScript("arguments[0].click();", element);
+					// element.click();
+				} 
+				else{
+				se.element().Click(element);
 	
 				}
 				// element.click();
@@ -321,13 +321,13 @@ public class PageProcess {
 			break;
 		case "a":
 			try {
-				if (value.equalsIgnoreCase("Click")) {
-					se.element().Click(element);
-					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
+				if (value.equalsIgnoreCase("jsClick")) {
 					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
 	                executor.executeScript("arguments[0].click();", element);
+					// element.click();
+				} 
+				else{
+				se.element().Click(element);
 	
 				}
 				// element.click();
@@ -345,13 +345,13 @@ public class PageProcess {
 			break;
 		case "label":
 			try {
-				if (value.equalsIgnoreCase("Click")) {
-					se.element().Click(element);
-					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
+				if (value.equalsIgnoreCase("jsClick")) {
 					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
 	                executor.executeScript("arguments[0].click();", element);
+					// element.click();
+				} 
+				else{
+				se.element().Click(element);
 	
 				}
 				// element.click();
