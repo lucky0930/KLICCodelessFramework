@@ -135,10 +135,12 @@ public class TestUtil extends Thread {
 	}
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
-			LinkedHashMap<String, String> actualxPathData, LinkedHashMap<String, String> actualWaitData) {
+			LinkedHashMap<String, String> actualxPathData,LinkedHashMap<String, String> actualWaitData) {
 
 		se.log().logSeStep("Opening page: " + sheetName);
 		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
+
+		
 
 		try {
 			actualData.entrySet().forEach(entry -> {
@@ -161,34 +163,39 @@ public class TestUtil extends Thread {
 				} else {
 					if (entry.getValue() != null)
 						System.out.println(actualxPathData.get(entry.getKey()));
-
-					if (actualWaitData != null) {
-						if (actualWaitData.get(entry.getKey()) != null) {
-							String wait = actualWaitData.get(entry.getKey());
-							String sleep;
-
-							if (wait.length() < 6) {
-								se.waits().setTimeOut(Integer.parseInt(wait));
-							}
-
-							else if (wait.substring(0, 5).equalsIgnoreCase("sleep")) {
-
-								wait = wait.split("=")[1].trim();
-								se.waits().Sleep(Integer.parseInt(wait));
-							} else {
-								se.waits().setTimeOut(Integer.parseInt(wait));
-							}
-
+						
+					if(actualWaitData != null) {
+					if(actualWaitData.get(entry.getKey()) != null) {
+						String wait = actualWaitData.get(entry.getKey());
+						String sleep;
+						
+						if(wait.length() < 6) {
+							se.waits().setTimeOut(Integer.parseInt(wait));
 						}
+						
+						
+						else if(wait.substring(0,5).equalsIgnoreCase("sleep")) {
+							
+							
+							wait = wait.split("=")[1].trim();
+							se.waits().Sleep(Integer.parseInt(wait));
+						}
+						else {
+							se.waits().setTimeOut(Integer.parseInt(wait));
+						}
+						
 					}
-
+					}
+					
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
+					
+					se.waits().resetTimeOut();
 				}
 			});
 			se.waits().waitForPageLoad();
 		} catch (NullPointerException e) {
-			// e.printStackTrace();
+				//e.printStackTrace();
 		}
 	}
 

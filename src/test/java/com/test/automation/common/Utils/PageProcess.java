@@ -228,7 +228,7 @@ public class PageProcess {
 		if (checkOptional(element, value)) {
 			return;
 		}
-
+		
 		// checking if the value should be saved
 		if (key.endsWith("*")) {
 
@@ -254,11 +254,13 @@ public class PageProcess {
 				if (value.equalsIgnoreCase("Click")) {
 					se.element().Click(element);
 					// element.click();
-				} else if (value.equalsIgnoreCase("jsClick")) {
-					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-					executor.executeScript("arguments[0].click();", element);
-
-				} else {
+				} 
+				else if(value.equalsIgnoreCase("jsClick")){
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
+	
+				}
+						else {
 					element.clear();
 					element.sendKeys(value);
 				}
@@ -277,12 +279,13 @@ public class PageProcess {
 		case "button":
 			try {
 				if (value.equalsIgnoreCase("jsClick")) {
-					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-					executor.executeScript("arguments[0].click();", element);
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} else {
-					se.element().Click(element);
-
+				} 
+				else{
+				se.element().Click(element);
+	
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -326,12 +329,13 @@ public class PageProcess {
 		case "a":
 			try {
 				if (value.equalsIgnoreCase("jsClick")) {
-					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-					executor.executeScript("arguments[0].click();", element);
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} else {
-					se.element().Click(element);
-
+				} 
+				else{
+				se.element().Click(element);
+	
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -349,12 +353,13 @@ public class PageProcess {
 		case "label":
 			try {
 				if (value.equalsIgnoreCase("jsClick")) {
-					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
-					executor.executeScript("arguments[0].click();", element);
+					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
+	                executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} else {
-					se.element().Click(element);
-
+				} 
+				else{
+				se.element().Click(element);
+	
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -374,7 +379,7 @@ public class PageProcess {
 
 		}
 		se.reporter().reportStepPass("Accessing Element", "Element: " + key + "<br>Value:" + value);
-
+	
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
