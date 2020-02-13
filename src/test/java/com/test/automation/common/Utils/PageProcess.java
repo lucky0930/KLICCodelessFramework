@@ -48,8 +48,28 @@ public class PageProcess {
 				}
 
 				if (key.contains("OpenPDF")) {
-					PDFReader reader = new PDFReader(se, value);
-					SystemPropertyUtil.setPDFReader(reader);
+					Thread.sleep(1000);
+
+					if (value.contains("GeneratePath()")) {
+						String path = CustomHandler.GeneratePath();
+						OpenWindowsDocuent(se, path);
+					} else {
+						OpenWindowsDocuent(se, value);
+					}
+
+					// Actions action = new Actions(se.driver());
+
+					// action.keyDown(Keys.CONTROL).sendKeys("o").keyUp(Keys.CONTROL).perform();
+					// action.keyDown(Keys.CONTROL+"O").keyUp(Keys.CONTROL).perform();
+					// Thread.sleep(1000);
+					// action.keyDown(Keys.CONTROL).sendKeys("o").keyUp(Keys.CONTROL).perform();
+//					Keyboard keyboard = new Keyboard();
+//					keyboard.type(value.trim());
+//					Thread.sleep(1000);
+//					keyboard.enter();
+
+					// PDFReader reader = new PDFReader(se, value);
+					// SystemPropertyUtil.setPDFReader(reader);
 					return null;
 				}
 
@@ -82,8 +102,9 @@ public class PageProcess {
 
 					// element = (WebElement) callMethod.invoke(obj, se);
 					// element = (WebElement) callMethod.invoke(obj);
+					if (xPathExpression != null)
 
-					element = CommonRepo.ElementObject(se, xPathExpression);
+						element = CommonRepo.ElementObject(se, xPathExpression);
 
 				} catch (NoSuchElementException e) {
 
@@ -107,13 +128,13 @@ public class PageProcess {
 					if (checkOptional(element, value)) {
 						return null;
 					}
-					if (value.contains(">")) {
-						Assertions asrt = new Assertions(se);
-						asrt.verify(element, value, key);
-						return element;
-					}
 
 					FillElement(se, element, key, value);
+				}
+				if (value.contains(">")) {
+					Assertions asrt = new Assertions(se);
+					asrt.verify(element, value, key);
+					return element;
 				}
 			} catch (SecurityException e) {
 				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName,
@@ -228,7 +249,7 @@ public class PageProcess {
 		if (checkOptional(element, value)) {
 			return;
 		}
-		
+
 		// checking if the value should be saved
 		if (key.endsWith("*")) {
 
@@ -254,13 +275,11 @@ public class PageProcess {
 				if (value.equalsIgnoreCase("Click")) {
 					se.element().Click(element);
 					// element.click();
-				} 
-				else if(value.equalsIgnoreCase("jsClick")){
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
-	
-				}
-						else {
+				} else if (value.equalsIgnoreCase("jsClick")) {
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
+
+				} else {
 					element.clear();
 					element.sendKeys(value);
 				}
@@ -279,13 +298,12 @@ public class PageProcess {
 		case "button":
 			try {
 				if (value.equalsIgnoreCase("jsClick")) {
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} 
-				else{
-				se.element().Click(element);
-	
+				} else {
+					se.element().Click(element);
+
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -329,13 +347,12 @@ public class PageProcess {
 		case "a":
 			try {
 				if (value.equalsIgnoreCase("jsClick")) {
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} 
-				else{
-				se.element().Click(element);
-	
+				} else {
+					se.element().Click(element);
+
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -353,13 +370,12 @@ public class PageProcess {
 		case "label":
 			try {
 				if (value.equalsIgnoreCase("jsClick")) {
-					JavascriptExecutor executor = (JavascriptExecutor)se.driver();
-	                executor.executeScript("arguments[0].click();", element);
+					JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+					executor.executeScript("arguments[0].click();", element);
 					// element.click();
-				} 
-				else{
-				se.element().Click(element);
-	
+				} else {
+					se.element().Click(element);
+
 				}
 				// element.click();
 			} catch (NoSuchElementException e) {
@@ -379,7 +395,7 @@ public class PageProcess {
 
 		}
 		se.reporter().reportStepPass("Accessing Element", "Element: " + key + "<br>Value:" + value);
-	
+
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
@@ -462,6 +478,27 @@ public class PageProcess {
 		} catch (Exception e) {
 			se.log().error(e.getClass().getSimpleName() + " encountered during FileUpload.", e);
 			se.reporter().reportErrorCapture("Doing FileUpload", e, se);
+			e.printStackTrace();
+		}
+	}
+
+	private static void OpenWindowsDocuent(SeHelper se, String value) {
+		Keyboard keyboard;
+		try {
+			keyboard = new Keyboard();
+			keyboard.openwindow();
+			Thread.sleep(1000);
+			keyboard.type(value.trim());
+			Thread.sleep(2000);
+			keyboard.enter();
+		} catch (AWTException e) {
+
+			e.printStackTrace();
+		}
+
+		catch (Exception e) {
+			se.log().error(e.getClass().getSimpleName() + " encountered during OpenWindow.", e);
+			se.reporter().reportErrorCapture("Doing OpenWindow", e, se);
 			e.printStackTrace();
 		}
 	}
