@@ -1,5 +1,6 @@
 package com.test.automation.customs;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Random;
@@ -11,8 +12,14 @@ public class CustomHandler {
 	
 	private static SeHelper se;
 	
+	static String setNewValue = null;
+	
 	public  CustomHandler(SeHelper se) {
 		CustomHandler.se = se;
+	}
+	
+	public static void setValue(String CapturedValue) {
+		setNewValue = CapturedValue;
 	}
 	
 	public String handle(String function)
@@ -135,6 +142,15 @@ public class CustomHandler {
 		return "sc";
 	}
 	
+	
+	public static String GeneratePath()
+	{
+		String home = System.getProperty("user.home");
+		//String txt = se.savedData().get("QuoteNumber");
+		File file = new File(home+"/Downloads/" + setNewValue + "_Benefitillustration.pdf"); 
+		String path = file.toString();
+		return path;
+	}
 	
 	
 	

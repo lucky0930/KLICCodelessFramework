@@ -4,6 +4,8 @@ import com.test.automation.common.SeHelper;
 import com.test.automation.common.SystemPropertyUtil;
 import com.test.automation.common.Utils.PDFReader;
 
+import junit.framework.Assert;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -49,8 +51,16 @@ public class Assertions {
 
 	public boolean verify(WebElement element, String arg, String key) // arg should be in the format: assertion>value
 	{
+		String assertion = arg.substring(0, arg.indexOf('>'));
+		String expectedValue = arg.substring(arg.indexOf('>') + 1);
 		if (element == null) {
-			return verify(arg);
+			if (assertion.contains("PDFText")) {
+				PDFReader pdfReader = new PDFReader(se);
+				// pdfReader.verifyPDFContent(arg);
+				Assert.assertTrue(pdfReader.verifyPDFContent(se.driver().getCurrentUrl(), expectedValue));
+			} else {
+				return verify(arg);
+			}
 		}
 
 		boolean result = false;
@@ -59,8 +69,7 @@ public class Assertions {
 			return false;
 		}
 
-		String assertion = arg.substring(0, arg.indexOf('>'));
-		String expectedValue = arg.substring(arg.indexOf('>') + 1);
+		
 		String actualValue = new String();
 
 		switch (assertion) {
@@ -130,9 +139,10 @@ public class Assertions {
 			String resultString = new String();
 			result = true;
 
-			element.sendKeys(Keys.ENTER);			
+			element.sendKeys(Keys.ENTER);
 			String elementPrintOut = element.findElement(By.tagName("option")).toString();
-			String xpath = elementPrintOut.substring(elementPrintOut.indexOf("//*[@id"), elementPrintOut.indexOf("]]]")+1);
+			String xpath = elementPrintOut.substring(elementPrintOut.indexOf("//*[@id"),
+					elementPrintOut.indexOf("]]]") + 1);
 			System.out.println(element.findElements(By.xpath(xpath)));
 			System.out.println("xpath: " + xpath);
 
@@ -140,23 +150,21 @@ public class Assertions {
 				int check = 0;
 				for (WebElement option : se.driver().findElements(By.xpath(xpath + "/child::option"))) {
 
-				if(expectedOption.equals(option.getText())) {
+					if (expectedOption.equals(option.getText())) {
 						resultString = resultString.concat("true, ");
 						break;
 					}
 					check++;
 				}
-				if(check == eVals.length)
-				{
+				if (check == eVals.length) {
 					resultString = resultString.concat("false, ");
 					result = false;
 				}
 			}
-			if(result == Boolean.parseBoolean(expectedValue)) {
+			if (result == Boolean.parseBoolean(expectedValue)) {
 				se.log().logSeStep("VERIFY " + assertion + ": " + expectedValue);
-			}
-			else {
-				resultString = resultString.substring(0, resultString.length()-2);
+			} else {
+				resultString = resultString.substring(0, resultString.length() - 2);
 				se.log().logSeStep("VERIFY FAILED - " + assertion + ": " + expectedValue + " resolved " + resultString);
 			}
 			return result;
@@ -179,13 +187,22 @@ public class Assertions {
 			}
 
 			break;
-		
+
 		case "ReadValue":
 			String text = element.getText();
 			System.out.println("Text value found for element " + key + ": " + text);
 			se.log().logSeStep("Text value found for element " + key + ": " + text);
 			se.reporter().reportStepPass("Text value for " + key, "Value: " + text);
 			se.savedData().put(key, text);
+			return true;
+
+		case "SetValue":
+			String text1 = element.getText();
+			System.out.println("Text value found for element " + key + ": " + text1);
+			se.log().logSeStep("Text value found for element " + key + ": " + text1);
+			se.reporter().reportStepPass("Text value for " + key, "Value: " + text1);
+			se.savedData().put(key, text1);
+			CustomHandler.setValue(text1);
 			return true;
 
 		default:

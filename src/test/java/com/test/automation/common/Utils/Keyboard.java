@@ -108,7 +108,7 @@ public class Keyboard {
         case '*': doType(VK_ASTERISK); break;
         case '(': doType(VK_LEFT_PARENTHESIS); break;
         case ')': doType(VK_RIGHT_PARENTHESIS); break;
-        case '_': doType(VK_UNDERSCORE); break;
+        case '_': doType(VK_SHIFT, VK_MINUS); break;
         case '+': doType(VK_PLUS); break;
         case '\t': doType(VK_TAB); break;
         case '\n': doType(VK_ENTER); break;
@@ -148,5 +148,11 @@ public class Keyboard {
         doType(keyCodes, offset + 1, length - 1);
         robot.keyRelease(keyCodes[offset]);
     }
+
+	public void openwindow() {
+		robot.keyPress(VK_CONTROL);
+		type("o");
+    	robot.keyRelease(VK_CONTROL);
+	}
 
 }
