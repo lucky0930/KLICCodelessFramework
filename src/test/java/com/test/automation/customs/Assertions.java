@@ -57,7 +57,45 @@ public class Assertions {
 			if (assertion.contains("PDFText")) {
 				PDFReader pdfReader = new PDFReader(se);
 				// pdfReader.verifyPDFContent(arg);
-				Assert.assertTrue(pdfReader.verifyPDFContent(se.driver().getCurrentUrl(), expectedValue));
+				boolean result = false;
+				String pdfText = pdfReader.ConvertPDFToText(se.driver().getCurrentUrl());
+				
+				if(expectedValue.contains("||"))
+				{
+					String pdfVals[] = expectedValue.split("\\|\\|");
+					
+					for(int i=0; i < pdfVals.length; i++)
+					//for (String expectedText : pdfVals) 
+					{
+						String expectedText = pdfVals[i];
+						if(pdfText.contains(expectedText.trim()))
+						{
+							se.log().logSeStep("PDF Validation for the Text -" + expectedText + " is Success");
+							se.reporter().reportVerifyPass("PDF Validation for the Text - " + expectedText, "" + "Success", expectedText);
+							result = true;
+						}
+						else
+						{
+							se.log().logSeStep("PDF Validation for the Text - " + expectedText + " is fail");
+							se.reporter().reportFailCapture("PDF Validation for the Text is Fail ", null, expectedText, se);
+							result = false;
+						}
+					}
+					return result;
+					
+				}
+				
+//				// Assert.assertTrue(pdfReader.verifyPDFContent(se.driver().getCurrentUrl(),
+//				// expectedValue));
+//				if (result == true) {
+//					se.log().logSeStep("PDF Validation for the Text -" + expectedValue + "is" + result );
+//					se.reporter().reportVerifyPass("PDF Validation for the Text - " + expectedValue, "" + result, expectedValue);
+//					return true;
+//				} else {
+//					se.log().logSeStep("PDF Validation for the Text - " + expectedValue + "is" + result);
+//					se.reporter().reportFailCapture("PDF Validation for the Text - ", null, expectedValue, se);
+//					return false;
+//				}
 			} else {
 				return verify(arg);
 			}
@@ -69,7 +107,6 @@ public class Assertions {
 			return false;
 		}
 
-		
 		String actualValue = new String();
 
 		switch (assertion) {

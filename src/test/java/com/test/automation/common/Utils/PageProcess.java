@@ -544,7 +544,7 @@ public class PageProcess {
 	}
 
 	private static boolean checkWindow(SeHelper se, String key, String value) {
-		if (key.equals("Window")) {
+		if (key.contains("Window")) {
 			se.browser().switchToWindow(Integer.parseInt(value));
 			return true;
 		}

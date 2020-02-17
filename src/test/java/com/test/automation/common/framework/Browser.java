@@ -290,7 +290,7 @@ public class Browser {
 
 			Set<String> windows = se.driver().getWindowHandles();
 			Object[] arr = windows.toArray();
-			se.driver().switchTo().window(((String)arr[index]));
+			se.driver().switchTo().window(((String)arr[index]));		
 
 		}
 		catch(Exception e) {

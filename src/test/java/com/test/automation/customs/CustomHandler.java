@@ -12,14 +12,14 @@ public class CustomHandler {
 	
 	private static SeHelper se;
 	
-	static String setNewValue = null;
+	static String setValue = null;
 	
 	public  CustomHandler(SeHelper se) {
 		CustomHandler.se = se;
 	}
 	
 	public static void setValue(String CapturedValue) {
-		setNewValue = CapturedValue;
+		setValue = CapturedValue;
 	}
 	
 	public String handle(String function)
@@ -147,7 +147,7 @@ public class CustomHandler {
 	{
 		String home = System.getProperty("user.home");
 		//String txt = se.savedData().get("QuoteNumber");
-		File file = new File(home+"/Downloads/" + setNewValue + "_Benefitillustration.pdf"); 
+		File file = new File(home+"/Downloads/" + setValue + "_Benefitillustration.pdf"); 
 		String path = file.toString();
 		return path;
 	}

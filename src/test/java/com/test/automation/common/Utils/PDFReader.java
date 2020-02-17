@@ -88,9 +88,9 @@ public class PDFReader {
 
 			doc = PDDocument.load(fileparse);
 
-			String pdfContent = new PDFTextStripper().getText(doc);
+			parsedText = new PDFTextStripper().getText(doc);
 
-			Assert.assertTrue(pdfContent.contains(reqTextInPDF));
+			
 
 		} catch (IOException e) {
 			System.err.println("Unable to parse PDF");
@@ -105,6 +105,35 @@ public class PDFReader {
 		}
 
 		return flag;
+	}
+	
+	public String ConvertPDFToText(String fileName) {
+
+		boolean flag = false;
+
+		String parsedText = null;
+
+		try {
+
+			URL url = new URL(fileName);
+
+			InputStream is = url.openStream();
+			BufferedInputStream fileparse = new BufferedInputStream(is);
+			PDDocument doc = null;
+
+			doc = PDDocument.load(fileparse);
+
+			parsedText = new PDFTextStripper().getText(doc);
+
+			
+
+		} catch (IOException e) {
+			System.err.println("Unable to parse PDF");
+			e.printStackTrace();
+		}
+
+
+		return parsedText;
 	}
 
 	public void tearDown() {
