@@ -235,6 +235,9 @@ public class ExcelReader {
 
 			for (int row = 0; row <= sheet.getLastRowNum(); row++) {
 				String GroupName = CheckNumeric(sheet.getRow(row).getCell(columnList.indexOf("Groups")));
+				if (GroupName == null || GroupName.trim().isEmpty()) {
+					continue;
+				}
 				String GroupNameValues[] = GroupName.split(",");
 				List<String> groupNames = new ArrayList<String>();
 				
