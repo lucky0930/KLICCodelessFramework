@@ -90,8 +90,6 @@ public class PDFReader {
 
 			parsedText = new PDFTextStripper().getText(doc);
 
-			
-
 		} catch (IOException e) {
 			System.err.println("Unable to parse PDF");
 			e.printStackTrace();
@@ -106,7 +104,7 @@ public class PDFReader {
 
 		return flag;
 	}
-	
+
 	public String ConvertPDFToText(String fileName) {
 
 		boolean flag = false;
@@ -125,13 +123,10 @@ public class PDFReader {
 
 			parsedText = new PDFTextStripper().getText(doc);
 
-			
-
 		} catch (IOException e) {
 			System.err.println("Unable to parse PDF");
 			e.printStackTrace();
 		}
-
 
 		return parsedText;
 	}

@@ -59,43 +59,77 @@ public class Assertions {
 				// pdfReader.verifyPDFContent(arg);
 				boolean result = false;
 				String pdfText = pdfReader.ConvertPDFToText(se.driver().getCurrentUrl());
-				
-				if(expectedValue.contains("||"))
-				{
+
+				if (expectedValue.contains("||")) {
 					String pdfVals[] = expectedValue.split("\\|\\|");
-					
-					for(int i=0; i < pdfVals.length; i++)
-					//for (String expectedText : pdfVals) 
+
+					for (int i = 0; i < pdfVals.length; i++)
+					// for (String expectedText : pdfVals)
 					{
 						String expectedText = pdfVals[i];
-						if(pdfText.contains(expectedText.trim()))
-						{
-							se.log().logSeStep("PDF Validation for the Text -" + expectedText + " is Success");
-							se.reporter().reportVerifyPass("PDF Validation for the Text - " + expectedText, "" + "Success", expectedText);
-							result = true;
+
+						if (expectedText.contains("+")) {
+							String newMultiValu1 = "";
+							String multilines[] = expectedText.split("\\+");
+
+							for (int i1 = 0; i1 < multilines.length; i1++) {
+								newMultiValu1 += multilines[i1].trim() + "\r\n";
+							}
+							if (pdfText.contains(newMultiValu1.trim())) {
+
+								se.log().logSeStep("PDF Validation for the Text -" + expectedValue + " is Success");
+								se.reporter().reportVerifyPass("PDF Validation for the Text - " + expectedValue,
+										"" + "Success", expectedValue);
+								result = true;
+							} else {
+								se.log().logSeStep("PDF Validation for the Text - " + expectedValue + " is fail");
+								result = false;
+							}
+
 						}
-						else
-						{
-							se.log().logSeStep("PDF Validation for the Text - " + expectedText + " is fail");
-							se.reporter().reportFailCapture("PDF Validation for the Text is Fail ", null, expectedText, se);
-							result = false;
+
+						else {
+							if (pdfText.contains(expectedText.trim())) {
+								se.log().logSeStep("PDF Validation for the Text -" + expectedText + " is Success");
+								se.reporter().reportVerifyPass("PDF Validation for the Text - " + expectedText,
+										"" + "Success", expectedText);
+								result = true;
+							} else {
+								se.log().logSeStep("PDF Validation for the Text - " + expectedText + " is fail");
+								se.reporter().reportFailCapture("PDF Validation for the Text is Fail ", null,
+										expectedText, se);
+								result = false;
+							}
 						}
 					}
 					return result;
-					
+
+				} else {
+					String newMultiValu = "";
+					if (expectedValue.contains("+")) {
+						String multilines[] = expectedValue.split("\\+");
+
+						for (int i = 0; i < multilines.length; i++) {
+							newMultiValu += multilines[i].trim() + "\r\n";
+						}
+
+						if (pdfText.contains(newMultiValu.trim())) {
+
+							se.log().logSeStep("PDF Validation for the Text -" + expectedValue + " is Success");
+							se.reporter().reportVerifyPass("PDF Validation for the Text - " + expectedValue,
+									"" + "Success", expectedValue);
+							result = true;
+						} else {
+							se.log().logSeStep("PDF Validation for the Text - " + expectedValue + " is fail");
+							se.reporter().reportFailCapture("PDF Validation for the Text is Fail ", null, expectedValue,
+									se);
+							result = false;
+						}
+					}
+
+					return result;
 				}
-				
-//				// Assert.assertTrue(pdfReader.verifyPDFContent(se.driver().getCurrentUrl(),
-//				// expectedValue));
-//				if (result == true) {
-//					se.log().logSeStep("PDF Validation for the Text -" + expectedValue + "is" + result );
-//					se.reporter().reportVerifyPass("PDF Validation for the Text - " + expectedValue, "" + result, expectedValue);
-//					return true;
-//				} else {
-//					se.log().logSeStep("PDF Validation for the Text - " + expectedValue + "is" + result);
-//					se.reporter().reportFailCapture("PDF Validation for the Text - ", null, expectedValue, se);
-//					return false;
-//				}
+
 			} else {
 				return verify(arg);
 			}

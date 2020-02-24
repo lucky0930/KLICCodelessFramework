@@ -49,9 +49,14 @@ public class PageProcess {
 
 				if (key.contains("OpenPDF")) {
 					Thread.sleep(1000);
-
+					String path = null;
 					if (value.contains("GeneratePath()")) {
-						String path = CustomHandler.GeneratePath();
+						path = CustomHandler.GeneratePath();
+						OpenWindowsDocuent(se, path);
+					}
+						if (value.contains("GeneratePath1()")) {
+						path = CustomHandler.GeneratePath1();
+								
 						OpenWindowsDocuent(se, path);
 					} else {
 						OpenWindowsDocuent(se, value);
@@ -142,12 +147,14 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
-			se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
-			e.printStackTrace();
-		}
-		return element;
+		}catch(
+
+	Exception e)
+	{
+		se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+		se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
+		e.printStackTrace();
+	}return element;
 	}
 
 	public static WebElement findElement(SeHelper se, String sheetName, String key, String value) {

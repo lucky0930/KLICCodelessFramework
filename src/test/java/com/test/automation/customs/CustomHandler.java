@@ -152,6 +152,13 @@ public class CustomHandler {
 		return path;
 	}
 	
-	
+	public static String GeneratePath1()
+	{
+		String home = System.getProperty("user.home");
+		//String txt = se.savedData().get("QuoteNumber");
+		File file = new File(home+"/Downloads/" + setValue + "_Kotak_e-Term.pdf"); 
+		String path = file.toString();
+		return path;
+	}
 	
 }
