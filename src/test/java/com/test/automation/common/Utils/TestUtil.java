@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -37,13 +38,13 @@ public class TestUtil extends Thread {
 	ExtentTest test;
 	int retryCount = 0;
 
-	public TestUtil(ExtentReports report, Method method, String TestCaseNumber) {
+	public TestUtil(ExtentReports report, Method method, String TestCaseNumber, String TestDescription) {
 		this.report = report;
 		this.method = method;
 		this.TestCaseNumber = TestCaseNumber;
 		this.se = new SeHelper();
 
-		this.test = report.startTest("Test Case Number: " + TestCaseNumber);
+		this.test = report.startTest(TestDescription + ":"  + TestCaseNumber);
 		test.assignAuthor("VAM QA");
 		test.assignCategory(method.getName());
 
@@ -137,8 +138,8 @@ public class TestUtil extends Thread {
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
 			LinkedHashMap<String, String> actualxPathData,LinkedHashMap<String, String> actualWaitData) {
 
-		se.log().logSeStep("Opening page: " + sheetName);
-		se.reporter().reportInfo("Opening Page", "Page Name: " + sheetName);
+		se.log().logSeStep("User is Navigating to the the"  + sheetName);
+		se.reporter().reportInfo("User is Navigating to the " + sheetName, "Page Name: " + sheetName);
 
 		
 
@@ -266,9 +267,9 @@ public class TestUtil extends Thread {
 		se.reporter().reportInfo("This is a retry of a failed test.", "Retry Number: " + retryCount);
 	}
 
-	public List<String> ExecuteTestRunner() {
+	public HashMap<String, String> ExecuteTestRunner() {
 
-		List<String> lstOfTC = excelReader.GetTestRunnerData(TEST_RUNNER_PATH);
+		HashMap<String, String> lstOfTC = excelReader.GetTestRunnerData(TEST_RUNNER_PATH);
 		return lstOfTC;
 	}
 

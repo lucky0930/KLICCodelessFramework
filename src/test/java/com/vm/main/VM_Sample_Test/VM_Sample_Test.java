@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.testng.ITestResult;
@@ -32,7 +33,7 @@ import atu.testrecorder.exceptions.ATUTestRecorderException;
 public class VM_Sample_Test {
 
 	List<TestUtil> testsArray = new ArrayList<TestUtil>();
-	List<String> lstOfTestCasesToExecute = new ArrayList<String>();
+	HashMap<String, String> lstOfTestCasesToExecute = new HashMap<String, String>();
 	List<TestUtil> activeTests = new ArrayList<TestUtil>();
 
 	private String reportPath;
@@ -54,7 +55,7 @@ public class VM_Sample_Test {
 		numberOfTests = lstOfTestCasesToExecute.size();
 	}
 
-	private List<String> GetTestRunnerCases() {
+	private HashMap<String, String> GetTestRunnerCases() {
 
 		TestUtil testUtil = new TestUtil();
 		return testUtil.ExecuteTestRunner();
@@ -93,8 +94,14 @@ public class VM_Sample_Test {
 			}
 		}
 		// add test cases to testsArray to execute
-		for (String testCaseNumber : lstOfTestCasesToExecute) {
-			TestUtil testUtil = new TestUtil(report, method, testCaseNumber);
+//		for (String testCaseNumber : lstOfTestCasesToExecute) {
+//			TestUtil testUtil = new TestUtil(report, method, testCaseNumber);
+//			testsArray.add(testUtil);
+//		}
+		
+		for(HashMap.Entry<String, String> testCaseNumber : lstOfTestCasesToExecute.entrySet() )
+		{
+			TestUtil testUtil = new TestUtil(report, method, testCaseNumber.getKey(), testCaseNumber.getValue());
 			testsArray.add(testUtil);
 		}
 	}

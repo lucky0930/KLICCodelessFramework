@@ -50,13 +50,12 @@ public class PageProcess {
 				if (key.contains("OpenPDF")) {
 					Thread.sleep(1000);
 					String path = null;
-					if (value.contains("GeneratePath()")) {
+					if (value.equalsIgnoreCase("GeneratePath()")) {
 						path = CustomHandler.GeneratePath();
 						OpenWindowsDocuent(se, path);
-					}
-						if (value.contains("GeneratePath1()")) {
+					} else if (value.equalsIgnoreCase("GeneratePath1()")) {
 						path = CustomHandler.GeneratePath1();
-								
+
 						OpenWindowsDocuent(se, path);
 					} else {
 						OpenWindowsDocuent(se, value);
@@ -147,14 +146,14 @@ public class PageProcess {
 				se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
 				e.printStackTrace();
 			}
-		}catch(
+		} catch (
 
-	Exception e)
-	{
-		se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
-		se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
-		e.printStackTrace();
-	}return element;
+		Exception e) {
+			se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName, e);
+			se.reporter().reportErrorCapture("Element " + key + " on " + sheetName, e, se);
+			e.printStackTrace();
+		}
+		return element;
 	}
 
 	public static WebElement findElement(SeHelper se, String sheetName, String key, String value) {
@@ -401,8 +400,14 @@ public class PageProcess {
 			ActionBasedOnValue(se, element, value);
 
 		}
-		se.reporter().reportStepPass("Accessing Element", "Element: " + key + "<br>Value:" + value);
-
+		
+		if (value.contains("click") || value.equalsIgnoreCase("click") || value.equalsIgnoreCase("jsClick")) {
+			se.reporter().reportStepPass("User is  click on " + key, "Element: " + key + "<br>Value:" + value);
+		}
+		else
+		{
+			se.reporter().reportStepPass("User enters the value " + key, "Element: " + key + "<br>Value:" + value);
+		}
 	}
 
 	private static void ActionBasedOnValue(SeHelper se, WebElement element, String value) {
@@ -484,7 +489,7 @@ public class PageProcess {
 			}
 		} catch (Exception e) {
 			se.log().error(e.getClass().getSimpleName() + " encountered during FileUpload.", e);
-			se.reporter().reportErrorCapture("Doing FileUpload", e, se);
+			se.reporter().reportErrorCapture("user is Doing FileUpload", e, se);
 			e.printStackTrace();
 		}
 	}
