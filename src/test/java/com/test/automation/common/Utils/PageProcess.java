@@ -402,7 +402,7 @@ public class PageProcess {
 		}
 		
 		if (value.contains("click") || value.equalsIgnoreCase("click") || value.equalsIgnoreCase("jsClick")) {
-			se.reporter().reportStepPass("User is  click on " + key, "Element: " + key + "<br>Value:" + value);
+			se.reporter().reportStepPass("User clicks on " + key, "Element: " + key + "<br>Value:" + value);
 		}
 		else
 		{

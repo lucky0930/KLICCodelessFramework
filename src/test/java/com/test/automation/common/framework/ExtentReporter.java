@@ -36,6 +36,14 @@ public class ExtentReporter {
 		
 		test.log(LogStatus.PASS, assertion + " passed.", "Actual: " + actual + "<br>Expected: " + expected);
 	}
+	
+	 public void reportVerifyPass(String Key, String assertion, String actual, String expected) {
+	        if (assertion.equalsIgnoreCase("AreEqual")) {
+	            test.log(LogStatus.PASS, "Validation for the " + Key + "is getting success", "Actual: " + actual + "<br>Expected: " + expected);
+	        } else {
+	            test.log(LogStatus.PASS, assertion + " passed.", "Actual: " + actual + "<br>Expected: " + expected);
+	        }
+	    }
 
 	public void reportVerifyFail(String assertion, String actual, String expected) {
 		

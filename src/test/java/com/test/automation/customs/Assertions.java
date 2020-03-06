@@ -284,7 +284,8 @@ public class Assertions {
 
 		if (result == true) {
 			se.log().logSeStep("VERIFY " + assertion + ": " + expectedValue);
-			se.reporter().reportVerifyPass("Verify " + assertion, "" + actualValue, expectedValue);
+			//se.reporter().reportVerifyPass(key, "Verify " + assertion, "" + actualValue, expectedValue);
+			se.reporter().reportVerifyPass(key,  assertion, "" + actualValue, expectedValue);
 		} else {
 			se.log().logSeStep("VERIFY FAILED - " + assertion + ": " + expectedValue
 					+ " does not match actual value -> " + actualValue);

@@ -118,8 +118,8 @@ public class TestUtil extends Thread {
 
 				if (se.keepRunning()) {
 					LinkedHashMap<String, String> actualData = mydata.get(actualSheetCollection.get(i));
-					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
-					LinkedHashMap<String, String> actualWaitData = exWait.get(actualSheetCollection.get(i));
+					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(0));
+					LinkedHashMap<String, String> actualWaitData = exWait.get(actualSheetCollection.get(0));
 					// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
 					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData, actualWaitData);
 				} else {
