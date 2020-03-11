@@ -44,7 +44,7 @@ public class TestUtil extends Thread {
 		this.TestCaseNumber = TestCaseNumber;
 		this.se = new SeHelper();
 
-		this.test = report.startTest(TestDescription + ":"  + TestCaseNumber);
+		this.test = report.startTest(TestDescription + ":" + TestCaseNumber);
 		test.assignAuthor("VAM QA");
 		test.assignCategory(method.getName());
 
@@ -72,9 +72,9 @@ public class TestUtil extends Thread {
 		LinkedHashMap<String, LinkedHashMap<String, String>> exWait = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 		try {
 
-			mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se);
-			xpathData = excelReader.GetTestData("Locators", TESTDATA_SHEET_PATH, se);
-			exWait = excelReader.GetTestData("ExplicitWait", TESTDATA_SHEET_PATH, se);
+			mydata = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se, "TestCaseNumber");
+			xpathData = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se, "Locators");
+			exWait = excelReader.GetTestData(TestCaseNumber, TESTDATA_SHEET_PATH, se, "ExplicitWait");
 		} catch (Exception e) {
 
 			System.out.println("***** Unable to read the Excel sheet Data *****");
@@ -102,6 +102,7 @@ public class TestUtil extends Thread {
 
 		List<String> sheetCollection1 = new ArrayList<String>();
 		List<String> actualSheetCollection = new ArrayList<String>();
+		List<String> actualSXpathsheetCollection = new ArrayList<String>();
 
 		try {
 			mydata.entrySet().forEach(entry -> {
@@ -118,8 +119,8 @@ public class TestUtil extends Thread {
 
 				if (se.keepRunning()) {
 					LinkedHashMap<String, String> actualData = mydata.get(actualSheetCollection.get(i));
-					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(0));
-					LinkedHashMap<String, String> actualWaitData = exWait.get(actualSheetCollection.get(0));
+					LinkedHashMap<String, String> actualxPathData = xpathData.get(actualSheetCollection.get(i));
+					LinkedHashMap<String, String> actualWaitData = exWait.get(actualSheetCollection.get(i));
 					// ExecuteTestProcess(se, sheetCollection1.get(i), actualData);
 					ExecuteTestProcess(se, sheetCollection1.get(i), actualData, actualxPathData, actualWaitData);
 				} else {
@@ -136,12 +137,10 @@ public class TestUtil extends Thread {
 	}
 
 	private void ExecuteTestProcess(SeHelper se, String sheetName, LinkedHashMap<String, String> actualData,
-			LinkedHashMap<String, String> actualxPathData,LinkedHashMap<String, String> actualWaitData) {
+			LinkedHashMap<String, String> actualxPathData, LinkedHashMap<String, String> actualWaitData) {
 
-		se.log().logSeStep("User is Navigating to the the"  + sheetName);
+		se.log().logSeStep("User is Navigating to the the" + sheetName);
 		se.reporter().reportInfo("User is Navigating to the " + sheetName, "Page Name: " + sheetName);
-
-		
 
 		try {
 			actualData.entrySet().forEach(entry -> {
@@ -164,39 +163,36 @@ public class TestUtil extends Thread {
 				} else {
 					if (entry.getValue() != null)
 						System.out.println(actualxPathData.get(entry.getKey()));
-						
-					if(actualWaitData != null) {
-					if(actualWaitData.get(entry.getKey()) != null) {
-						String wait = actualWaitData.get(entry.getKey());
-						String sleep;
-						
-						if(wait.length() < 6) {
-							se.waits().setTimeOut(Integer.parseInt(wait));
+
+					if (actualWaitData != null) {
+						if (actualWaitData.get(entry.getKey()) != null) {
+							String wait = actualWaitData.get(entry.getKey());
+							String sleep;
+
+							if (wait.length() < 6) {
+								se.waits().setTimeOut(Integer.parseInt(wait));
+							}
+
+							else if (wait.substring(0, 5).equalsIgnoreCase("sleep")) {
+
+								wait = wait.split("=")[1].trim();
+								se.waits().Sleep(Integer.parseInt(wait));
+							} else {
+								se.waits().setTimeOut(Integer.parseInt(wait));
+							}
+
 						}
-						
-						
-						else if(wait.substring(0,5).equalsIgnoreCase("sleep")) {
-							
-							
-							wait = wait.split("=")[1].trim();
-							se.waits().Sleep(Integer.parseInt(wait));
-						}
-						else {
-							se.waits().setTimeOut(Integer.parseInt(wait));
-						}
-						
 					}
-					}
-					
+
 					PageProcess.findElement(se, sheetName, entry.getKey(), entry.getValue(),
 							actualxPathData.get(entry.getKey()));
-					
+
 					se.waits().resetTimeOut();
 				}
 			});
 			se.waits().waitForPageLoad();
 		} catch (NullPointerException e) {
-				//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 

@@ -45,8 +45,74 @@ public class ExcelReader {
 	protected List<String> sheetCollection = new ArrayList<String>();
 	int indexflow;
 
+//	protected LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(String testCaseNumber,
+//			String TESTDATA_SHEET_PATH, SeHelper se) {
+//
+//		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+//
+//		try {
+//
+//			workbook = openworkbook(TESTDATA_SHEET_PATH);
+//
+//		} catch (Exception e) {
+//
+//			System.out.println("***** Unable to read the Excel sheet Data *****");
+//			se.log().error(e.getClass().getSimpleName() + " encountered while trying to read Excel sheet data.", e);
+//			se.reporter().reportError("Reading Excel data.", e);
+//			return null;
+//		}
+//
+//		int numberOfSheets = workbook.getNumberOfSheets();
+//
+//		for (int i = 0; i < numberOfSheets; i++) {
+//			indexflow = 0;
+//			Sheet sheet = workbook.getSheetAt(i);
+//			String sheetName = sheet.getSheetName();
+//			int StartrowNum = 1;
+//
+//			if (!testCaseNumber.equalsIgnoreCase("Locators")) {
+//				StartrowNum = StartrowNum + 1;
+//			}
+//
+//			if (!testCaseNumber.equalsIgnoreCase("ExplicitWait") && !testCaseNumber.equalsIgnoreCase("Locators")) {
+//
+//				StartrowNum = StartrowNum + 1;
+//			}
+//
+//			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
+//				Row sheetRow = sheet.getRow(row);
+//				if (sheetRow != null) {
+//					String TCNumber = CheckNumeric(sheetRow.getCell(0));
+//					String flow = CheckNumeric(sheet.getRow(row).getCell(1));
+//
+//					if (TCNumber != null) {
+//						if (TCNumber.equals(testCaseNumber)) {
+//
+//							GetTestData(tableData, sheet, row);
+//
+//							sheetCollection.add(sheetName);
+//							indexflow++;
+//						}
+//					}
+//				}
+//			}
+//		}
+//
+//		if (testCaseNumber.equalsIgnoreCase("Locators") || testCaseNumber.equalsIgnoreCase("ExplicitWait"))
+//			return tableData;
+//
+//		else if (tableData.isEmpty()) {
+//
+//			System.out.println("***** Test Case #: " + testCaseNumber + " Not Found *****");
+//			se.log().debug("Test Case #: " + testCaseNumber + " not found.");
+//			se.reporter().reportStepFail("Test Case #: " + testCaseNumber + " not found.", "Check Excel Sheet");
+//			return null;
+//		} else
+//			return SortByFlow(tableData);
+//	}
+
 	protected LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(String testCaseNumber,
-			String TESTDATA_SHEET_PATH, SeHelper se) {
+			String TESTDATA_SHEET_PATH, SeHelper se, String typeOfItem) {
 
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
 
@@ -74,13 +140,26 @@ public class ExcelReader {
 				StartrowNum = StartrowNum + 1;
 			}
 
-			if (!testCaseNumber.equalsIgnoreCase("ExplicitWait") && !testCaseNumber.equalsIgnoreCase("Locators")) {
+			if (!typeOfItem.equalsIgnoreCase("ExplicitWait") && !typeOfItem.equalsIgnoreCase("Locators")) {
 
 				StartrowNum = StartrowNum + 1;
 			}
 
 			for (int row = StartrowNum; row <= sheet.getLastRowNum(); row++) {
 				Row sheetRow = sheet.getRow(row);
+
+				Row locatorOrWaitsRow;
+
+//				if(typeOfItem.equalsIgnoreCase("Locators"))
+//				{
+//					locatorOrWaitsRow = sheet.getRow(1);
+//				}
+//				
+//				if(typeOfItem.equalsIgnoreCase("ExplicitWait"))
+//				{
+//					locatorOrWaitsRow = sheet.getRow(2);
+//				}
+
 				if (sheetRow != null) {
 					String TCNumber = CheckNumeric(sheetRow.getCell(0));
 					String flow = CheckNumeric(sheet.getRow(row).getCell(1));
@@ -88,7 +167,18 @@ public class ExcelReader {
 					if (TCNumber != null) {
 						if (TCNumber.equals(testCaseNumber)) {
 
-							GetTestData(tableData, sheet, row);
+							if (typeOfItem.equalsIgnoreCase("Locators")) {
+								GetTestData(tableData, sheet, 1, typeOfItem);
+							}
+
+							else if (typeOfItem.equalsIgnoreCase("ExplicitWait")) {
+								GetTestData(tableData, sheet, 2, typeOfItem);
+							}
+							
+							else if (typeOfItem.equalsIgnoreCase("TestCaseNumber"))
+							{
+								GetTestData(tableData, sheet, row, typeOfItem);
+							}
 
 							sheetCollection.add(sheetName);
 							indexflow++;
@@ -98,7 +188,7 @@ public class ExcelReader {
 			}
 		}
 
-		if (testCaseNumber.equalsIgnoreCase("Locators") || testCaseNumber.equalsIgnoreCase("ExplicitWait"))
+		if (typeOfItem.equalsIgnoreCase("Locators") || typeOfItem.equalsIgnoreCase("ExplicitWait"))
 			return tableData;
 
 		else if (tableData.isEmpty()) {
@@ -109,6 +199,20 @@ public class ExcelReader {
 			return null;
 		} else
 			return SortByFlow(tableData);
+	}
+
+	private boolean IsSheetContainTescaseNumber(int startrowNum, Sheet sheet, String TCNumber) {
+		for (int row = startrowNum; row <= sheet.getLastRowNum(); row++) {
+			Row sheetRow = sheet.getRow(row);
+			if (sheetRow != null) {
+				String TCNumber1 = CheckNumeric(sheetRow.getCell(0));
+				if (TCNumber1 != null)
+					if (TCNumber1.equalsIgnoreCase(TCNumber))
+						return true;
+			}
+		}
+
+		return false;
 	}
 
 	private LinkedHashMap<String, LinkedHashMap<String, String>> SortByFlow(
@@ -135,7 +239,7 @@ public class ExcelReader {
 	}
 
 	private LinkedHashMap<String, LinkedHashMap<String, String>> GetTestData(
-			LinkedHashMap<String, LinkedHashMap<String, String>> tableData, Sheet sheet, int rowNum) {
+			LinkedHashMap<String, LinkedHashMap<String, String>> tableData, Sheet sheet, int rowNum, String typeOfItem) {
 
 		LinkedHashMap<String, String> data = new LinkedHashMap<String, String>();
 		for (int k = 0; k < sheet.getRow(0).getLastCellNum(); k++) {
@@ -146,14 +250,14 @@ public class ExcelReader {
 
 		}
 
-		return UpdateTableData(tableData, sheet.getSheetName(), data);
+		return UpdateTableData(tableData, sheet.getSheetName(), data, typeOfItem);
 	}
 
 	private LinkedHashMap<String, LinkedHashMap<String, String>> UpdateTableData(
 			LinkedHashMap<String, LinkedHashMap<String, String>> tableData, String sheetName,
-			LinkedHashMap<String, String> data2) {
+			LinkedHashMap<String, String> data2, String typeOfItem) {
 		LinkedHashMap<String, LinkedHashMap<String, String>> myData = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-		if (!tableData.containsValue(data2)) {
+		if (!tableData.containsValue(data2) || typeOfItem.equalsIgnoreCase("Locators") || typeOfItem.equalsIgnoreCase("ExplicitWait")) {
 			if (indexflow > 0) {
 				sheetName = sheetName + "$" + indexflow;
 			}
@@ -362,7 +466,7 @@ public class ExcelReader {
 			}
 		}
 
-		//return sortedList;
+		// return sortedList;
 		return sortedListWithDescription;
 	}
 
