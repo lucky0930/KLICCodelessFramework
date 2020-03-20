@@ -161,4 +161,9 @@ public class CustomHandler {
 		return path;
 	}
 	
+	private static String NaviagteToCustomUrl(String var)
+	{
+		se.browser().get(var);
+		return null;
+	}
 }

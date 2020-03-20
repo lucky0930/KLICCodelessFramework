@@ -102,6 +102,16 @@ public class PageProcess {
 					return null;
 				}
 
+				if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1)) {
+
+					value = new CustomHandler(se).handle(value);
+					if (value != null) {
+						if (value.equals("sc")) {
+							return null;
+						}
+					}
+				}
+
 				try {
 
 					// element = (WebElement) callMethod.invoke(obj, se);
@@ -135,11 +145,12 @@ public class PageProcess {
 
 					FillElement(se, element, key, value);
 				}
-				if (value.contains(">")) {
-					Assertions asrt = new Assertions(se);
-					asrt.verify(element, value, key);
-					return element;
-				}
+				if (value != null)
+					if (value.contains(">")) {
+						Assertions asrt = new Assertions(se);
+						asrt.verify(element, value, key);
+						return element;
+					}
 			} catch (SecurityException e) {
 				se.log().error(e.getClass().getSimpleName() + " encountered for element: " + key + " on " + sheetName,
 						e);
@@ -400,12 +411,10 @@ public class PageProcess {
 			ActionBasedOnValue(se, element, value);
 
 		}
-		
+
 		if (value.contains("click") || value.equalsIgnoreCase("click") || value.equalsIgnoreCase("jsClick")) {
 			se.reporter().reportStepPass("User clicks on " + key, "Element: " + key + "<br>Value:" + value);
-		}
-		else
-		{
+		} else {
 			se.reporter().reportStepPass("User enters the value " + key, "Element: " + key + "<br>Value:" + value);
 		}
 	}
