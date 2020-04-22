@@ -60,6 +60,11 @@ public class PageProcess {
 					} else {
 						OpenWindowsDocuent(se, value);
 					}
+					
+					if(key.contains("NaviagteToCustomUrl"))
+					{
+						CustomHandler.NaviagteToCustomUrl(value);
+					}
 
 					// Actions action = new Actions(se.driver());
 

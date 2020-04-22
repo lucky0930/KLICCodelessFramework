@@ -276,6 +276,7 @@ public class Assertions {
 			CustomHandler.setValue(text1);
 			return true;
 
+			
 		default:
 			se.log().logSeStep("VERIFY FAILED: No valid assertion provided");
 			se.reporter().reportStepFail("Invalid Assertion", "No valid assertion provided.");
