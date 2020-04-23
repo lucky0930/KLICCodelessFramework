@@ -61,10 +61,7 @@ public class PageProcess {
 						OpenWindowsDocuent(se, value);
 					}
 					
-					if(key.contains("NaviagteToCustomUrl"))
-					{
-						CustomHandler.NaviagteToCustomUrl(value);
-					}
+				
 
 					// Actions action = new Actions(se.driver());
 
@@ -107,7 +104,7 @@ public class PageProcess {
 					return null;
 				}
 
-				if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1)) {
+				if ((value.contains("(")) && (value.indexOf(')') == value.length() - 1) && !value.contains(">")) {
 
 					value = new CustomHandler(se).handle(value);
 					if (value != null) {
@@ -115,6 +112,7 @@ public class PageProcess {
 							return null;
 						}
 					}
+					
 				}
 
 				try {

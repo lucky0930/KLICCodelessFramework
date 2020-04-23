@@ -161,12 +161,9 @@ public class CustomHandler {
 		return path;
 	}
 	
-	public static String NaviagteToCustomUrl(String var)
+	private static String NaviagteToCustomUrl(String var)
 	{
-		//String[] keys = var.split("(");
-		String keys = var.substring(var.indexOf('(') + 1, var.indexOf(')'));
-		
-		se.browser().get(keys);
+		se.browser().get(var);
 		return null;
 	}
 }
