@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Random;
 
+import org.openqa.selenium.By;
+
 import com.test.automation.common.SeHelper;
 import com.test.automation.common.Utils.PDFReader;
 
@@ -13,6 +15,7 @@ public class CustomHandler {
 	private static SeHelper se;
 	
 	static String setValue = null;
+	static long startTime;
 	
 	public  CustomHandler(SeHelper se) {
 		CustomHandler.se = se;
@@ -166,4 +169,21 @@ public class CustomHandler {
 		se.browser().get(var);
 		return null;
 	}
+	
+	private static String StartTime(String var)
+	{
+	startTime = System.currentTimeMillis();
+	return null;
+	}
+
+	private static void EndTime(String xPathExpression)
+	{
+	se.element().getElement(By.xpath(xPathExpression));
+	long endTime = System.currentTimeMillis();
+	String elapsedTime =  String.valueOf((endTime - startTime));
+	se.reporter().reportInfo("Page Load duration(in milli seconds)", elapsedTime);
+	}
+
+	
+	
 }
