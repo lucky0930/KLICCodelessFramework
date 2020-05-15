@@ -387,6 +387,34 @@ public class PageProcess {
 			}
 
 			break;
+			
+		case "textarea":
+            try {
+                if (value.equalsIgnoreCase("Click")) {
+                    se.element().Click(element);
+                    // element.click();
+                } else if (value.equalsIgnoreCase("jsClick")) {
+                    JavascriptExecutor executor = (JavascriptExecutor) se.driver();
+                    executor.executeScript("arguments[0].click();", element);
+
+ 
+
+                } else {
+                    element.clear();
+                    element.sendKeys(value);
+                }
+            } catch (NoSuchElementException e) {
+                se.log().error(e.getClass().getSimpleName() + " encountered when accessing \"" + key + "\"", e);
+                System.out.println("***** Recommend reviewing column head data entry *****");
+                se.reporter().reportErrorCapture("Element: " + key + " using Value: " + value, e, se);
+                e.printStackTrace();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                se.log().logSeStep("Interception " + element.toString() + "Waiting for page load");
+                se.waits().waitForPageLoad();
+                se.element().Click(element);
+            }
+            break;
+            
 		case "label":
 			try {
 				if (value.equalsIgnoreCase("jsClick")) {
