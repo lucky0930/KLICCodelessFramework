@@ -243,10 +243,11 @@ public class SeHelper {
 				break;
 			case InternetExplorer:
 				capabilities = DesiredCapabilities.internetExplorer();
-				System.setProperty("webdriver.ie.driver", SystemPropertyUtil.getIEDriverPath());
+				//System.setProperty("webdriver.ie.driver", SystemPropertyUtil.getIEDriverPath());
+				System.setProperty("webdriver.ie.driver", "C:\\Users\\ravikumar\\git\\CodeLessFramework\\IEDriverServer.exe");
 				//capabilities.setCapability()
 				driver = new InternetExplorerDriver(capabilities);
-			
+						
 								
 				break;
 
